@@ -19,12 +19,15 @@ public class Contact extends AbstractEntityId {
     private Civility civility;
 
     @OneToMany(mappedBy = "contact")
+    @JoinColumn(name = "email_id")
     private List<Email> emails = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
+    @JoinColumn(name = "phone_id")
     private List<Phone> phones = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
+    @JoinColumn(name = "address_id")
     private List<Address> addresses = new ArrayList<>();
 
     protected Contact() {
