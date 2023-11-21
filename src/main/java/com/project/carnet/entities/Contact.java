@@ -1,8 +1,10 @@
 package com.project.carnet.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "contact")
 public class Contact extends AbstractEntityId {
@@ -11,6 +13,19 @@ public class Contact extends AbstractEntityId {
     private String firstName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "civility_id")
+    private Civility civility;
+
+    @OneToMany(mappedBy = "contact")
+    private List<Email> emails = new ArrayList<>();
+
+    @OneToMany(mappedBy = "contact")
+    private List<Phone> phones = new ArrayList<>();
+
+    @OneToMany(mappedBy = "contact")
+    private List<Address> addresses = new ArrayList<>();
 
     protected Contact() {
 
@@ -30,5 +45,37 @@ public class Contact extends AbstractEntityId {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Civility getCivility() {
+        return civility;
+    }
+
+    public void setCivility(Civility civility) {
+        this.civility = civility;
+    }
+
+    public List<Email> getEmails() {
+        return emails;
+    }
+
+    public void setEmails(List<Email> emails) {
+        this.emails = emails;
+    }
+
+    public List<Phone> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(List<Phone> phones) {
+        this.phones = phones;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
     }
 }
