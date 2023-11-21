@@ -4,14 +4,20 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "contact")
-public class Contact extends AbstractEntityId {
+public class Contact {
 
-    @Column(name = "first_name", nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_contact")
+    @SequenceGenerator(name = "seq_contact", sequenceName = "seq_contact", initialValue = 1, allocationSize = 1)
+    private long contactId;
+
+    @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,6 +38,27 @@ public class Contact extends AbstractEntityId {
 
     protected Contact() {
 
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "contactId=" + contactId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", civility=" + civility +
+                ", emails=" + emails +
+                ", phones=" + phones +
+                ", addresses=" + addresses +
+                '}';
+    }
+
+    public long getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(long contactId) {
+        this.contactId = contactId;
     }
 
     public String getFirstName() {
@@ -80,5 +107,17 @@ public class Contact extends AbstractEntityId {
 
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Contact contact)) return false;
+        return getContactId() == contact.getContactId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getContactId());
     }
 }

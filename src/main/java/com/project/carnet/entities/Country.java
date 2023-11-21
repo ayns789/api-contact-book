@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 @Entity
 @Table(name = "country")
-public class Country extends AbstractEntityId{
+public class Country {
 
     @Column(name = "libelle", nullable = false)
     private String countryLibelle;

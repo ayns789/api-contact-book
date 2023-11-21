@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "civility")
-public class Civility extends AbstractEntityId {
+public class Civility {
 
     @Column(name = "libelle")
     private String civLibelle;
@@ -22,5 +22,7 @@ public class Civility extends AbstractEntityId {
     public void setCivLibelle(String civLibelle) {
         this.civLibelle = civLibelle;
     }
+
+
 
 }

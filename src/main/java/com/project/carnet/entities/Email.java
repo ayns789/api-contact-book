@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "email")
-public class Email extends AbstractEntityId {
+public class Email {
     @Column(name = "libelle", nullable = false)
     private String emailLibelle;
 
