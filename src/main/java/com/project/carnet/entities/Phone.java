@@ -1,8 +1,7 @@
 package com.project.carnet.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 @Entity
 @Table(name = "phone")
 public class Phone extends AbstractEntityId{
@@ -10,6 +9,10 @@ public class Phone extends AbstractEntityId{
     private Integer phoneLibelle;
     @Column(name = "type", nullable = false)
     private String phoneType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contact_id")
+    private Contact contact;
 
     protected Phone() {
 
@@ -29,5 +32,13 @@ public class Phone extends AbstractEntityId{
 
     public void setPhoneType(String phoneType) {
         this.phoneType = phoneType;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 }
