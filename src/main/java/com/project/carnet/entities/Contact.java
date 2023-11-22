@@ -8,49 +8,38 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "contact")
+@SequenceGenerator(name = "contact.seq_contact", sequenceName = "seq_contact", allocationSize = 1)
 public class Contact {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_contact")
-    @SequenceGenerator(name = "seq_contact", sequenceName = "seq_contact", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact.seq_contact")
+    @Column(name = "contact_id", nullable = false)
     private long contactId;
 
-    @Column(name = "first_name", nullable = false, length = 50)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(name = "last_name", nullable = false, length = 50)
+
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "civility_id")
-    private Civility civility;
+    private Civility civilityId;
 
     @OneToMany(mappedBy = "contact")
     @JoinColumn(name = "email_id")
-    private List<Email> emails = new ArrayList<>();
+    private List<Email> emailsId = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
     @JoinColumn(name = "phone_id")
-    private List<Phone> phones = new ArrayList<>();
+    private List<Phone> phonesId = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
     @JoinColumn(name = "address_id")
-    private List<Address> addresses = new ArrayList<>();
+    private List<Address> addressesId = new ArrayList<>();
 
     protected Contact() {
 
-    }
-
-    @Override
-    public String toString() {
-        return "Contact{" +
-                "contactId=" + contactId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", civility=" + civility +
-                ", emails=" + emails +
-                ", phones=" + phones +
-                ", addresses=" + addresses +
-                '}';
     }
 
     public long getContactId() {
@@ -77,47 +66,61 @@ public class Contact {
         this.lastName = lastName;
     }
 
-    public Civility getCivility() {
-        return civility;
+    public Civility getCivilityId() {
+        return civilityId;
     }
 
-    public void setCivility(Civility civility) {
-        this.civility = civility;
+    public void setCivilityId(Civility civilityId) {
+        this.civilityId = civilityId;
     }
 
-    public List<Email> getEmails() {
-        return emails;
+    public List<Email> getEmailsId() {
+        return emailsId;
     }
 
-    public void setEmails(List<Email> emails) {
-        this.emails = emails;
+    public void setEmailsId(List<Email> emailsId) {
+        this.emailsId = emailsId;
     }
 
-    public List<Phone> getPhones() {
-        return phones;
+    public List<Phone> getPhonesId() {
+        return phonesId;
     }
 
-    public void setPhones(List<Phone> phones) {
-        this.phones = phones;
+    public void setPhonesId(List<Phone> phonesId) {
+        this.phonesId = phonesId;
     }
 
-    public List<Address> getAddresses() {
-        return addresses;
+    public List<Address> getAddressesId() {
+        return addressesId;
     }
 
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
+    public void setAddressesId(List<Address> addressesId) {
+        this.addressesId = addressesId;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "contactId=" + contactId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", civilityId=" + civilityId +
+                ", emailsId=" + emailsId +
+                ", phonesId=" + phonesId +
+                ", addressesId=" + addressesId +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Contact contact)) return false;
-        return getContactId() == contact.getContactId();
+        return getContactId() == contact.getContactId() && Objects.equals(getFirstName(), contact.getFirstName()) && Objects.equals(getLastName(), contact.getLastName()) && Objects.equals(getCivilityId(), contact.getCivilityId()) && Objects.equals(getEmailsId(), contact.getEmailsId()) && Objects.equals(getPhonesId(), contact.getPhonesId()) && Objects.equals(getAddressesId(), contact.getAddressesId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getContactId());
+        return Objects.hash(getContactId(), getFirstName(), getLastName(), getCivilityId(), getEmailsId(), getPhonesId(), getAddressesId());
     }
 }
+
