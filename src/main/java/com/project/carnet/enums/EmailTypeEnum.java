@@ -1,5 +1,5 @@
 package com.project.carnet.enums;
 
-public enum EmailType {
+public enum EmailTypeEnum {
     personal, professional
 }

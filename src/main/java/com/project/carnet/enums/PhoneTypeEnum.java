@@ -1,5 +1,5 @@
 package com.project.carnet.enums;
 
-public enum PhoneType {
+public enum PhoneTypeEnum {
     personal, professional
 }
