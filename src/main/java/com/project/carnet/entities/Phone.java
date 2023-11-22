@@ -54,11 +54,11 @@ public class Phone {
         this.contact = contact;
     }
 
-    public PhoneType getType() {
+    public PhoneTypeEnum getType() {
         return type;
     }
 
-    public void setType(PhoneType type) {
+    public void setType(PhoneTypeEnum type) {
         this.type = type;
     }
 
