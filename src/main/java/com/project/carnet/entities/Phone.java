@@ -7,15 +7,17 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "phone")
+@SequenceGenerator(name = "phone.seq_phone", sequenceName = "seq_phone", initialValue = 1, allocationSize = 1)
 public class Phone {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_phone")
-    @SequenceGenerator(name = "seq_phone", sequenceName = "seq_phone", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phone.seq_phone")
+    @Column(name = "phone_id", nullable = false)
     private long phoneId;
 
-    @Column(name = "libelle", nullable = false, length = 25)
-    private Integer phone;
+    @Column(name = "libelle", nullable = false)
+    private Integer libelle;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private PhoneType type;
@@ -28,16 +30,6 @@ public class Phone {
 
     }
 
-    @Override
-    public String toString() {
-        return "Phone{" +
-                "phoneId=" + phoneId +
-                ", phone=" + phone +
-                ", type=" + type +
-                ", contact=" + contact +
-                '}';
-    }
-
     public long getPhoneId() {
         return phoneId;
     }
@@ -46,12 +38,12 @@ public class Phone {
         this.phoneId = phoneId;
     }
 
-    public Integer getPhone() {
-        return phone;
+    public Integer getLibelle() {
+        return libelle;
     }
 
-    public void setPhone(Integer phone) {
-        this.phone = phone;
+    public void setLibelle(Integer libelle) {
+        this.libelle = libelle;
     }
 
     public Contact getContact() {
@@ -71,14 +63,24 @@ public class Phone {
     }
 
     @Override
+    public String toString() {
+        return "Phone{" +
+                "phoneId=" + phoneId +
+                ", libelle=" + libelle +
+                ", type=" + type +
+                ", contact=" + contact +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Phone phone)) return false;
-        return phoneId == phone.phoneId;
+        return getPhoneId() == phone.getPhoneId() && Objects.equals(libelle, phone.libelle) && getType() == phone.getType() && Objects.equals(getContact(), phone.getContact());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(phoneId);
+        return Objects.hash(getPhoneId(), libelle, getType(), getContact());
     }
 }
