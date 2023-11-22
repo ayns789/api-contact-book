@@ -24,7 +24,7 @@ public class Phone {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contact_id")
-    private Contact contact;
+    private Contact contactId;
 
     protected Phone() {
 
@@ -46,12 +46,12 @@ public class Phone {
         this.libelle = libelle;
     }
 
-    public Contact getContact() {
-        return contact;
+    public Contact getContactId() {
+        return contactId;
     }
 
-    public void setContact(Contact contact) {
-        this.contact = contact;
+    public void setContactId(Contact contactId) {
+        this.contactId = contactId;
     }
 
     public PhoneTypeEnum getType() {
@@ -68,7 +68,7 @@ public class Phone {
                 "phoneId=" + phoneId +
                 ", libelle=" + libelle +
                 ", type=" + type +
-                ", contact=" + contact +
+                ", contactId=" + contactId +
                 '}';
     }
 
@@ -76,11 +76,11 @@ public class Phone {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Phone phone)) return false;
-        return getPhoneId() == phone.getPhoneId() && Objects.equals(libelle, phone.libelle) && getType() == phone.getType() && Objects.equals(getContact(), phone.getContact());
+        return getPhoneId() == phone.getPhoneId() && Objects.equals(getLibelle(), phone.getLibelle()) && getType() == phone.getType() && Objects.equals(getContactId(), phone.getContactId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPhoneId(), libelle, getType(), getContact());
+        return Objects.hash(getPhoneId(), getLibelle(), getType(), getContactId());
     }
 }
