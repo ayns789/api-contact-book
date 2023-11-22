@@ -32,11 +32,11 @@ public class Address {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contact_id")
-    private Contact contactId;
+    private Contact contact;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")
-    private Country countryId;
+    private Country country;
 
     protected Address(){
 
@@ -66,20 +66,20 @@ public class Address {
         this.streetType = streetType;
     }
 
-    public Contact getContactId() {
-        return contactId;
+    public Contact getContact() {
+        return contact;
     }
 
-    public void setContactId(Contact contactId) {
-        this.contactId = contactId;
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
-    public Country getCountryId() {
-        return countryId;
+    public Country getCountry() {
+        return country;
     }
 
-    public void setCountryId(Country countryId) {
-        this.countryId = countryId;
+    public void setCountry(Country country) {
+        this.country = country;
     }
 
     public String getStreetName() {
@@ -115,8 +115,8 @@ public class Address {
                 ", streetName='" + streetName + '\'' +
                 ", cityName='" + cityName + '\'' +
                 ", postalCode=" + postalCode +
-                ", contactId=" + contactId +
-                ", countryId=" + countryId +
+                ", contact=" + contact +
+                ", country=" + country +
                 '}';
     }
 
@@ -124,11 +124,11 @@ public class Address {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Address address)) return false;
-        return getAddressId() == address.getAddressId() && Objects.equals(getStreetNumber(), address.getStreetNumber()) && getStreetType() == address.getStreetType() && Objects.equals(getStreetName(), address.getStreetName()) && Objects.equals(getCityName(), address.getCityName()) && Objects.equals(getPostalCode(), address.getPostalCode()) && Objects.equals(getContactId(), address.getContactId()) && Objects.equals(getCountryId(), address.getCountryId());
+        return getAddressId() == address.getAddressId() && Objects.equals(getStreetNumber(), address.getStreetNumber()) && getStreetType() == address.getStreetType() && Objects.equals(getStreetName(), address.getStreetName()) && Objects.equals(getCityName(), address.getCityName()) && Objects.equals(getPostalCode(), address.getPostalCode()) && Objects.equals(getContact(), address.getContact()) && Objects.equals(getCountry(), address.getCountry());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getAddressId(), getStreetNumber(), getStreetType(), getStreetName(), getCityName(), getPostalCode(), getContactId(), getCountryId());
+        return Objects.hash(getAddressId(), getStreetNumber(), getStreetType(), getStreetName(), getCityName(), getPostalCode(), getContact(), getCountry());
     }
 }

@@ -23,7 +23,7 @@ public class Email {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contact_id")
-    private Contact contactId;
+    private Contact contact;
 
     protected Email(){
 
@@ -53,12 +53,12 @@ public class Email {
         this.type = type;
     }
 
-    public Contact getContactId() {
-        return contactId;
+    public Contact getContact() {
+        return contact;
     }
 
-    public void setContactId(Contact contactId) {
-        this.contactId = contactId;
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class Email {
                 "emailId=" + emailId +
                 ", libelle='" + libelle + '\'' +
                 ", type=" + type +
-                ", contactId=" + contactId +
+                ", contact=" + contact +
                 '}';
     }
 
@@ -75,11 +75,11 @@ public class Email {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Email email)) return false;
-        return getEmailId() == email.getEmailId() && Objects.equals(getLibelle(), email.getLibelle()) && getType() == email.getType() && Objects.equals(getContactId(), email.getContactId());
+        return getEmailId() == email.getEmailId() && Objects.equals(getLibelle(), email.getLibelle()) && getType() == email.getType() && Objects.equals(getContact(), email.getContact());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getEmailId(), getLibelle(), getType(), getContactId());
+        return Objects.hash(getEmailId(), getLibelle(), getType(), getContact());
     }
 }

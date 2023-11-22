@@ -24,19 +24,19 @@ public class Contact {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "civility_id")
-    private Civility civilityId;
+    private Civility civility;
 
     @OneToMany(mappedBy = "contact")
     @JoinColumn(name = "email_id")
-    private List<Email> emailsId = new ArrayList<>();
+    private List<Email> emails = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
     @JoinColumn(name = "phone_id")
-    private List<Phone> phonesId = new ArrayList<>();
+    private List<Phone> phones = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
     @JoinColumn(name = "address_id")
-    private List<Address> addressesId = new ArrayList<>();
+    private List<Address> addresses = new ArrayList<>();
 
     protected Contact() {
 
@@ -66,36 +66,36 @@ public class Contact {
         this.lastName = lastName;
     }
 
-    public Civility getCivilityId() {
-        return civilityId;
+    public Civility getCivility() {
+        return civility;
     }
 
-    public void setCivilityId(Civility civilityId) {
-        this.civilityId = civilityId;
+    public void setCivility(Civility civility) {
+        this.civility = civility;
     }
 
-    public List<Email> getEmailsId() {
-        return emailsId;
+    public List<Email> getEmails() {
+        return emails;
     }
 
-    public void setEmailsId(List<Email> emailsId) {
-        this.emailsId = emailsId;
+    public void setEmails(List<Email> emails) {
+        this.emails = emails;
     }
 
-    public List<Phone> getPhonesId() {
-        return phonesId;
+    public List<Phone> getPhones() {
+        return phones;
     }
 
-    public void setPhonesId(List<Phone> phonesId) {
-        this.phonesId = phonesId;
+    public void setPhones(List<Phone> phones) {
+        this.phones = phones;
     }
 
-    public List<Address> getAddressesId() {
-        return addressesId;
+    public List<Address> getAddresses() {
+        return addresses;
     }
 
-    public void setAddressesId(List<Address> addressesId) {
-        this.addressesId = addressesId;
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
     }
 
     @Override
@@ -104,10 +104,10 @@ public class Contact {
                 "contactId=" + contactId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", civilityId=" + civilityId +
-                ", emailsId=" + emailsId +
-                ", phonesId=" + phonesId +
-                ", addressesId=" + addressesId +
+                ", civility=" + civility +
+                ", emails=" + emails +
+                ", phones=" + phones +
+                ", addresses=" + addresses +
                 '}';
     }
 
@@ -115,12 +115,12 @@ public class Contact {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Contact contact)) return false;
-        return getContactId() == contact.getContactId() && Objects.equals(getFirstName(), contact.getFirstName()) && Objects.equals(getLastName(), contact.getLastName()) && Objects.equals(getCivilityId(), contact.getCivilityId()) && Objects.equals(getEmailsId(), contact.getEmailsId()) && Objects.equals(getPhonesId(), contact.getPhonesId()) && Objects.equals(getAddressesId(), contact.getAddressesId());
+        return getContactId() == contact.getContactId() && Objects.equals(getFirstName(), contact.getFirstName()) && Objects.equals(getLastName(), contact.getLastName()) && Objects.equals(getCivility(), contact.getCivility()) && Objects.equals(getEmails(), contact.getEmails()) && Objects.equals(getPhones(), contact.getPhones()) && Objects.equals(getAddresses(), contact.getAddresses());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getContactId(), getFirstName(), getLastName(), getCivilityId(), getEmailsId(), getPhonesId(), getAddressesId());
+        return Objects.hash(getContactId(), getFirstName(), getLastName(), getCivility(), getEmails(), getPhones(), getAddresses());
     }
 }
 
