@@ -1,13 +1,13 @@
 package com.project.carnet.entities;
 
-import com.project.carnet.enums.PhoneType;
+import com.project.carnet.enums.PhoneTypeEnum;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "phone")
-@SequenceGenerator(name = "phone.seq_phone", sequenceName = "seq_phone", initialValue = 1, allocationSize = 1)
+@SequenceGenerator(name = "phone.seq_phone", sequenceName = "seq_phone", allocationSize = 1)
 public class Phone {
 
     @Id
@@ -20,7 +20,7 @@ public class Phone {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private PhoneType type;
+    private PhoneTypeEnum type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contact_id")
