@@ -1,5 +1,5 @@
 package com.project.carnet.enums;
 
-public enum StreetType {
+public enum StreetTypeEnum {
     street, quay, avenue
 }
