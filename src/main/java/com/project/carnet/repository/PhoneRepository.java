@@ -1,9 +1,9 @@
-package com.project.carnet.repositories;
+package com.project.carnet.repository;
 
 import com.project.carnet.entities.Phone;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PhoneJpaRepo extends JpaRepository<Phone, Long> {
+public interface PhoneRepository extends JpaRepository<Phone, Long> {
 }
