@@ -7,7 +7,7 @@ import com.project.carnet.entities.Phone;
 
 import java.util.List;
 
-public class ContactDTO {
+public class ContactCreateDTO {
 
     private long contactId;
 
@@ -23,8 +23,21 @@ public class ContactDTO {
 
     private List<Address> addresses;
 
-    public ContactDTO(){
+    public ContactCreateDTO(){
 
+    }
+
+    @Override
+    public String toString() {
+        return "ContactCreateDTO{" +
+                "contactId=" + contactId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", civility=" + civility +
+                ", emails=" + emails +
+                ", phones=" + phones +
+                ", addresses=" + addresses +
+                '}';
     }
 
     public long getContactId() {
