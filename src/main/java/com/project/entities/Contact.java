@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "contact")
-@SequenceGenerator(name = "ContactIdGenerator", sequenceName = "contact_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "ContactIdGenerator", sequenceName = "contact_seq", allocationSize = 1)
 public class Contact {
 
     @Id
@@ -27,15 +27,12 @@ public class Contact {
     private Civility civility;
 
     @OneToMany(mappedBy = "contact")
-    @JoinColumn(name = "email_id")
     private List<Email> emails = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
-    @JoinColumn(name = "phone_id")
     private List<Phone> phones = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
-    @JoinColumn(name = "address_id")
     private List<Address> addresses = new ArrayList<>();
 
     protected Contact(){

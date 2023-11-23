@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "address")
-@SequenceGenerator(name = "AddressIdGenerator", sequenceName = "address_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "AddressIdGenerator", sequenceName = "address_seq", allocationSize = 1)
 public class Address {
 
     @Id

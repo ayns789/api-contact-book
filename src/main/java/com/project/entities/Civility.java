@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "civility")
-@SequenceGenerator(name = "CivilityIdGenerator", sequenceName = "civility_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "CivilityIdGenerator", sequenceName = "civility_seq", allocationSize = 1)
 public class Civility {
 
     @Id
