@@ -38,7 +38,11 @@ public class Contact {
     @JoinColumn(name = "address_id")
     private List<Address> addresses = new ArrayList<>();
 
-    protected Contact() {
+    protected Contact(){
+
+    }
+
+    public Contact(String firstName, String lastName, Civility civility, List<Email> emails, List<Address> addresses, List<Phone> phones) {
 
     }
 
