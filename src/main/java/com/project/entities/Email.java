@@ -19,6 +19,7 @@ public class Email {
     private String libelle;
 
     @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private EmailTypeEnum type;
 
     @ManyToOne(fetch = FetchType.LAZY)

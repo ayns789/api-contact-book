@@ -19,6 +19,7 @@ public class Address {
     private Integer streetNumber;
 
     @Column(name = "street_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private StreetTypeEnum streetType;
 
     @Column(name = "street_name", nullable = false)

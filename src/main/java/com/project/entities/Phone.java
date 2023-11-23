@@ -18,8 +18,8 @@ public class Phone {
     @Column(name = "libelle", nullable = false)
     private Integer libelle;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private PhoneTypeEnum type;
 
     @ManyToOne(fetch = FetchType.LAZY)
