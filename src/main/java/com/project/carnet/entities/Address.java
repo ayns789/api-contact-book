@@ -7,11 +7,11 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "address")
-@SequenceGenerator(name = "address.seq_address", sequenceName = "seq_address", allocationSize = 1)
+@SequenceGenerator(name = "AddressIdGenerator", sequenceName = "address_id_seq", allocationSize = 1)
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address.seq_address")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AddressIdGenerator")
     @Column(name = "address_id", nullable = false)
     private long addressId;
 

@@ -7,11 +7,11 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "phone")
-@SequenceGenerator(name = "phone.seq_phone", sequenceName = "seq_phone", allocationSize = 1)
+@SequenceGenerator(name = "PhoneIdGenerator", sequenceName = "phone_id_seq", allocationSize = 1)
 public class Phone {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phone.seq_phone")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PhoneIdGenerator")
     @Column(name = "phone_id", nullable = false)
     private long phoneId;
 

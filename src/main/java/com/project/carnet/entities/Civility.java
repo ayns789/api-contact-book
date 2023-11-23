@@ -6,11 +6,11 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "civility")
-@SequenceGenerator(name = "civility.seq_civility", sequenceName = "seq_civility", allocationSize = 1)
+@SequenceGenerator(name = "CivilityIdGenerator", sequenceName = "civility_id_seq", allocationSize = 1)
 public class Civility {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "civility.seq_civility")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CivilityIdGenerator")
     @Column(name = "civility_id", nullable = false)
     private long civilityId;
 
