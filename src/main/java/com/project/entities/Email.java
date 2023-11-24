@@ -26,9 +26,6 @@ public class Email {
     @JoinColumn(name = "contact_id")
     private Contact contact;
 
-    protected Email(){
-
-    }
 
     public long getEmailId() {
         return emailId;

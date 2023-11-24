@@ -17,9 +17,6 @@ public class Country {
     @Column(name = "libelle", nullable = false)
     private String libelle;
 
-    protected Country(){
-
-    }
 
     public long getCountryId() {
         return countryId;

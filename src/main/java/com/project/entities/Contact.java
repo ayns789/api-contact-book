@@ -35,9 +35,6 @@ public class Contact {
     @OneToMany(mappedBy = "contact")
     private List<Address> addresses = new ArrayList<>();
 
-    protected Contact(){
-
-    }
 
     public Contact(String firstName, String lastName, Civility civility, List<Email> emails, List<Address> addresses, List<Phone> phones) {
 

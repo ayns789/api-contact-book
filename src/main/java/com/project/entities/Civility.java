@@ -17,9 +17,6 @@ public class Civility {
     @Column(name = "libelle")
     private String libelle;
 
-    protected Civility() {
-
-    }
 
     public long getCivilityId() {
         return civilityId;

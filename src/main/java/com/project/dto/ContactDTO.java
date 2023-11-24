@@ -23,9 +23,6 @@ public class ContactDTO {
 
     private List<Address> addresses;
 
-    public ContactDTO(){
-
-    }
 
     public long getContactId() {
         return contactId;
@@ -81,5 +78,18 @@ public class ContactDTO {
 
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
+    }
+
+    @Override
+    public String toString() {
+        return "ContactDTO{" +
+                "contactId=" + contactId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", civility=" + civility +
+                ", emails=" + emails +
+                ", phones=" + phones +
+                ", addresses=" + addresses +
+                '}';
     }
 }

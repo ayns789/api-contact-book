@@ -1,11 +1,11 @@
 package com.project.service;
 
 
-import com.project.dto.ContactCreateDTO;
+import com.project.dto.ContactDTO;
 
 public interface ContactService {
 
-    void createContact(ContactCreateDTO dto);
+    ContactDTO createContact(ContactDTO dto);
 
 
 

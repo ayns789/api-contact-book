@@ -39,10 +39,6 @@ public class Address {
     @JoinColumn(name = "country_id")
     private Country country;
 
-    protected Address(){
-
-    }
-
     public Integer getStreetNumber() {
         return streetNumber;
     }
