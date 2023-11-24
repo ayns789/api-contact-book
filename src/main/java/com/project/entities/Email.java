@@ -1,17 +1,17 @@
-package com.project.carnet.entities;
+package com.project.entities;
 
-import com.project.carnet.enums.EmailTypeEnum;
+import com.project.enums.EmailTypeEnum;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "email")
-@SequenceGenerator(name = "email.seq_email", sequenceName = "seq_email", allocationSize = 1)
+@SequenceGenerator(name = "EmailIdGenerator", sequenceName = "email_seq", allocationSize = 1)
 public class Email {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "email.seq_phone")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EmailIdGenerator")
     @Column(name = "email_id", nullable = false)
     private long emailId;
 
@@ -19,15 +19,13 @@ public class Email {
     private String libelle;
 
     @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private EmailTypeEnum type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contact_id")
     private Contact contact;
 
-    protected Email(){
-
-    }
 
     public long getEmailId() {
         return emailId;

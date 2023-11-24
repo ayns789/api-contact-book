@@ -1,4 +1,4 @@
-package com.project.carnet.entities;
+package com.project.entities;
 
 import jakarta.persistence.*;
 
@@ -6,20 +6,17 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "country")
-@SequenceGenerator(name = "country.seq_country", sequenceName = "seq_country", allocationSize = 1)
+@SequenceGenerator(name = "CountryIdGenerator", sequenceName = "country_seq", allocationSize = 1)
 public class Country {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "country.seq_country")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CountryIdGenerator")
     @Column(name = "country_id", nullable = false)
     private long countryId;
 
     @Column(name = "libelle", nullable = false)
     private String libelle;
 
-    protected Country(){
-
-    }
 
     public long getCountryId() {
         return countryId;

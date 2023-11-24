@@ -1,34 +1,31 @@
-package com.project.carnet.entities;
+package com.project.entities;
 
-import com.project.carnet.enums.PhoneTypeEnum;
+import com.project.enums.PhoneTypeEnum;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "phone")
-@SequenceGenerator(name = "phone.seq_phone", sequenceName = "seq_phone", allocationSize = 1)
+@SequenceGenerator(name = "PhoneIdGenerator", sequenceName = "phone_seq", allocationSize = 1)
 public class Phone {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phone.seq_phone")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PhoneIdGenerator")
     @Column(name = "phone_id", nullable = false)
     private long phoneId;
 
     @Column(name = "libelle", nullable = false)
     private Integer libelle;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private PhoneTypeEnum type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contact_id")
     private Contact contact;
 
-    protected Phone() {
-
-    }
 
     public long getPhoneId() {
         return phoneId;
