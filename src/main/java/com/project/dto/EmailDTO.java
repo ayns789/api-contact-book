@@ -2,6 +2,8 @@ package com.project.dto;
 
 import com.project.entities.Contact;
 import com.project.enums.EmailTypeEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 public class EmailDTO {
 
@@ -9,6 +11,7 @@ public class EmailDTO {
 
     private String libelle;
 
+    @Enumerated(EnumType.STRING)
     private EmailTypeEnum type;
 
     private Contact contact;

@@ -2,6 +2,8 @@ package com.project.dto;
 
 import com.project.entities.Contact;
 import com.project.enums.PhoneTypeEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 
 public class PhoneDTO {
@@ -11,7 +13,7 @@ public class PhoneDTO {
 
     private Integer libelle;
 
-
+    @Enumerated(EnumType.STRING)
     private PhoneTypeEnum phoneType;
 
     private Contact contact;

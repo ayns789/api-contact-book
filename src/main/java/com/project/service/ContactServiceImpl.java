@@ -1,10 +1,14 @@
 package com.project.service;
 
+import com.project.dto.AddressDTO;
 import com.project.dto.ContactDTO;
+import com.project.dto.EmailDTO;
+import com.project.dto.PhoneDTO;
 import com.project.entities.*;
 import com.project.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,40 +34,76 @@ public class ContactServiceImpl implements  ContactService {
         this.addressRepository = addressRepository;
         this.countryRepository = countryRepository;
     }
+
     @Override
-    public ContactDTO createContact(ContactDTO dto) {
-        Civility civility = civilityRepository.getReferenceById(dto.getCivility().getCivilityId());
-        Country country = countryRepository.getReferenceById(dto.getAddresses().get(0).getCountry().getCountryId());
+    public ContactDTO createContact(ContactDTO input) {
+        Civility civility = civilityRepository.getReferenceById(input.getCivility().getCivilityId());
+        Country country = countryRepository.getReferenceById(input.getAddresses().get(0).getCountry().getCountryId());
 
         Contact contact = new Contact();
         contact.setCivility(civility);
-        contact.setFirstName(dto.getFirstName());
-        contact.setLastName(dto.getLastName());
+        contact.setFirstName(input.getFirstName());
+        contact.setLastName(input.getLastName());
 
-        Email email = new Email();
-        email.setContact(contact);
-        email.setLibelle(dto.getEmails().get(0).getLibelle());
-        email.setType(dto.getEmails().get(0).getType());
+        List<Email> emails = new ArrayList<>();
+        input.getEmails().forEach(emailInput -> {
+            Email email = new Email();
+            email.setContact(contact);
+            email.setLibelle(emailInput.getLibelle());
+            email.setType(emailInput.getType());
+            emails.add(email);
+        });
 
-        Phone phone = new Phone();
-        phone.setContact(contact);
-        phone.setLibelle(dto.getPhones().get(0).getLibelle());
-        phone.setType(dto.getPhones().get(0).getType());
+        List<Phone> phones = new ArrayList<>();
+        input.getPhones().forEach(phoneInput -> {
+            Phone phone = new Phone();
+            phone.setContact(contact);
+            phone.setLibelle(phoneInput.getLibelle());
+            phone.setType(phoneInput.getType());
+            phones.add(phone);
+        });
 
-        Address address = new Address();
-        address.setCountry(country);
-        address.setContact(contact);
-        address.setStreetNumber(dto.getAddresses().get(0).getStreetNumber());
-        address.setStreetType(dto.getAddresses().get(0).getStreetType());
-        address.setStreetName(dto.getAddresses().get(0).getStreetName());
-        address.setCityName(dto.getAddresses().get(0).getCityName());
-        address.setPostalCode(dto.getAddresses().get(0).getPostalCode());
+        List<Address> addresses = new ArrayList<>();
+        input.getAddresses().forEach(addressInput -> {
+            Address address = new Address();
+            address.setCountry(country);
+            address.setContact(contact);
+            address.setStreetNumber(addressInput.getStreetNumber());
+            address.setStreetType(addressInput.getStreetType());
+            address.setStreetName(addressInput.getStreetName());
+            address.setCityName(addressInput.getCityName());
+            address.setPostalCode(addressInput.getPostalCode());
+            addresses.add(address);
+        });
 
         contactRepository.save(contact);
-        emailRepository.save(email);
-        phoneRepository.save(phone);
-        addressRepository.save(address);
+        emailRepository.saveAll(emails);
+        phoneRepository.saveAll(phones);
+        addressRepository.saveAll(addresses);
 
-        return dto;
+        return input;
     }
 }
+
+
+
+
+
+//        Email email = new Email();
+//        email.setContact(contact);
+//        email.setLibelle(dto.getEmails().get(0).getLibelle());
+//        email.setType(dto.getEmails().get(0).getType());
+//
+//        Phone phone = new Phone();
+//        phone.setContact(contact);
+//        phone.setLibelle(dto.getPhones().get(0).getLibelle());
+//        phone.setType(dto.getPhones().get(0).getType());
+//
+//        Address address = new Address();
+//        address.setCountry(country);
+//        address.setContact(contact);
+//        address.setStreetNumber(dto.getAddresses().get(0).getStreetNumber());
+//        address.setStreetType(dto.getAddresses().get(0).getStreetType());
+//        address.setStreetName(dto.getAddresses().get(0).getStreetName());
+//        address.setCityName(dto.getAddresses().get(0).getCityName());
+//        address.setPostalCode(dto.getAddresses().get(0).getPostalCode());
