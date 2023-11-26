@@ -13,10 +13,6 @@ public class EmailDTO {
 
     private Contact contact;
 
-    public EmailDTO(){
-
-    }
-
     public long getEmailId() {
         return emailId;
     }
