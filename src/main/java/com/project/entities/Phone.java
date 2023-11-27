@@ -16,7 +16,7 @@ public class Phone {
     private long phoneId;
 
     @Column(name = "libelle", nullable = false)
-    private Integer libelle;
+    private String libelle;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -35,14 +35,13 @@ public class Phone {
         this.phoneId = phoneId;
     }
 
-    public Integer getLibelle() {
+    public String getLibelle() {
         return libelle;
     }
 
-    public void setLibelle(Integer libelle) {
+    public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
-
 
     public Contact getContact() {
         return contact;

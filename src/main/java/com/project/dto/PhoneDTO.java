@@ -4,15 +4,24 @@ import com.project.entities.Contact;
 import com.project.enums.PhoneTypeEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 
 public class PhoneDTO {
 
     private Long contactId;
 
+    @NotNull
+    @NotBlank
+    @Max(value = 50, message
+            = "'libelle' from phone must be under 50 characters")
+    private String libelle;
 
-    private Integer libelle;
-
+    @NotNull
+    @NotBlank
+    @Max(value=20, message = "'type' of phone must be under 20 characters")
     @Enumerated(EnumType.STRING)
     private PhoneTypeEnum phoneType;
 
@@ -30,11 +39,11 @@ public class PhoneDTO {
         this.contactId = contactId;
     }
 
-    public Integer getLibelle() {
+    public String getLibelle() {
         return libelle;
     }
 
-    public void setLibelle(Integer libelle) {
+    public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
 

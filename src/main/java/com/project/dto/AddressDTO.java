@@ -3,19 +3,35 @@ package com.project.dto;
 import com.project.entities.Contact;
 import com.project.entities.Country;
 import com.project.enums.StreetTypeEnum;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class AddressDTO {
 
     private long addressId;
 
+    @NotNull
+    @NotBlank
     private Integer streetNumber;
 
+    @NotNull
+    @NotBlank
+    @Max(value=50, message = "'type' of phone must be under 50 characters")
     private StreetTypeEnum streetType;
 
+    @NotNull
+    @NotBlank
+    @Max(value=255, message = "'type' of phone must be under 255 characters")
     private String streetName;
 
+    @NotNull
+    @NotBlank
+    @Max(value=255, message = "'type' of phone must be under 255 characters")
     private String cityName;
 
+    @NotNull
+    @NotBlank
     private Integer postalCode;
 
     private Contact contact;

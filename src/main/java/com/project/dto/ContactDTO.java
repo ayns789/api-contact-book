@@ -4,6 +4,9 @@ import com.project.entities.Address;
 import com.project.entities.Civility;
 import com.project.entities.Email;
 import com.project.entities.Phone;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -11,8 +14,14 @@ public class ContactDTO {
 
     private long contactId;
 
+    @NotNull
+    @NotBlank
+    @Max(value=50, message = "'type' of phone must be under 50 characters")
     private String firstName;
 
+    @NotNull
+    @NotBlank
+    @Max(value=50, message = "'type' of phone must be under 50 characters")
     private String lastName;
 
     private Civility civility;
