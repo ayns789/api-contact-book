@@ -4,10 +4,7 @@ import com.project.entities.Contact;
 import com.project.enums.EmailTypeEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 
 public class EmailDTO {
@@ -18,13 +15,13 @@ public class EmailDTO {
     @NotNull
     @NotBlank
     @Email
-    @Max(value = 255, message
+    @Size(max = 255, message
             = "'libelle' from email must be under 255 characters")
     private String libelle;
 
     @NotNull
     @NotBlank
-    @Max(value=20, message = "'type' of email must be under 20 characters")
+    @Size(max=20, message = "'type' of email must be under 20 characters")
     @Enumerated(EnumType.STRING)
     private EmailTypeEnum type;
 

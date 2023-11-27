@@ -3,10 +3,7 @@ package com.project.dto;
 import com.project.entities.Contact;
 import com.project.entities.Country;
 import com.project.enums.StreetTypeEnum;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 
 public class AddressDTO {
 
@@ -14,30 +11,27 @@ public class AddressDTO {
 
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^[0-9]+$", message = "street number of address must be only numbers")
-    @Max(value=15, message = "number of street must be under 15 characters")
+    @Size(max=15, message = "number of street must be under 15 characters")
     private Integer streetNumber;
 
     @NotNull
     @NotBlank
-    @Max(value=50, message = "'type' of phone must be under 50 characters")
+    @Size(max=50, message = "'type' of address must be under 50 characters")
     private StreetTypeEnum streetType;
 
     @NotNull
     @NotBlank
-    @Max(value=255, message = "'type' of phone must be under 255 characters")
-    @Pattern(regexp="^[a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'-`]+$", message = "name of street must be only characters letters")
+    @Size(max=255, message = "'streetName' of address must be under 255 characters")
     private String streetName;
 
     @NotNull
     @NotBlank
-    @Max(value=255, message = "'type' of phone must be under 255 characters")
-    @Pattern(regexp="^[a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'-`]+$", message = "name of city must be only characters letters")
+    @Size(max=255, message = "'cityName' of address must be under 255 characters")
     private String cityName;
 
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^[0-9]+$", message = "postal code of address must be only numbers")
+    @Size(max=25, message = "'postalCode' of address must be under 25 characters")
     private Integer postalCode;
 
     private Contact contact;

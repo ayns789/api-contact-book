@@ -2,6 +2,7 @@ package com.project.controllers;
 
 import com.project.dto.ContactDTO;
 import com.project.service.ContactService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +16,7 @@ public class ContactController {
     }
 
     @PostMapping("/add")
-    public ContactDTO create(@RequestBody ContactDTO input) {
+    public ContactDTO create(@Valid @RequestBody ContactDTO input) {
       return service.createContact(input);
     }
 }

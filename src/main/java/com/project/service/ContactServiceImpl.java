@@ -88,22 +88,3 @@ public class ContactServiceImpl implements  ContactService {
 
 
 
-
-//        Email email = new Email();
-//        email.setContact(contact);
-//        email.setLibelle(dto.getEmails().get(0).getLibelle());
-//        email.setType(dto.getEmails().get(0).getType());
-//
-//        Phone phone = new Phone();
-//        phone.setContact(contact);
-//        phone.setLibelle(dto.getPhones().get(0).getLibelle());
-//        phone.setType(dto.getPhones().get(0).getType());
-//
-//        Address address = new Address();
-//        address.setCountry(country);
-//        address.setContact(contact);
-//        address.setStreetNumber(dto.getAddresses().get(0).getStreetNumber());
-//        address.setStreetType(dto.getAddresses().get(0).getStreetType());
-//        address.setStreetName(dto.getAddresses().get(0).getStreetName());
-//        address.setCityName(dto.getAddresses().get(0).getCityName());
-//        address.setPostalCode(dto.getAddresses().get(0).getPostalCode());
