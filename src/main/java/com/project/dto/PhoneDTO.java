@@ -25,7 +25,7 @@ public class PhoneDTO {
     @NotBlank
     @Max(value=20, message = "'type' of phone must be under 20 characters")
     @Enumerated(EnumType.STRING)
-    private PhoneTypeEnum phoneType;
+    private PhoneTypeEnum type;
 
     private Contact contact;
 
@@ -49,12 +49,12 @@ public class PhoneDTO {
         this.libelle = libelle;
     }
 
-    public PhoneTypeEnum getPhoneType() {
-        return phoneType;
+    public PhoneTypeEnum getType() {
+        return type;
     }
 
-    public void setPhoneType(PhoneTypeEnum phoneType) {
-        this.phoneType = phoneType;
+    public void setType(PhoneTypeEnum type) {
+        this.type = type;
     }
 
     public Contact getContact() {
