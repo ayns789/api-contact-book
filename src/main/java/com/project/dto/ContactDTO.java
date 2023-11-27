@@ -7,6 +7,7 @@ import com.project.entities.Phone;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
 
@@ -17,11 +18,13 @@ public class ContactDTO {
     @NotNull
     @NotBlank
     @Max(value=50, message = "'type' of phone must be under 50 characters")
+    @Pattern(regexp="^[a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'-`]+$", message = "first name of contact must be only characters letters")
     private String firstName;
 
     @NotNull
     @NotBlank
     @Max(value=50, message = "'type' of phone must be under 50 characters")
+    @Pattern(regexp="^[a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'-`]+$", message = "last name of contact must be only characters letters")
     private String lastName;
 
     private Civility civility;

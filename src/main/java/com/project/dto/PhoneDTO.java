@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 
 public class PhoneDTO {
@@ -15,6 +16,7 @@ public class PhoneDTO {
 
     @NotNull
     @NotBlank
+    @Pattern(regexp = "^[0-9]+$", message = "libelle of phone must be only numbers")
     @Max(value = 50, message
             = "'libelle' from phone must be under 50 characters")
     private String libelle;

@@ -6,6 +6,7 @@ import com.project.enums.StreetTypeEnum;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public class AddressDTO {
 
@@ -13,6 +14,8 @@ public class AddressDTO {
 
     @NotNull
     @NotBlank
+    @Pattern(regexp = "^[0-9]+$", message = "street number of address must be only numbers")
+    @Max(value=15, message = "number of street must be under 15 characters")
     private Integer streetNumber;
 
     @NotNull
@@ -23,15 +26,18 @@ public class AddressDTO {
     @NotNull
     @NotBlank
     @Max(value=255, message = "'type' of phone must be under 255 characters")
+    @Pattern(regexp="^[a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'-`]+$", message = "name of street must be only characters letters")
     private String streetName;
 
     @NotNull
     @NotBlank
     @Max(value=255, message = "'type' of phone must be under 255 characters")
+    @Pattern(regexp="^[a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'-`]+$", message = "name of city must be only characters letters")
     private String cityName;
 
     @NotNull
     @NotBlank
+    @Pattern(regexp = "^[0-9]+$", message = "postal code of address must be only numbers")
     private Integer postalCode;
 
     private Contact contact;
