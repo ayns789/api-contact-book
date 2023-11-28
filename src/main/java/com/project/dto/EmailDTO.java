@@ -27,6 +27,13 @@ public class EmailDTO {
 
     private Contact contact;
 
+    public EmailDTO(Contact contact, String libelle, EmailTypeEnum type) {
+    }
+
+    public EmailDTO() {
+
+    }
+
     public long getEmailId() {
         return emailId;
     }

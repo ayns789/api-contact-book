@@ -39,6 +39,13 @@ public class Address {
     @JoinColumn(name = "country_id")
     private Country country;
 
+    public Address(Country country, Contact contact, Integer streetNumber, StreetTypeEnum streetType, String streetName, String cityName, Integer postalCode) {
+    }
+
+    public Address() {
+
+    }
+
     public Integer getStreetNumber() {
         return streetNumber;
     }

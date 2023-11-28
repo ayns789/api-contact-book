@@ -30,6 +30,9 @@ public class Email {
 
     }
 
+    public Email(Contact contact, String libelle, EmailTypeEnum type) {
+    }
+
     public long getEmailId() {
         return emailId;
     }

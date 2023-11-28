@@ -26,6 +26,13 @@ public class Phone {
     @JoinColumn(name = "contact_id")
     private Contact contact;
 
+    public Phone(Contact contact, String libelle, PhoneTypeEnum type) {
+    }
+
+    public Phone() {
+
+    }
+
 
     public long getPhoneId() {
         return phoneId;

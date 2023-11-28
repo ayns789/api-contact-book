@@ -38,9 +38,13 @@ public class AddressDTO {
 
     private Country country;
 
+    public AddressDTO(Country country, Contact contact, Integer streetNumber, StreetTypeEnum streetType, String streetName, String cityName, Integer postalCode) {
+    }
+
     public AddressDTO(){
 
     }
+
 
     public long getAddressId() {
         return addressId;

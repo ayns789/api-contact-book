@@ -29,6 +29,9 @@ public class PhoneDTO {
 
     }
 
+    public PhoneDTO(Contact contact, String libelle, PhoneTypeEnum type) {
+    }
+
     public Long getContactId() {
         return contactId;
     }
