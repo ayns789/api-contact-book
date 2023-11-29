@@ -5,6 +5,8 @@ import com.project.entities.Country;
 import com.project.enums.StreetTypeEnum;
 import jakarta.validation.constraints.*;
 
+import java.util.Objects;
+
 public class AddressDTO {
 
     private long addressId;
@@ -34,17 +36,9 @@ public class AddressDTO {
     @Size(max=25, message = "'postalCode' of address must be under 25 characters")
     private Integer postalCode;
 
-    private Contact contact;
+    private ContactDTO contact;
 
-    private Country country;
-
-    public AddressDTO(Country country, Contact contact, Integer streetNumber, StreetTypeEnum streetType, String streetName, String cityName, Integer postalCode) {
-    }
-
-    public AddressDTO(){
-
-    }
-
+    private CountryDTO country;
 
     public long getAddressId() {
         return addressId;
@@ -94,19 +88,61 @@ public class AddressDTO {
         this.postalCode = postalCode;
     }
 
-    public Contact getContact() {
+    public ContactDTO getContact() {
         return contact;
     }
 
-    public void setContact(Contact contact) {
+    public void setContact(ContactDTO contact) {
         this.contact = contact;
     }
 
-    public Country getCountry() {
+    public CountryDTO getCountry() {
         return country;
     }
 
-    public void setCountry(Country country) {
+    public void setCountry(CountryDTO country) {
         this.country = country;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressDTO{" +
+                "addressId=" + addressId +
+                ", streetNumber=" + streetNumber +
+                ", streetType=" + streetType +
+                ", streetName='" + streetName + '\'' +
+                ", cityName='" + cityName + '\'' +
+                ", postalCode=" + postalCode +
+                ", contact=" + contact +
+                ", country=" + country +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AddressDTO that)) return false;
+
+        if (addressId != that.addressId) return false;
+        if (!Objects.equals(streetNumber, that.streetNumber)) return false;
+        if (streetType != that.streetType) return false;
+        if (!Objects.equals(streetName, that.streetName)) return false;
+        if (!Objects.equals(cityName, that.cityName)) return false;
+        if (!Objects.equals(postalCode, that.postalCode)) return false;
+        if (!Objects.equals(contact, that.contact)) return false;
+        return Objects.equals(country, that.country);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (addressId ^ (addressId >>> 32));
+        result = 31 * result + (streetNumber != null ? streetNumber.hashCode() : 0);
+        result = 31 * result + (streetType != null ? streetType.hashCode() : 0);
+        result = 31 * result + (streetName != null ? streetName.hashCode() : 0);
+        result = 31 * result + (cityName != null ? cityName.hashCode() : 0);
+        result = 31 * result + (postalCode != null ? postalCode.hashCode() : 0);
+        result = 31 * result + (contact != null ? contact.hashCode() : 0);
+        result = 31 * result + (country != null ? country.hashCode() : 0);
+        return result;
     }
 }

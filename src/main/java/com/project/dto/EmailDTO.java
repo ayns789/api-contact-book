@@ -6,6 +6,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 
+import java.util.Objects;
+
 
 public class EmailDTO {
 
@@ -25,14 +27,7 @@ public class EmailDTO {
     @Enumerated(EnumType.STRING)
     private EmailTypeEnum type;
 
-    private Contact contact;
-
-    public EmailDTO(Contact contact, String libelle, EmailTypeEnum type) {
-    }
-
-    public EmailDTO() {
-
-    }
+    private ContactDTO contact;
 
     public long getEmailId() {
         return emailId;
@@ -58,11 +53,41 @@ public class EmailDTO {
         this.type = type;
     }
 
-    public Contact getContact() {
+    public ContactDTO getContact() {
         return contact;
     }
 
-    public void setContact(Contact contact) {
+    public void setContact(ContactDTO contact) {
         this.contact = contact;
+    }
+
+    @Override
+    public String toString() {
+        return "EmailDTO{" +
+                "emailId=" + emailId +
+                ", libelle='" + libelle + '\'' +
+                ", type=" + type +
+                ", contact=" + contact +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EmailDTO emailDTO)) return false;
+
+        if (emailId != emailDTO.emailId) return false;
+        if (!Objects.equals(libelle, emailDTO.libelle)) return false;
+        if (type != emailDTO.type) return false;
+        return Objects.equals(contact, emailDTO.contact);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (emailId ^ (emailId >>> 32));
+        result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (contact != null ? contact.hashCode() : 0);
+        return result;
     }
 }

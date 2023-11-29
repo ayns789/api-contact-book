@@ -7,6 +7,7 @@ import com.project.entities.Phone;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ContactDTO {
 
@@ -22,13 +23,13 @@ public class ContactDTO {
     @Size(max = 50, message = "'lastName' of contact must be under 50 characters")
     private String lastName;
 
-    private Civility civility;
+    private CivilityDTO civility;
 
-    private List<Email> emails;
+    private List<EmailDTO> emails;
 
-    private List<Phone> phones;
+    private List<PhoneDTO> phones;
 
-    private List<Address> addresses;
+    private List<AddressDTO> addresses;
 
 
     public long getContactId() {
@@ -55,35 +56,35 @@ public class ContactDTO {
         this.lastName = lastName;
     }
 
-    public Civility getCivility() {
+    public CivilityDTO getCivility() {
         return civility;
     }
 
-    public void setCivility(Civility civility) {
+    public void setCivility(CivilityDTO civility) {
         this.civility = civility;
     }
 
-    public List<Email> getEmails() {
+    public List<EmailDTO> getEmails() {
         return emails;
     }
 
-    public void setEmails(List<Email> emails) {
+    public void setEmails(List<EmailDTO> emails) {
         this.emails = emails;
     }
 
-    public List<Phone> getPhones() {
+    public List<PhoneDTO> getPhones() {
         return phones;
     }
 
-    public void setPhones(List<Phone> phones) {
+    public void setPhones(List<PhoneDTO> phones) {
         this.phones = phones;
     }
 
-    public List<Address> getAddresses() {
+    public List<AddressDTO> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<Address> addresses) {
+    public void setAddresses(List<AddressDTO> addresses) {
         this.addresses = addresses;
     }
 
@@ -98,5 +99,31 @@ public class ContactDTO {
                 ", phones=" + phones +
                 ", addresses=" + addresses +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ContactDTO that)) return false;
+
+        if (contactId != that.contactId) return false;
+        if (!Objects.equals(firstName, that.firstName)) return false;
+        if (!Objects.equals(lastName, that.lastName)) return false;
+        if (!Objects.equals(civility, that.civility)) return false;
+        if (!Objects.equals(emails, that.emails)) return false;
+        if (!Objects.equals(phones, that.phones)) return false;
+        return Objects.equals(addresses, that.addresses);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (contactId ^ (contactId >>> 32));
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (civility != null ? civility.hashCode() : 0);
+        result = 31 * result + (emails != null ? emails.hashCode() : 0);
+        result = 31 * result + (phones != null ? phones.hashCode() : 0);
+        result = 31 * result + (addresses != null ? addresses.hashCode() : 0);
+        return result;
     }
 }

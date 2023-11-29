@@ -141,7 +141,7 @@ public class ContactServiceImpl implements  ContactService {
             List<Address> addresses = new ArrayList<>();
             addressesDTO.forEach(addressDTO -> {
                 Address address = new Address();
-                address.setCountry(countryRepository.getReferenceById(addressDTO.getCountry().getCountryId()));
+                address.setCountry(addressDTO.getCountry());
                 address.setContact(addressDTO.getContact());
                 address.setStreetNumber(addressDTO.getStreetNumber());
                 address.setStreetType(addressDTO.getStreetType());

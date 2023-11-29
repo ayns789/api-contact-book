@@ -6,6 +6,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 
+import java.util.Objects;
+
 
 public class PhoneDTO {
 
@@ -23,14 +25,7 @@ public class PhoneDTO {
     @Enumerated(EnumType.STRING)
     private PhoneTypeEnum type;
 
-    private Contact contact;
-
-    public PhoneDTO(){
-
-    }
-
-    public PhoneDTO(Contact contact, String libelle, PhoneTypeEnum type) {
-    }
+    private ContactDTO contact;
 
     public Long getContactId() {
         return contactId;
@@ -56,11 +51,41 @@ public class PhoneDTO {
         this.type = type;
     }
 
-    public Contact getContact() {
+    public ContactDTO getContact() {
         return contact;
     }
 
-    public void setContact(Contact contact) {
+    public void setContact(ContactDTO contact) {
         this.contact = contact;
+    }
+
+    @Override
+    public String toString() {
+        return "PhoneDTO{" +
+                "contactId=" + contactId +
+                ", libelle='" + libelle + '\'' +
+                ", type=" + type +
+                ", contact=" + contact +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PhoneDTO phoneDTO)) return false;
+
+        if (!Objects.equals(contactId, phoneDTO.contactId)) return false;
+        if (!Objects.equals(libelle, phoneDTO.libelle)) return false;
+        if (type != phoneDTO.type) return false;
+        return Objects.equals(contact, phoneDTO.contact);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = contactId != null ? contactId.hashCode() : 0;
+        result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (contact != null ? contact.hashCode() : 0);
+        return result;
     }
 }
