@@ -1,5 +1,6 @@
 package com.project.entities;
 
+import com.project.enums.CivilityEnumType;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -15,7 +16,7 @@ public class Civility {
     private long civilityId;
 
     @Column(name = "libelle")
-    private String libelle;
+    private CivilityEnumType libelle;
 
 
     public long getCivilityId() {
@@ -26,11 +27,11 @@ public class Civility {
         this.civilityId = civilityId;
     }
 
-    public String getLibelle() {
+    public CivilityEnumType getLibelle() {
         return libelle;
     }
 
-    public void setLibelle(String libelle) {
+    public void setLibelle(CivilityEnumType libelle) {
         this.libelle = libelle;
     }
 
@@ -38,7 +39,7 @@ public class Civility {
     public String toString() {
         return "Civility{" +
                 "civilityId=" + civilityId +
-                ", libelle='" + libelle + '\'' +
+                ", libelle=" + libelle +
                 '}';
     }
 
@@ -46,11 +47,15 @@ public class Civility {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Civility civility)) return false;
-        return getCivilityId() == civility.getCivilityId() && Objects.equals(getLibelle(), civility.getLibelle());
+
+        if (civilityId != civility.civilityId) return false;
+        return libelle == civility.libelle;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCivilityId(), getLibelle());
+        int result = (int) (civilityId ^ (civilityId >>> 32));
+        result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
+        return result;
     }
 }

@@ -1,5 +1,6 @@
 package com.project.dto;
 
+import com.project.enums.CivilityEnumType;
 import jakarta.validation.constraints.*;
 
 import java.util.Objects;
@@ -10,7 +11,7 @@ public class CivilityDTO {
     @NotNull
     @NotBlank
     @Size(max=20, message = "'libelle' of civility must be under 20 characters")
-    private String libelle;
+    private CivilityEnumType libelle;
 
 
     public long getCivilityId() {
@@ -21,11 +22,11 @@ public class CivilityDTO {
         this.civilityId = civilityId;
     }
 
-    public String getLibelle() {
+    public CivilityEnumType getLibelle() {
         return libelle;
     }
 
-    public void setLibelle(String libelle) {
+    public void setLibelle(CivilityEnumType libelle) {
         this.libelle = libelle;
     }
 
@@ -33,7 +34,7 @@ public class CivilityDTO {
     public String toString() {
         return "CivilityDTO{" +
                 "civilityId=" + civilityId +
-                ", libelle='" + libelle + '\'' +
+                ", libelle=" + libelle +
                 '}';
     }
 
@@ -43,7 +44,7 @@ public class CivilityDTO {
         if (!(o instanceof CivilityDTO that)) return false;
 
         if (civilityId != that.civilityId) return false;
-        return Objects.equals(libelle, that.libelle);
+        return libelle == that.libelle;
     }
 
     @Override
