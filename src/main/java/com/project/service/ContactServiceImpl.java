@@ -36,187 +36,70 @@ public class ContactServiceImpl implements  ContactService {
         this.countryRepository = countryRepository;
     }
 
-//    public List<Phone> getPhones(ContactDTO input, Contact contact) {
-//
-//        List<PhoneDTO> phonesDTO = input.getPhones().stream()
-//                .map(phoneData -> new PhoneDTO(contact, phoneData.getLibelle(), phoneData.getType()))
-//                .toList();
-//
-//        List<Phone> phones = phonesDTO.stream()
-//                .map(phoneDTO -> new Phone(phoneDTO.getContact(), phoneDTO.getLibelle(), phoneDTO.getType()))
-//                .collect(Collectors.toList());
-//
-//            return phones;
-//    }
-//
-//    public List<Email> getEmails(ContactDTO input, Contact contact) {
-//
-//        List<EmailDTO> emailsDTO = input.getEmails().stream()
-//                .map(emailData -> new EmailDTO(contact, emailData.getLibelle(), emailData.getType()))
-//                .toList();
-//
-//        List<Email> emails =  emailsDTO.stream()
-//                .map(emailDTO -> new Email(emailDTO.getContact(), emailDTO.getLibelle(), emailDTO.getType()))
-//                .collect(Collectors.toList());
-//
-//        return emails;
-//    }
-//
-//    public List<Address> getAddresses(ContactDTO input, Contact contact) {
-//        List<AddressDTO> addressesDTO = input.getAddresses().stream()
-//                .map(addressData -> new AddressDTO(countryRepository.getReferenceById(addressData.getCountry().getCountryId()), contact, addressData.getStreetNumber(), addressData.getStreetType(), addressData.getStreetName(),
-//                        addressData.getCityName(), addressData.getPostalCode()))
-//                .toList();
-//
-//        List<Address> addresses = addressesDTO.stream()
-//                .map(addressDto -> new Address(addressDto.getCountry(),addressDto.getContact(), addressDto.getStreetNumber(), addressDto.getStreetType(), addressDto.getStreetName(),
-//                        addressDto.getCityName(), addressDto.getPostalCode()))
-//                .toList();
-//
-//          return addresses;
-//    }
 
-    public List<Email> getEmails(ContactDTO input, Contact contact) {
+        public List<Phone> getPhones(ContactDTO contactDTO, Contact contact) {
 
-        List<EmailDTO> emailsDTO = new ArrayList<>();
-        input.getEmails().forEach(emailData -> {
-            EmailDTO emailDTO = new EmailDTO();
-            emailDTO.setContact(contact);
-            emailDTO.setLibelle(emailData.getLibelle());
-            emailDTO.setType(emailData.getType());
-            emailsDTO.add(emailDTO);
-        });
-
-        List<Email> emails = new ArrayList<>();
-        emailsDTO.forEach(emailDTO -> {
-            Email email = new Email();
-            email.setContact(emailDTO.getContact());
-            email.setLibelle(emailDTO.getLibelle());
-            email.setType(emailDTO.getType());
-            emails.add(email);
-        });
-
-        return emails;
-    }
-
-    public List<Phone> getPhones(ContactDTO input, Contact contact) {
-
-        List<PhoneDTO> phonesDTO = new ArrayList<>();
-        input.getPhones().forEach(phoneData -> {
-            PhoneDTO phoneDTO = new PhoneDTO();
-            phoneDTO.setContact(contact);
-            phoneDTO.setLibelle(phoneData.getLibelle());
-            phoneDTO.setType(phoneData.getType());
-            phonesDTO.add(phoneDTO);
-        });
-
-        List<Phone> phones = new ArrayList<>();
-        phonesDTO.forEach(phoneDTO -> {
-            Phone phone = new Phone();
-            phone.setContact(phoneDTO.getContact());
-            phone.setLibelle(phoneDTO.getLibelle());
-            phone.setType(phoneDTO.getType());
-            phones.add(phone);
-        });
-
-        return phones;
-    }
-
-        public List<Address> getAddresses(ContactDTO input, Contact contact) {
-
-            List<AddressDTO> addressesDTO = new ArrayList<>();
-            input.getAddresses().forEach(addressData -> {
-                AddressDTO addressDTO = new AddressDTO();
-                addressDTO.setCountry(countryRepository.getReferenceById(addressData.getCountry().getCountryId()));
-                addressDTO.setContact(contact);
-                addressDTO.setStreetNumber(addressData.getStreetNumber());
-                addressDTO.setStreetType(addressData.getStreetType());
-                addressDTO.setStreetName(addressData.getStreetName());
-                addressDTO.setCityName(addressData.getCityName());
-                addressDTO.setPostalCode(addressData.getPostalCode());
-                addressesDTO.add(addressDTO);
-
+            List<Phone> phones = new ArrayList<>();
+            contactDTO.getPhones().forEach(phoneDTO -> {
+                Phone phone = new Phone();
+                phone.setContact(contact);
+                phone.setLibelle(phoneDTO.getLibelle());
+                phone.setType(phoneDTO.getType());
+                phones.add(phone);
             });
 
-            List<Address> addresses = new ArrayList<>();
-            addressesDTO.forEach(addressDTO -> {
-                Address address = new Address();
-                address.setCountry(addressDTO.getCountry());
-                address.setContact(addressDTO.getContact());
-                address.setStreetNumber(addressDTO.getStreetNumber());
-                address.setStreetType(addressDTO.getStreetType());
-                address.setStreetName(addressDTO.getStreetName());
-                address.setCityName(addressDTO.getCityName());
-                address.setPostalCode(addressDTO.getPostalCode());
-                addresses.add(address);
-            });
-
-            return addresses;
+            return phones;
         }
 
-//        public List<Phone> getPhones(ContactDTO input, Contact contact) {
-//
-//            List<Phone> phones = new ArrayList<>();
-//            input.getPhones().forEach(phoneData -> {
-//                Phone phone = new Phone();
-//                phone.setContact(contact);
-//                phone.setLibelle(phoneData.getLibelle());
-//                phone.setType(phoneData.getType());
-//                phones.add(phone);
-//            });
-//
-//            return phones;
-//        }
+        public List<Email> getEmails(ContactDTO contactDTO, Contact contact) {
 
-//        public List<Email> getEmails(ContactDTO input, Contact contact) {
-//
-//            List<Email> emails = new ArrayList<>();
-//            input.getEmails().forEach(emailData -> {
-//                Email email = new Email();
-//                email.setContact(contact);
-//                email.setLibelle(emailData.getLibelle());
-//                email.setType(emailData.getType());
-//                emails.add(email);
-//            });
-//
-//            return emails;
-//        }
+            List<Email> emails = new ArrayList<>();
+            contactDTO.getEmails().forEach(emailDTO -> {
+                Email email = new Email();
+                email.setContact(contact);
+                email.setLibelle(emailDTO.getLibelle());
+                email.setType(emailDTO.getType());
+                emails.add(email);
+            });
 
-//    public List<Address> getAddresses(ContactDTO input, Contact contact) {
-//
-//        List<Address> addresses = new ArrayList<>();
-//        input.getAddresses().forEach(addressData -> {
-//            Address address = new Address();
-//            address.setCountry(countryRepository.getReferenceById(addressData.getCountry().getCountryId()));
-//            address.setContact(contact);
-//            address.setStreetNumber(addressData.getStreetNumber());
-//            address.setStreetType(addressData.getStreetType());
-//            address.setStreetName(addressData.getStreetName());
-//            address.setCityName(addressData.getCityName());
-//            address.setPostalCode(addressData.getPostalCode());
-//            addresses.add(address);
-//        });
-//
-//        return addresses;
-//    }
+            return emails;
+        }
+
+    public List<Address> getAddresses(ContactDTO contactDTO, Contact contact) {
+
+        List<Address> addresses = new ArrayList<>();
+        contactDTO.getAddresses().forEach(addressDTO -> {
+            Address address = new Address();
+            address.setCountry(countryRepository.getReferenceById(addressDTO.getCountry().getCountryId()));
+            address.setContact(contact);
+            address.setStreetNumber(addressDTO.getStreetNumber());
+            address.setStreetType(addressDTO.getStreetType());
+            address.setStreetName(addressDTO.getStreetName());
+            address.setCityName(addressDTO.getCityName());
+            address.setPostalCode(addressDTO.getPostalCode());
+            addresses.add(address);
+        });
+
+        return addresses;
+    }
 
 
 
     @Override
-    public ContactDTO createContact(ContactDTO input) {
-        Civility civility = civilityRepository.getReferenceById(input.getCivility().getCivilityId());
+    public ContactDTO createContact(ContactDTO contactDTO) {
+        Civility civility = civilityRepository.getReferenceById(contactDTO.getCivility().getCivilityId());
 
         Contact contact = new Contact();
         contact.setCivility(civility);
-        contact.setFirstName(input.getFirstName());
-        contact.setLastName(input.getLastName());
+        contact.setFirstName(contactDTO.getFirstName());
+        contact.setLastName(contactDTO.getLastName());
 
         contactRepository.save(contact);
-        emailRepository.saveAll(getEmails(input, contact));
-        phoneRepository.saveAll(getPhones(input, contact));
-        addressRepository.saveAll(getAddresses(input, contact));
+        emailRepository.saveAll(getEmails(contactDTO, contact));
+        phoneRepository.saveAll(getPhones(contactDTO, contact));
+        addressRepository.saveAll(getAddresses(contactDTO, contact));
 
-        return input;
+        return contactDTO;
     }
 
 
