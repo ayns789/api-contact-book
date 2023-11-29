@@ -27,7 +27,7 @@ public class ContactServiceImpl implements  ContactService {
 
     private final CountryRepository countryRepository;
 
-    protected ContactServiceImpl(ContactRepository contactRepository, CivilityRepository civilityRepository, EmailRepository emailRepository, PhoneRepository phoneRepository, AddressRepository addressRepository, CountryRepository countryRepository) {
+    public ContactServiceImpl(ContactRepository contactRepository, CivilityRepository civilityRepository, EmailRepository emailRepository, PhoneRepository phoneRepository, AddressRepository addressRepository, CountryRepository countryRepository) {
         this.contactRepository = contactRepository;
         this.civilityRepository = civilityRepository;
         this.emailRepository = emailRepository;
@@ -69,8 +69,11 @@ public class ContactServiceImpl implements  ContactService {
 
         List<Address> addresses = new ArrayList<>();
         contactDTO.getAddresses().forEach(addressDTO -> {
+            Long countryId = addressDTO.getCountry().getCountryId();
+            Country country = countryRepository.getReferenceById(countryId);
+
             Address address = new Address();
-            address.setCountry(countryRepository.getReferenceById(addressDTO.getCountry().getCountryId()));
+            address.setCountry(country);
             address.setContact(contact);
             address.setStreetNumber(addressDTO.getStreetNumber());
             address.setStreetType(addressDTO.getStreetType());
@@ -87,7 +90,8 @@ public class ContactServiceImpl implements  ContactService {
 
     @Override
     public ContactDTO createContact(ContactDTO contactDTO) {
-        Civility civility = civilityRepository.getReferenceById(contactDTO.getCivility().getCivilityId());
+        Long civilityId = contactDTO.getCivility().getCivilityId();
+        Civility civility = civilityRepository.getReferenceById(civilityId);
 
         Contact contact = new Contact();
         contact.setCivility(civility);
