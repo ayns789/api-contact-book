@@ -202,8 +202,6 @@ public class ContactServiceImpl implements  ContactService {
 
 
 
-
-
     @Override
     public ContactDTO createContact(ContactDTO input) {
         Civility civility = civilityRepository.getReferenceById(input.getCivility().getCivilityId());
