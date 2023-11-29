@@ -1,19 +1,15 @@
 package com.project.service;
 
-import com.project.dto.AddressDTO;
 import com.project.dto.ContactDTO;
-import com.project.dto.EmailDTO;
-import com.project.dto.PhoneDTO;
 import com.project.entities.*;
 import com.project.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-public class ContactServiceImpl implements  ContactService {
+public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
 
@@ -37,38 +33,39 @@ public class ContactServiceImpl implements  ContactService {
     }
 
 
-        public List<Phone> getPhones(ContactDTO contactDTO, Contact contact) {
+    public List<Phone> getPhones(ContactDTO contactDTO, Contact contact) {
 
-            List<Phone> phones = new ArrayList<>();
-            contactDTO.getPhones().forEach(phoneDTO -> {
-                Phone phone = new Phone();
-                phone.setContact(contact);
-                phone.setLibelle(phoneDTO.getLibelle());
-                phone.setType(phoneDTO.getType());
-                phones.add(phone);
-            });
+        List<Phone> phones = new ArrayList<>();
+        contactDTO.getPhones().forEach(phoneDTO -> {
+            Phone phone = new Phone();
+            phone.setContact(contact);
+            phone.setLibelle(phoneDTO.getLibelle());
+            phone.setType(phoneDTO.getType());
+            phones.add(phone);
+        });
 
-            return phones;
-        }
+        return phones;
+    }
 
-        public List<Email> getEmails(ContactDTO contactDTO, Contact contact) {
+    public List<Email> getEmails(ContactDTO contactDTO, Contact contact) {
 
-            List<Email> emails = new ArrayList<>();
-            contactDTO.getEmails().forEach(emailDTO -> {
-                Email email = new Email();
-                email.setContact(contact);
-                email.setLibelle(emailDTO.getLibelle());
-                email.setType(emailDTO.getType());
-                emails.add(email);
-            });
+        List<Email> emails = new ArrayList<>();
+        contactDTO.getEmails().forEach(emailDTO -> {
+            Email email = new Email();
+            email.setContact(contact);
+            email.setLibelle(emailDTO.getLibelle());
+            email.setType(emailDTO.getType());
+            emails.add(email);
+        });
 
-            return emails;
-        }
+        return emails;
+    }
 
     public List<Address> getAddresses(ContactDTO contactDTO, Contact contact) {
 
         List<Address> addresses = new ArrayList<>();
         contactDTO.getAddresses().forEach(addressDTO -> {
+            
             Long countryId = addressDTO.getCountry().getCountryId();
             Country country = countryRepository.getReferenceById(countryId);
 
@@ -85,7 +82,6 @@ public class ContactServiceImpl implements  ContactService {
 
         return addresses;
     }
-
 
 
     @Override
