@@ -25,8 +25,6 @@ public class PhoneDTO {
     @Enumerated(EnumType.STRING)
     private PhoneTypeEnum type;
 
-    private ContactDTO contact;
-
     public Long getContactId() {
         return contactId;
     }
@@ -51,21 +49,12 @@ public class PhoneDTO {
         this.type = type;
     }
 
-    public ContactDTO getContact() {
-        return contact;
-    }
-
-    public void setContact(ContactDTO contact) {
-        this.contact = contact;
-    }
-
     @Override
     public String toString() {
         return "PhoneDTO{" +
                 "contactId=" + contactId +
                 ", libelle='" + libelle + '\'' +
                 ", type=" + type +
-                ", contact=" + contact +
                 '}';
     }
 
@@ -76,8 +65,7 @@ public class PhoneDTO {
 
         if (!Objects.equals(contactId, phoneDTO.contactId)) return false;
         if (!Objects.equals(libelle, phoneDTO.libelle)) return false;
-        if (type != phoneDTO.type) return false;
-        return Objects.equals(contact, phoneDTO.contact);
+        return type == phoneDTO.type;
     }
 
     @Override
@@ -85,7 +73,6 @@ public class PhoneDTO {
         int result = contactId != null ? contactId.hashCode() : 0;
         result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (contact != null ? contact.hashCode() : 0);
         return result;
     }
 }

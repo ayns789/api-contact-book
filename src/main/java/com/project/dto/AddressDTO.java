@@ -36,8 +36,6 @@ public class AddressDTO {
     @Size(max=25, message = "'postalCode' of address must be under 25 characters")
     private Integer postalCode;
 
-    private ContactDTO contact;
-
     private CountryDTO country;
 
     public long getAddressId() {
@@ -88,14 +86,6 @@ public class AddressDTO {
         this.postalCode = postalCode;
     }
 
-    public ContactDTO getContact() {
-        return contact;
-    }
-
-    public void setContact(ContactDTO contact) {
-        this.contact = contact;
-    }
-
     public CountryDTO getCountry() {
         return country;
     }
@@ -113,7 +103,6 @@ public class AddressDTO {
                 ", streetName='" + streetName + '\'' +
                 ", cityName='" + cityName + '\'' +
                 ", postalCode=" + postalCode +
-                ", contact=" + contact +
                 ", country=" + country +
                 '}';
     }
@@ -129,7 +118,6 @@ public class AddressDTO {
         if (!Objects.equals(streetName, that.streetName)) return false;
         if (!Objects.equals(cityName, that.cityName)) return false;
         if (!Objects.equals(postalCode, that.postalCode)) return false;
-        if (!Objects.equals(contact, that.contact)) return false;
         return Objects.equals(country, that.country);
     }
 
@@ -141,7 +129,6 @@ public class AddressDTO {
         result = 31 * result + (streetName != null ? streetName.hashCode() : 0);
         result = 31 * result + (cityName != null ? cityName.hashCode() : 0);
         result = 31 * result + (postalCode != null ? postalCode.hashCode() : 0);
-        result = 31 * result + (contact != null ? contact.hashCode() : 0);
         result = 31 * result + (country != null ? country.hashCode() : 0);
         return result;
     }

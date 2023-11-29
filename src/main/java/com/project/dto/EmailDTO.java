@@ -27,8 +27,6 @@ public class EmailDTO {
     @Enumerated(EnumType.STRING)
     private EmailTypeEnum type;
 
-    private ContactDTO contact;
-
     public long getEmailId() {
         return emailId;
     }
@@ -53,21 +51,12 @@ public class EmailDTO {
         this.type = type;
     }
 
-    public ContactDTO getContact() {
-        return contact;
-    }
-
-    public void setContact(ContactDTO contact) {
-        this.contact = contact;
-    }
-
     @Override
     public String toString() {
         return "EmailDTO{" +
                 "emailId=" + emailId +
                 ", libelle='" + libelle + '\'' +
                 ", type=" + type +
-                ", contact=" + contact +
                 '}';
     }
 
@@ -78,8 +67,7 @@ public class EmailDTO {
 
         if (emailId != emailDTO.emailId) return false;
         if (!Objects.equals(libelle, emailDTO.libelle)) return false;
-        if (type != emailDTO.type) return false;
-        return Objects.equals(contact, emailDTO.contact);
+        return type == emailDTO.type;
     }
 
     @Override
@@ -87,7 +75,6 @@ public class EmailDTO {
         int result = (int) (emailId ^ (emailId >>> 32));
         result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (contact != null ? contact.hashCode() : 0);
         return result;
     }
 }
