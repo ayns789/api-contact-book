@@ -1,48 +1,48 @@
 package com.project.dto;
 
-import com.project.entities.Contact;
-import com.project.entities.Country;
 import com.project.enums.StreetTypeEnum;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
 public class AddressDTO {
 
-    private long addressId;
+    private Long addressId;
 
     @NotNull
     @NotBlank
-    @Size(max=15, message = "number of street must be under 15 characters")
+    @Size(max = 15, message = "number of street must be under 15 characters")
     private Integer streetNumber;
 
     @NotNull
     @NotBlank
-    @Size(max=50, message = "'type' of address must be under 50 characters")
+    @Size(max = 50, message = "'type' of address must be under 50 characters")
     private StreetTypeEnum streetType;
 
     @NotNull
     @NotBlank
-    @Size(max=255, message = "'streetName' of address must be under 255 characters")
+    @Size(max = 255, message = "'streetName' of address must be under 255 characters")
     private String streetName;
 
     @NotNull
     @NotBlank
-    @Size(max=255, message = "'cityName' of address must be under 255 characters")
+    @Size(max = 255, message = "'cityName' of address must be under 255 characters")
     private String cityName;
 
     @NotNull
     @NotBlank
-    @Size(max=25, message = "'postalCode' of address must be under 25 characters")
+    @Size(max = 25, message = "'postalCode' of address must be under 25 characters")
     private Integer postalCode;
 
     private CountryDTO country;
 
-    public long getAddressId() {
+    public Long getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(long addressId) {
+    public void setAddressId(Long addressId) {
         this.addressId = addressId;
     }
 

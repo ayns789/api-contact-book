@@ -1,24 +1,26 @@
 package com.project.dto;
 
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
 public class CountryDTO {
 
-    private long countryId;
+    private Long countryId;
 
     @NotNull
     @NotBlank
-    @Size(max=100, message = "'libelle' of country must be under 100 characters")
+    @Size(max = 100, message = "'libelle' of country must be under 100 characters")
     private String libelle;
 
-    public long getCountryId() {
+    public Long getCountryId() {
         return countryId;
     }
 
-    public void setCountryId(long countryId) {
+    public void setCountryId(Long countryId) {
         this.countryId = countryId;
     }
 

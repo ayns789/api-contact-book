@@ -1,24 +1,24 @@
 package com.project.dto;
 
 import com.project.enums.CivilityEnumType;
-import jakarta.validation.constraints.*;
-
-import java.util.Objects;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class CivilityDTO {
-    private long civilityId;
+    private Long civilityId;
 
     @NotNull
     @NotBlank
-    @Size(max=20, message = "'libelle' of civility must be under 20 characters")
+    @Size(max = 20, message = "'libelle' of civility must be under 20 characters")
     private CivilityEnumType libelle;
 
 
-    public long getCivilityId() {
+    public Long getCivilityId() {
         return civilityId;
     }
 
-    public void setCivilityId(long civilityId) {
+    public void setCivilityId(Long civilityId) {
         this.civilityId = civilityId;
     }
 

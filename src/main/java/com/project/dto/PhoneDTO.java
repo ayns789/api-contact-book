@@ -1,17 +1,18 @@
 package com.project.dto;
 
-import com.project.entities.Contact;
 import com.project.enums.PhoneTypeEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
 
 public class PhoneDTO {
 
-    private Long contactId;
+    private Long phoneId;
 
     @NotNull
     @NotBlank
@@ -21,16 +22,16 @@ public class PhoneDTO {
 
     @NotNull
     @NotBlank
-    @Size(max=20, message = "'type' of phone must be under 20 characters")
+    @Size(max = 20, message = "'type' of phone must be under 20 characters")
     @Enumerated(EnumType.STRING)
     private PhoneTypeEnum type;
 
-    public Long getContactId() {
-        return contactId;
+    public Long getPhoneId() {
+        return phoneId;
     }
 
-    public void setContactId(Long contactId) {
-        this.contactId = contactId;
+    public void setPhoneId(Long phoneId) {
+        this.phoneId = phoneId;
     }
 
     public String getLibelle() {
@@ -52,7 +53,7 @@ public class PhoneDTO {
     @Override
     public String toString() {
         return "PhoneDTO{" +
-                "contactId=" + contactId +
+                "phoneId=" + phoneId +
                 ", libelle='" + libelle + '\'' +
                 ", type=" + type +
                 '}';
@@ -63,14 +64,14 @@ public class PhoneDTO {
         if (this == o) return true;
         if (!(o instanceof PhoneDTO phoneDTO)) return false;
 
-        if (!Objects.equals(contactId, phoneDTO.contactId)) return false;
+        if (!Objects.equals(phoneId, phoneDTO.phoneId)) return false;
         if (!Objects.equals(libelle, phoneDTO.libelle)) return false;
         return type == phoneDTO.type;
     }
 
     @Override
     public int hashCode() {
-        int result = contactId != null ? contactId.hashCode() : 0;
+        int result = phoneId != null ? phoneId.hashCode() : 0;
         result = 31 * result + (libelle != null ? libelle.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;

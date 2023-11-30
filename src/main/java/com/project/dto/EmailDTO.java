@@ -1,10 +1,12 @@
 package com.project.dto;
 
-import com.project.entities.Contact;
 import com.project.enums.EmailTypeEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
@@ -12,7 +14,7 @@ import java.util.Objects;
 public class EmailDTO {
 
 
-    private long emailId;
+    private Long emailId;
 
     @NotNull
     @NotBlank
@@ -23,15 +25,15 @@ public class EmailDTO {
 
     @NotNull
     @NotBlank
-    @Size(max=20, message = "'type' of email must be under 20 characters")
+    @Size(max = 20, message = "'type' of email must be under 20 characters")
     @Enumerated(EnumType.STRING)
     private EmailTypeEnum type;
 
-    public long getEmailId() {
+    public Long getEmailId() {
         return emailId;
     }
 
-    public void setEmailId(long emailId) {
+    public void setEmailId(Long emailId) {
         this.emailId = emailId;
     }
 

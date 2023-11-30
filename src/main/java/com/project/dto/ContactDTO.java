@@ -1,17 +1,15 @@
 package com.project.dto;
 
-import com.project.entities.Address;
-import com.project.entities.Civility;
-import com.project.entities.Email;
-import com.project.entities.Phone;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 import java.util.Objects;
 
 public class ContactDTO {
 
-    private long contactId;
+    private Long contactId;
 
     @NotNull
     @NotBlank
@@ -32,11 +30,11 @@ public class ContactDTO {
     private List<AddressDTO> addresses;
 
 
-    public long getContactId() {
+    public Long getContactId() {
         return contactId;
     }
 
-    public void setContactId(long contactId) {
+    public void setContactId(Long contactId) {
         this.contactId = contactId;
     }
 
