@@ -3,8 +3,6 @@ package com.project.entities;
 import com.project.enums.CivilityEnumType;
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "civility")
 @SequenceGenerator(name = "CivilityIdGenerator", sequenceName = "civility_seq", allocationSize = 1)
@@ -13,17 +11,18 @@ public class Civility {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CivilityIdGenerator")
     @Column(name = "civility_id", nullable = false)
-    private long civilityId;
+    private Long civilityId;
 
     @Column(name = "libelle")
+    @Enumerated(EnumType.STRING)
     private CivilityEnumType libelle;
 
 
-    public long getCivilityId() {
+    public Long getCivilityId() {
         return civilityId;
     }
 
-    public void setCivilityId(long civilityId) {
+    public void setCivilityId(Long civilityId) {
         this.civilityId = civilityId;
     }
 

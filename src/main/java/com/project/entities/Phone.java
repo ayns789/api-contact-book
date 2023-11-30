@@ -13,7 +13,7 @@ public class Phone {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PhoneIdGenerator")
     @Column(name = "phone_id", nullable = false)
-    private long phoneId;
+    private Long phoneId;
 
     @Column(name = "libelle", nullable = false)
     private String libelle;
@@ -34,11 +34,11 @@ public class Phone {
     }
 
 
-    public long getPhoneId() {
+    public Long getPhoneId() {
         return phoneId;
     }
 
-    public void setPhoneId(long phoneId) {
+    public void setPhoneId(Long phoneId) {
         this.phoneId = phoneId;
     }
 

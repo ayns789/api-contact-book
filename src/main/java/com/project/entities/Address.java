@@ -13,7 +13,7 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AddressIdGenerator")
     @Column(name = "address_id", nullable = false)
-    private long addressId;
+    private Long addressId;
 
     @Column(name = "street_number", nullable = false)
     private Integer streetNumber;
@@ -54,11 +54,11 @@ public class Address {
         this.streetNumber = streetNumber;
     }
 
-    public long getAddressId() {
+    public Long getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(long addressId) {
+    public void setAddressId(Long addressId) {
         this.addressId = addressId;
     }
 

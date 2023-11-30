@@ -14,7 +14,7 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ContactIdGenerator")
     @Column(name = "contact_id", nullable = false)
-    private long contactId;
+    private Long contactId;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -39,11 +39,11 @@ public class Contact {
 
     }
 
-    public long getContactId() {
+    public Long getContactId() {
         return contactId;
     }
 
-    public void setContactId(long contactId) {
+    public void setContactId(Long contactId) {
         this.contactId = contactId;
     }
 

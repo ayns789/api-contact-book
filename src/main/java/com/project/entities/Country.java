@@ -12,17 +12,17 @@ public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CountryIdGenerator")
     @Column(name = "country_id", nullable = false)
-    private long countryId;
+    private Long countryId;
 
     @Column(name = "libelle", nullable = false)
     private String libelle;
 
 
-    public long getCountryId() {
+    public Long getCountryId() {
         return countryId;
     }
 
-    public void setCountryId(long countryId) {
+    public void setCountryId(Long countryId) {
         this.countryId = countryId;
     }
 

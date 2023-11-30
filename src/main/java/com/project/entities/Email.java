@@ -13,7 +13,7 @@ public class Email {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EmailIdGenerator")
     @Column(name = "email_id", nullable = false)
-    private long emailId;
+    private Long emailId;
 
     @Column(name = "libelle", nullable = false)
     private String libelle;
@@ -26,18 +26,18 @@ public class Email {
     @JoinColumn(name = "contact_id")
     private Contact contact;
 
-    public Email(){
+    public Email() {
 
     }
 
     public Email(Contact contact, String libelle, EmailTypeEnum type) {
     }
 
-    public long getEmailId() {
+    public Long getEmailId() {
         return emailId;
     }
 
-    public void setEmailId(long emailId) {
+    public void setEmailId(Long emailId) {
         this.emailId = emailId;
     }
 
