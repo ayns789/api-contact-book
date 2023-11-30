@@ -33,36 +33,39 @@ public class ContactServiceImpl implements ContactService {
     }
 
 
-    public List<Phone> getPhonesToDTO(ContactDTO contactDTO, Contact contact) {
-
+    public List<Phone> getPhonesFromDTO(ContactDTO contactDTO, Contact contact) {
         List<Phone> phones = new ArrayList<>();
         contactDTO.getPhones().forEach(phoneDTO -> {
+
             Phone phone = new Phone();
+
             phone.setContact(contact);
             phone.setLibelle(phoneDTO.getLibelle());
             phone.setType(phoneDTO.getType());
+
             phones.add(phone);
         });
 
         return phones;
     }
 
-    public List<Email> getEmailsToDTO(ContactDTO contactDTO, Contact contact) {
-
+    public List<Email> getEmailsFromDTO(ContactDTO contactDTO, Contact contact) {
         List<Email> emails = new ArrayList<>();
         contactDTO.getEmails().forEach(emailDTO -> {
+
             Email email = new Email();
+
             email.setContact(contact);
             email.setLibelle(emailDTO.getLibelle());
             email.setType(emailDTO.getType());
+
             emails.add(email);
         });
 
         return emails;
     }
 
-    public List<Address> getAddressesToDTO(ContactDTO contactDTO, Contact contact) {
-
+    public List<Address> getAddressesFromDTO(ContactDTO contactDTO, Contact contact) {
         List<Address> addresses = new ArrayList<>();
         contactDTO.getAddresses().forEach(addressDTO -> {
 
@@ -70,6 +73,7 @@ public class ContactServiceImpl implements ContactService {
             Country country = countryRepository.getReferenceById(countryId);
 
             Address address = new Address();
+
             address.setCountry(country);
             address.setContact(contact);
             address.setStreetNumber(addressDTO.getStreetNumber());
@@ -77,6 +81,7 @@ public class ContactServiceImpl implements ContactService {
             address.setStreetName(addressDTO.getStreetName());
             address.setCityName(addressDTO.getCityName());
             address.setPostalCode(addressDTO.getPostalCode());
+
             addresses.add(address);
         });
 
@@ -86,10 +91,13 @@ public class ContactServiceImpl implements ContactService {
     public List<PhoneDTO> phonesUpdateDTO(List<Phone> phonesGetRepo) {
         List<PhoneDTO> phonesDTO = new ArrayList<>();
         phonesGetRepo.forEach(phone -> {
+
             PhoneDTO phoneDTO = new PhoneDTO();
+
             phoneDTO.setPhoneId(phone.getPhoneId());
             phoneDTO.setLibelle(phone.getLibelle());
             phoneDTO.setType(phone.getType());
+
             phonesDTO.add(phoneDTO);
         });
         return phonesDTO;
@@ -150,9 +158,9 @@ public class ContactServiceImpl implements ContactService {
         List<Address> addressesGetRepo = new ArrayList<>();
 
         contact = contactRepository.save(contact);
-        emailsGetRepo = emailRepository.saveAll(getEmailsToDTO(contactDTO, contact));
-        phonesGetRepo = phoneRepository.saveAll(getPhonesToDTO(contactDTO, contact));
-        addressesGetRepo = addressRepository.saveAll(getAddressesToDTO(contactDTO, contact));
+        emailsGetRepo = emailRepository.saveAll(getEmailsFromDTO(contactDTO, contact));
+        phonesGetRepo = phoneRepository.saveAll(getPhonesFromDTO(contactDTO, contact));
+        addressesGetRepo = addressRepository.saveAll(getAddressesFromDTO(contactDTO, contact));
 
         contactDTO.setContactId(contact.getContactId());
         contactDTO.setEmails(emailUpdateDTO(emailsGetRepo));
