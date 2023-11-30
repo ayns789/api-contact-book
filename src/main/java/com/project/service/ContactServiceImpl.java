@@ -1,6 +1,6 @@
 package com.project.service;
 
-import com.project.dto.ContactDTO;
+import com.project.dto.*;
 import com.project.entities.*;
 import com.project.repository.*;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
 
-    public List<Phone> getPhones(ContactDTO contactDTO, Contact contact) {
+    public List<Phone> getPhonesToDTO(ContactDTO contactDTO, Contact contact) {
 
         List<Phone> phones = new ArrayList<>();
         contactDTO.getPhones().forEach(phoneDTO -> {
@@ -47,7 +47,7 @@ public class ContactServiceImpl implements ContactService {
         return phones;
     }
 
-    public List<Email> getEmails(ContactDTO contactDTO, Contact contact) {
+    public List<Email> getEmailsToDTO(ContactDTO contactDTO, Contact contact) {
 
         List<Email> emails = new ArrayList<>();
         contactDTO.getEmails().forEach(emailDTO -> {
@@ -61,11 +61,11 @@ public class ContactServiceImpl implements ContactService {
         return emails;
     }
 
-    public List<Address> getAddresses(ContactDTO contactDTO, Contact contact) {
+    public List<Address> getAddressesToDTO(ContactDTO contactDTO, Contact contact) {
 
         List<Address> addresses = new ArrayList<>();
         contactDTO.getAddresses().forEach(addressDTO -> {
-            
+
             Long countryId = addressDTO.getCountry().getCountryId();
             Country country = countryRepository.getReferenceById(countryId);
 
@@ -83,6 +83,57 @@ public class ContactServiceImpl implements ContactService {
         return addresses;
     }
 
+    public List<PhoneDTO> phonesUpdateDTO(List<Phone> phonesGetRepo) {
+        List<PhoneDTO> phonesDTO = new ArrayList<>();
+        phonesGetRepo.forEach(phone -> {
+            PhoneDTO phoneDTO = new PhoneDTO();
+            phoneDTO.setPhoneId(phone.getPhoneId());
+            phoneDTO.setLibelle(phone.getLibelle());
+            phoneDTO.setType(phone.getType());
+            phonesDTO.add(phoneDTO);
+        });
+        return phonesDTO;
+    }
+
+
+    public List<EmailDTO> emailUpdateDTO(List<Email> emailsGetRepo) {
+        List<EmailDTO> emailsDTO = new ArrayList<>();
+        emailsGetRepo.forEach(email -> {
+
+            EmailDTO emailDTO = new EmailDTO();
+
+            emailDTO.setEmailId(email.getEmailId());
+            emailDTO.setLibelle(email.getLibelle());
+            emailDTO.setType(email.getType());
+
+            emailsDTO.add(emailDTO);
+        });
+
+        return emailsDTO;
+    }
+
+    public List<AddressDTO> addressesUpdateDTO(List<Address> addressesGetRepo) {
+        List<AddressDTO> addressesDTO = new ArrayList<>();
+        addressesGetRepo.forEach(address -> {
+
+            CountryDTO countryDTO = new CountryDTO();
+            AddressDTO addressDTO = new AddressDTO();
+
+            addressDTO.setAddressId(address.getAddressId());
+            addressDTO.setStreetNumber(address.getStreetNumber());
+            addressDTO.setStreetType(address.getStreetType());
+            addressDTO.setStreetName(address.getStreetName());
+            addressDTO.setCityName(address.getCityName());
+            addressDTO.setPostalCode(address.getPostalCode());
+
+            countryDTO.setCountryId(address.getCountry().getCountryId());
+            countryDTO.setLibelle(address.getCountry().getLibelle());
+            addressDTO.setCountry(countryDTO);
+
+            addressesDTO.add(addressDTO);
+        });
+        return addressesDTO;
+    }
 
     @Override
     public ContactDTO createContact(ContactDTO contactDTO) {
@@ -94,13 +145,24 @@ public class ContactServiceImpl implements ContactService {
         contact.setFirstName(contactDTO.getFirstName());
         contact.setLastName(contactDTO.getLastName());
 
-        contactRepository.save(contact);
-        emailRepository.saveAll(getEmails(contactDTO, contact));
-        phoneRepository.saveAll(getPhones(contactDTO, contact));
-        addressRepository.saveAll(getAddresses(contactDTO, contact));
+        List<Phone> phonesGetRepo = new ArrayList<>();
+        List<Email> emailsGetRepo = new ArrayList<>();
+        List<Address> addressesGetRepo = new ArrayList<>();
+
+        contact = contactRepository.save(contact);
+        emailsGetRepo = emailRepository.saveAll(getEmailsToDTO(contactDTO, contact));
+        phonesGetRepo = phoneRepository.saveAll(getPhonesToDTO(contactDTO, contact));
+        addressesGetRepo = addressRepository.saveAll(getAddressesToDTO(contactDTO, contact));
+
+        contactDTO.setContactId(contact.getContactId());
+        contactDTO.setEmails(emailUpdateDTO(emailsGetRepo));
+        contactDTO.setPhones(phonesUpdateDTO(phonesGetRepo));
+        contactDTO.setAddresses(addressesUpdateDTO(addressesGetRepo));
 
         return contactDTO;
     }
 
 
 }
+
+
