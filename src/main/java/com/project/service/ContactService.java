@@ -7,6 +7,4 @@ public interface ContactService {
 
     ContactDTO createContact(ContactDTO dto);
 
-
-
 }

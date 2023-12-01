@@ -32,10 +32,13 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ContactDTO createContact(ContactDTO contactDTO) {
+        // get Civility by Id
         Long civilityId = contactDTO.getCivility().getCivilityId();
         Civility civility = civilityService.getCivilityById(civilityId);
 
         Contact contact = new Contact();
+
+        // contact get data from contactDTO
         contact.setCivility(civility);
         contact.setFirstName(contactDTO.getFirstName());
         contact.setLastName(contactDTO.getLastName());
@@ -44,11 +47,13 @@ public class ContactServiceImpl implements ContactService {
         List<Email> emails = new ArrayList<>();
         List<Address> addresses = new ArrayList<>();
 
+        // save all DTO datas in entities concerned
         contact = contactRepository.save(contact);
         emails = emailService.saveEmails(contactDTO, contact);
         phones = phoneService.savePhones(contactDTO, contact);
         addresses = addressService.saveAddresses(contactDTO, contact);
 
+        // update contactDTO before return this ( with id from entities created )
         contactDTO.setContactId(contact.getContactId());
         contactDTO.setEmails(emailService.emailUpdateDTO(emails));
         contactDTO.setPhones(phoneService.phonesUpdateDTO(phones));

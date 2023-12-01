@@ -25,13 +25,15 @@ public class EmailServiceImpl {
 
             Email email = new Email();
 
+            // save each email
             email.setContact(contact);
             email.setLibelle(emailDTO.getLibelle());
             email.setType(emailDTO.getType());
 
+            // save all emails
             emails.add(email);
         });
-        
+
         emailRepository.saveAll(emails);
 
         return emails;
@@ -43,10 +45,12 @@ public class EmailServiceImpl {
 
             EmailDTO emailDTO = new EmailDTO();
 
+            // save each emailDTO
             emailDTO.setEmailId(email.getEmailId());
             emailDTO.setLibelle(email.getLibelle());
             emailDTO.setType(email.getType());
 
+            // save all emailDTOs
             emailsDTO.add(emailDTO);
         });
 

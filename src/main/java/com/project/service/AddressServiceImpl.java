@@ -28,11 +28,13 @@ public class AddressServiceImpl {
         List<Address> addresses = new ArrayList<>();
         contactDTO.getAddresses().forEach(addressDTO -> {
 
+            // get Country by id
             Long countryId = addressDTO.getCountry().getCountryId();
             Country country = countryService.getCountryById(countryId);
 
             Address address = new Address();
 
+            // save each address
             address.setCountry(country);
             address.setContact(contact);
             address.setStreetNumber(addressDTO.getStreetNumber());
@@ -41,6 +43,7 @@ public class AddressServiceImpl {
             address.setCityName(addressDTO.getCityName());
             address.setPostalCode(addressDTO.getPostalCode());
 
+            // save all addresses
             addresses.add(address);
         });
 
@@ -57,6 +60,7 @@ public class AddressServiceImpl {
             CountryDTO countryDTO = new CountryDTO();
             AddressDTO addressDTO = new AddressDTO();
 
+            // save each addressesDTO
             addressDTO.setAddressId(address.getAddressId());
             addressDTO.setStreetNumber(address.getStreetNumber());
             addressDTO.setStreetType(address.getStreetType());
@@ -64,10 +68,12 @@ public class AddressServiceImpl {
             addressDTO.setCityName(address.getCityName());
             addressDTO.setPostalCode(address.getPostalCode());
 
+            // save each countryDTO in addressDTO
             countryDTO.setCountryId(address.getCountry().getCountryId());
             countryDTO.setLibelle(address.getCountry().getLibelle());
             addressDTO.setCountry(countryDTO);
 
+            // save all addressDTOs
             addressesDTO.add(addressDTO);
         });
         return addressesDTO;

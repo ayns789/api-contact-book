@@ -25,10 +25,12 @@ public class PhoneServiceImpl {
 
             Phone phone = new Phone();
 
+            // save each phone
             phone.setContact(contact);
             phone.setLibelle(phoneDTO.getLibelle());
             phone.setType(phoneDTO.getType());
 
+            // save all phones
             phones.add(phone);
         });
 
@@ -44,10 +46,12 @@ public class PhoneServiceImpl {
 
             PhoneDTO phoneDTO = new PhoneDTO();
 
+            // save each phone
             phoneDTO.setPhoneId(phone.getPhoneId());
             phoneDTO.setLibelle(phone.getLibelle());
             phoneDTO.setType(phone.getType());
 
+            // save all phoneDTOs
             phonesDTO.add(phoneDTO);
         });
         return phonesDTO;
