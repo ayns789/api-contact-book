@@ -22,10 +22,7 @@ public class EmailDTO {
     @Size(max = 255, message
             = "'libelle' from email must be under 255 characters")
     private String libelle;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 20, message = "'type' of email must be under 20 characters")
+    
     @Enumerated(EnumType.STRING)
     private EmailTypeEnum type;
 

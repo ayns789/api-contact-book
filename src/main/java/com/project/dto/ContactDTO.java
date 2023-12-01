@@ -1,7 +1,7 @@
 package com.project.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -22,13 +22,18 @@ public class ContactDTO {
     @Size(max = 50, message = "'lastName' of contact must be under 50 characters")
     private String lastName;
 
+    @Valid
+    @NotNull
     private CivilityDTO civility;
 
+    @Valid
     private List<EmailDTO> emails;
 
-    @NotEmpty
+    @Valid
+    @NotNull
     private List<PhoneDTO> phones;
 
+    @Valid
     private List<AddressDTO> addresses;
 
 

@@ -1,6 +1,9 @@
 package com.project.dto;
 
 import com.project.enums.StreetTypeEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -12,13 +15,10 @@ public class AddressDTO {
     private Long addressId;
 
     @NotNull
-    @NotBlank
-    @Size(max = 15, message = "number of street must be under 15 characters")
+    @Max(value = 99999, message = "number of street must be under 15 characters")
     private Integer streetNumber;
 
-    @NotNull
-    @NotBlank
-    @Size(max = 50, message = "'type' of address must be under 50 characters")
+    @Enumerated(EnumType.STRING)
     private StreetTypeEnum streetType;
 
     @NotNull
@@ -32,8 +32,7 @@ public class AddressDTO {
     private String cityName;
 
     @NotNull
-    @NotBlank
-    @Size(max = 25, message = "'postalCode' of address must be under 25 characters")
+    @Max(value = 999999, message = "'postalCode' of address must be under 25 characters")
     private Integer postalCode;
 
     private CountryDTO country;

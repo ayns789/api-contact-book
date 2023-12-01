@@ -1,16 +1,15 @@
 package com.project.dto;
 
 import com.project.enums.CivilityEnumType;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 public class CivilityDTO {
     private Long civilityId;
 
-    @NotNull
-    @NotBlank
-    @Size(max = 20, message = "'libelle' of civility must be under 20 characters")
+    //    @NotNull
+//    @Max(value = 20, message = "'libelle' of civility must be under 20 characters")
+    @Enumerated(EnumType.STRING)
     private CivilityEnumType libelle;
 
 

@@ -19,10 +19,7 @@ public class PhoneDTO {
     @Size(max = 50, message
             = "'libelle' from phone must be under 50 characters")
     private String libelle;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 20, message = "'type' of phone must be under 20 characters")
+    
     @Enumerated(EnumType.STRING)
     private PhoneTypeEnum type;
 
