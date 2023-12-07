@@ -1,8 +1,13 @@
-package com.project.service;
+package com.project.service.implementation;
 
 import com.project.dto.ContactDTO;
-import com.project.entities.*;
+import com.project.entities.Address;
+import com.project.entities.Civility;
+import com.project.entities.Contact;
+import com.project.entities.Email;
+import com.project.entities.Phone;
 import com.project.repository.ContactRepository;
+import com.project.service.ContactService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,7 +26,8 @@ public class ContactServiceImpl implements ContactService {
 
     private final AddressServiceImpl addressService;
 
-    public ContactServiceImpl(ContactRepository contactRepository, EmailServiceImpl emailService, PhoneServiceImpl phoneService, AddressServiceImpl addressService, CivilityServiceImpl civilityService) {
+    public ContactServiceImpl(ContactRepository contactRepository, EmailServiceImpl emailService, PhoneServiceImpl phoneService,
+                              AddressServiceImpl addressService, CivilityServiceImpl civilityService) {
         this.contactRepository = contactRepository;
         this.addressService = addressService;
         this.civilityService = civilityService;

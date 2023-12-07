@@ -1,12 +1,22 @@
 package com.project.entities;
 
 import com.project.enums.CivilityEnumType;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name = "civility")
 @SequenceGenerator(name = "CivilityIdGenerator", sequenceName = "civility_seq", allocationSize = 1)
-public class Civility {
+public class Civility implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CivilityIdGenerator")
@@ -17,37 +27,26 @@ public class Civility {
     @Enumerated(EnumType.STRING)
     private CivilityEnumType libelle;
 
-
-    public Long getCivilityId() {
-        return civilityId;
-    }
-
-    public void setCivilityId(Long civilityId) {
-        this.civilityId = civilityId;
-    }
-
-    public CivilityEnumType getLibelle() {
-        return libelle;
-    }
-
-    public void setLibelle(CivilityEnumType libelle) {
-        this.libelle = libelle;
-    }
-
     @Override
     public String toString() {
         return "Civility{" +
-                "civilityId=" + civilityId +
-                ", libelle=" + libelle +
-                '}';
+            "civilityId=" + civilityId +
+            ", libelle=" + libelle +
+            '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Civility civility)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Civility civility)) {
+            return false;
+        }
 
-        if (civilityId != civility.civilityId) return false;
+        if (civilityId != civility.civilityId) {
+            return false;
+        }
         return libelle == civility.libelle;
     }
 

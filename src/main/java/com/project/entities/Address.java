@@ -1,14 +1,30 @@
 package com.project.entities;
 
 import com.project.enums.StreetTypeEnum;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "address")
 @SequenceGenerator(name = "AddressIdGenerator", sequenceName = "address_seq", allocationSize = 1)
-public class Address {
+@Getter
+@Setter
+public class Address implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AddressIdGenerator")
@@ -39,100 +55,37 @@ public class Address {
     @JoinColumn(name = "country_id")
     private Country country;
 
-    public Address(Country country, Contact contact, Integer streetNumber, StreetTypeEnum streetType, String streetName, String cityName, Integer postalCode) {
-    }
-
-    public Address() {
-
-    }
-
-    public Integer getStreetNumber() {
-        return streetNumber;
-    }
-
-    public void setStreetNumber(Integer streetNumber) {
-        this.streetNumber = streetNumber;
-    }
-
-    public Long getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(Long addressId) {
-        this.addressId = addressId;
-    }
-
-    public StreetTypeEnum getStreetType() {
-        return streetType;
-    }
-
-    public void setStreetType(StreetTypeEnum streetType) {
-        this.streetType = streetType;
-    }
-
-    public Contact getContact() {
-        return contact;
-    }
-
-    public void setContact(Contact contact) {
-        this.contact = contact;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-
-    public String getStreetName() {
-        return streetName;
-    }
-
-    public void setStreetName(String streetName) {
-        this.streetName = streetName;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public Integer getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(Integer postalCode) {
-        this.postalCode = postalCode;
-    }
-
     @Override
     public String toString() {
         return "Address{" +
-                "addressId=" + addressId +
-                ", streetNumber=" + streetNumber +
-                ", streetType=" + streetType +
-                ", streetName='" + streetName + '\'' +
-                ", cityName='" + cityName + '\'' +
-                ", postalCode=" + postalCode +
-                ", contact=" + contact +
-                ", country=" + country +
-                '}';
+            "addressId=" + addressId +
+            ", streetNumber=" + streetNumber +
+            ", streetType=" + streetType +
+            ", streetName='" + streetName + '\'' +
+            ", cityName='" + cityName + '\'' +
+            ", postalCode=" + postalCode +
+            ", contact=" + contact +
+            ", country=" + country +
+            '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Address address)) return false;
-        return getAddressId() == address.getAddressId() && Objects.equals(getStreetNumber(), address.getStreetNumber()) && getStreetType() == address.getStreetType() && Objects.equals(getStreetName(), address.getStreetName()) && Objects.equals(getCityName(), address.getCityName()) && Objects.equals(getPostalCode(), address.getPostalCode()) && Objects.equals(getContact(), address.getContact()) && Objects.equals(getCountry(), address.getCountry());
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Address address)) {
+            return false;
+        }
+        return getAddressId() == address.getAddressId() && Objects.equals(getStreetNumber(), address.getStreetNumber()) &&
+            getStreetType() == address.getStreetType() && Objects.equals(getStreetName(), address.getStreetName()) &&
+            Objects.equals(getCityName(), address.getCityName()) && Objects.equals(getPostalCode(), address.getPostalCode()) &&
+            Objects.equals(getContact(), address.getContact()) && Objects.equals(getCountry(), address.getCountry());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getAddressId(), getStreetNumber(), getStreetType(), getStreetName(), getCityName(), getPostalCode(), getContact(), getCountry());
+        return Objects.hash(getAddressId(), getStreetNumber(), getStreetType(), getStreetName(), getCityName(), getPostalCode(), getContact(),
+            getCountry());
     }
 }

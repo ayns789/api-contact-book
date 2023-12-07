@@ -1,14 +1,30 @@
 package com.project.entities;
 
 import com.project.enums.PhoneTypeEnum;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "phone")
 @SequenceGenerator(name = "PhoneIdGenerator", sequenceName = "phone_seq", allocationSize = 1)
-public class Phone {
+@Getter
+@Setter
+public class Phone implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PhoneIdGenerator")
@@ -26,61 +42,26 @@ public class Phone {
     @JoinColumn(name = "contact_id")
     private Contact contact;
 
-    public Phone(Contact contact, String libelle, PhoneTypeEnum type) {
-    }
-
-    public Phone() {
-
-    }
-
-
-    public Long getPhoneId() {
-        return phoneId;
-    }
-
-    public void setPhoneId(Long phoneId) {
-        this.phoneId = phoneId;
-    }
-
-    public String getLibelle() {
-        return libelle;
-    }
-
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
-    }
-
-    public Contact getContact() {
-        return contact;
-    }
-
-    public void setContact(Contact contact) {
-        this.contact = contact;
-    }
-
-    public PhoneTypeEnum getType() {
-        return type;
-    }
-
-    public void setType(PhoneTypeEnum type) {
-        this.type = type;
-    }
-
     @Override
     public String toString() {
         return "Phone{" +
-                "phoneId=" + phoneId +
-                ", libelle=" + libelle +
-                ", type=" + type +
-                ", contact=" + contact +
-                '}';
+            "phoneId=" + phoneId +
+            ", libelle=" + libelle +
+            ", type=" + type +
+            ", contact=" + contact +
+            '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Phone phone)) return false;
-        return getPhoneId() == phone.getPhoneId() && Objects.equals(getLibelle(), phone.getLibelle()) && getType() == phone.getType() && Objects.equals(getContact(), phone.getContact());
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Phone phone)) {
+            return false;
+        }
+        return getPhoneId() == phone.getPhoneId() && Objects.equals(getLibelle(), phone.getLibelle()) && getType() == phone.getType() &&
+            Objects.equals(getContact(), phone.getContact());
     }
 
     @Override

@@ -1,14 +1,30 @@
 package com.project.entities;
 
 import com.project.enums.EmailTypeEnum;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "email")
 @SequenceGenerator(name = "EmailIdGenerator", sequenceName = "email_seq", allocationSize = 1)
-public class Email {
+@Getter
+@Setter
+public class Email implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EmailIdGenerator")
@@ -26,60 +42,26 @@ public class Email {
     @JoinColumn(name = "contact_id")
     private Contact contact;
 
-    public Email() {
-
-    }
-
-    public Email(Contact contact, String libelle, EmailTypeEnum type) {
-    }
-
-    public Long getEmailId() {
-        return emailId;
-    }
-
-    public void setEmailId(Long emailId) {
-        this.emailId = emailId;
-    }
-
-    public String getLibelle() {
-        return libelle;
-    }
-
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
-    }
-
-    public EmailTypeEnum getType() {
-        return type;
-    }
-
-    public void setType(EmailTypeEnum type) {
-        this.type = type;
-    }
-
-    public Contact getContact() {
-        return contact;
-    }
-
-    public void setContact(Contact contact) {
-        this.contact = contact;
-    }
-
     @Override
     public String toString() {
         return "Email{" +
-                "emailId=" + emailId +
-                ", libelle='" + libelle + '\'' +
-                ", type=" + type +
-                ", contact=" + contact +
-                '}';
+            "emailId=" + emailId +
+            ", libelle='" + libelle + '\'' +
+            ", type=" + type +
+            ", contact=" + contact +
+            '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Email email)) return false;
-        return getEmailId() == email.getEmailId() && Objects.equals(getLibelle(), email.getLibelle()) && getType() == email.getType() && Objects.equals(getContact(), email.getContact());
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Email email)) {
+            return false;
+        }
+        return getEmailId() == email.getEmailId() && Objects.equals(getLibelle(), email.getLibelle()) && getType() == email.getType() &&
+            Objects.equals(getContact(), email.getContact());
     }
 
     @Override
