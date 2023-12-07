@@ -27,7 +27,6 @@ public class ContactServiceImpl implements ContactService {
         this.civilityService = civilityService;
         this.emailService = emailService;
         this.phoneService = phoneService;
-        
     }
 
 
@@ -49,10 +48,16 @@ public class ContactServiceImpl implements ContactService {
         List<Address> addresses = new ArrayList<>();
 
         // save all DTO datas in entities concerned
-        contact = contactRepository.save(contact);
+        try {
+            contact = contactRepository.save(contact);
+        } catch (Exception e) {
+            System.out.println("Error in save process of contact" + e.getMessage());
+        }
+
         emails = emailService.saveEmails(contactDTO, contact);
         phones = phoneService.savePhones(contactDTO, contact);
         addresses = addressService.saveAddresses(contactDTO, contact);
+
 
         // update contactDTO before return this ( with id from entities created )
         contactDTO.setContactId(contact.getContactId());
