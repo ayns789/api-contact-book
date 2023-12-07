@@ -1,20 +1,11 @@
 package com.project.entities;
 
 import com.project.enums.EmailTypeEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -24,6 +15,8 @@ import java.util.Objects;
 @SequenceGenerator(name = "EmailIdGenerator", sequenceName = "email_seq", allocationSize = 1)
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor
 public class Email implements Serializable {
 
     @Id
@@ -45,11 +38,11 @@ public class Email implements Serializable {
     @Override
     public String toString() {
         return "Email{" +
-            "emailId=" + emailId +
-            ", libelle='" + libelle + '\'' +
-            ", type=" + type +
-            ", contact=" + contact +
-            '}';
+                "emailId=" + emailId +
+                ", libelle='" + libelle + '\'' +
+                ", type=" + type +
+                ", contact=" + contact +
+                '}';
     }
 
     @Override
@@ -60,8 +53,8 @@ public class Email implements Serializable {
         if (!(o instanceof Email email)) {
             return false;
         }
-        return getEmailId() == email.getEmailId() && Objects.equals(getLibelle(), email.getLibelle()) && getType() == email.getType() &&
-            Objects.equals(getContact(), email.getContact());
+        return getEmailId().equals(email.getEmailId()) && Objects.equals(getLibelle(), email.getLibelle()) && getType() == email.getType() &&
+                Objects.equals(getContact(), email.getContact());
     }
 
     @Override

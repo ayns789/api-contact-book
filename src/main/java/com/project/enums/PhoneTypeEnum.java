@@ -14,8 +14,8 @@ public enum PhoneTypeEnum {
 
     public static PhoneTypeEnum getValue(String value) {
         return Arrays.stream(PhoneTypeEnum.values())
-            .filter(phoneTypeEnum -> phoneTypeEnum.value.equals(value))
-            .findFirst()
-            .orElseThrow(IllegalArgumentException::new); // todo : create a custom exception
+                .filter(phoneTypeEnum -> phoneTypeEnum.value.equals(value))
+                .findFirst()
+                .orElse(PhoneTypeEnum.PERSONAL);
     }
 }

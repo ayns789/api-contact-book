@@ -14,8 +14,8 @@ public enum EmailTypeEnum {
 
     public static EmailTypeEnum getValue(String value) {
         return Arrays.stream(EmailTypeEnum.values())
-            .filter(emailTypeEnum -> emailTypeEnum.value.equals(value))
-            .findFirst()
-            .orElseThrow(IllegalArgumentException::new); // todo : create a custom exception
+                .filter(emailTypeEnum -> emailTypeEnum.value.equals(value))
+                .findFirst()
+                .orElse(EmailTypeEnum.PERSONAL);
     }
 }

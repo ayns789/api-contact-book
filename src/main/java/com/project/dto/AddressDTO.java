@@ -1,18 +1,17 @@
 package com.project.dto;
 
-import com.project.enums.StreetTypeEnum;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
+@SuperBuilder
 public class AddressDTO {
 
     private Long addressId;
@@ -20,8 +19,7 @@ public class AddressDTO {
     @NotNull
     private Integer streetNumber;
 
-    @Enumerated(EnumType.STRING)
-    private StreetTypeEnum streetType;
+    private String streetType;
 
     @NotNull
     @NotBlank

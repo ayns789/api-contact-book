@@ -1,21 +1,19 @@
 package com.project.entities;
 
 import com.project.enums.CivilityEnumType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Entity
 @Table(name = "civility")
 @SequenceGenerator(name = "CivilityIdGenerator", sequenceName = "civility_seq", allocationSize = 1)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Civility implements Serializable {
 
     @Id
@@ -30,9 +28,9 @@ public class Civility implements Serializable {
     @Override
     public String toString() {
         return "Civility{" +
-            "civilityId=" + civilityId +
-            ", libelle=" + libelle +
-            '}';
+                "civilityId=" + civilityId +
+                ", libelle=" + libelle +
+                '}';
     }
 
     @Override
@@ -44,7 +42,7 @@ public class Civility implements Serializable {
             return false;
         }
 
-        if (civilityId != civility.civilityId) {
+        if (!civilityId.equals(civility.civilityId)) {
             return false;
         }
         return libelle == civility.libelle;

@@ -1,20 +1,11 @@
 package com.project.entities;
 
 import com.project.enums.StreetTypeEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -24,6 +15,8 @@ import java.util.Objects;
 @SequenceGenerator(name = "AddressIdGenerator", sequenceName = "address_seq", allocationSize = 1)
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor
 public class Address implements Serializable {
 
     @Id
@@ -58,15 +51,15 @@ public class Address implements Serializable {
     @Override
     public String toString() {
         return "Address{" +
-            "addressId=" + addressId +
-            ", streetNumber=" + streetNumber +
-            ", streetType=" + streetType +
-            ", streetName='" + streetName + '\'' +
-            ", cityName='" + cityName + '\'' +
-            ", postalCode=" + postalCode +
-            ", contact=" + contact +
-            ", country=" + country +
-            '}';
+                "addressId=" + addressId +
+                ", streetNumber=" + streetNumber +
+                ", streetType=" + streetType +
+                ", streetName='" + streetName + '\'' +
+                ", cityName='" + cityName + '\'' +
+                ", postalCode=" + postalCode +
+                ", contact=" + contact +
+                ", country=" + country +
+                '}';
     }
 
     @Override
@@ -77,15 +70,15 @@ public class Address implements Serializable {
         if (!(o instanceof Address address)) {
             return false;
         }
-        return getAddressId() == address.getAddressId() && Objects.equals(getStreetNumber(), address.getStreetNumber()) &&
-            getStreetType() == address.getStreetType() && Objects.equals(getStreetName(), address.getStreetName()) &&
-            Objects.equals(getCityName(), address.getCityName()) && Objects.equals(getPostalCode(), address.getPostalCode()) &&
-            Objects.equals(getContact(), address.getContact()) && Objects.equals(getCountry(), address.getCountry());
+        return getAddressId().equals(address.getAddressId()) && Objects.equals(getStreetNumber(), address.getStreetNumber()) &&
+                getStreetType() == address.getStreetType() && Objects.equals(getStreetName(), address.getStreetName()) &&
+                Objects.equals(getCityName(), address.getCityName()) && Objects.equals(getPostalCode(), address.getPostalCode()) &&
+                Objects.equals(getContact(), address.getContact()) && Objects.equals(getCountry(), address.getCountry());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getAddressId(), getStreetNumber(), getStreetType(), getStreetName(), getCityName(), getPostalCode(), getContact(),
-            getCountry());
+                getCountry());
     }
 }

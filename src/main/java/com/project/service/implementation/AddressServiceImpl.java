@@ -1,81 +1,75 @@
 package com.project.service.implementation;
 
 import com.project.dto.AddressDTO;
-import com.project.dto.ContactDTO;
 import com.project.dto.CountryDTO;
 import com.project.entities.Address;
 import com.project.entities.Contact;
 import com.project.entities.Country;
+import com.project.enums.StreetTypeEnum;
 import com.project.repository.AddressRepository;
+import com.project.service.AddressService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class AddressServiceImpl {
+@RequiredArgsConstructor
+public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
-
     private final CountryServiceImpl countryService;
 
-    public AddressServiceImpl(AddressRepository addressRepository, CountryServiceImpl countryService) {
-        this.addressRepository = addressRepository;
-        this.countryService = countryService;
-    }
+    @Override
+    public List<Address> save(List<AddressDTO> addressDTOS, Contact contact) {
 
-    public List<Address> saveAddresses(ContactDTO contactDTO, Contact contact) {
         List<Address> addresses = new ArrayList<>();
-        contactDTO.getAddresses().forEach(addressDTO -> {
 
-            // get Country by id
+        addressDTOS.forEach(addressDTO -> {
+
+            StreetTypeEnum streetType = StreetTypeEnum.getValue(addressDTO.getStreetType());
+
             Long countryId = addressDTO.getCountry().getCountryId();
             Country country = countryService.getCountryById(countryId);
 
-            Address address = new Address();
+            Address address = Address.builder()
+                    .streetNumber(addressDTO.getStreetNumber())
+                    .streetType(streetType)
+                    .streetName(addressDTO.getStreetName())
+                    .cityName(addressDTO.getCityName())
+                    .postalCode(addressDTO.getPostalCode())
+                    .contact(contact)
+                    .country(country)
+                    .build();
 
-            // save each address
-            address.setCountry(country);
-            address.setContact(contact);
-            address.setStreetNumber(addressDTO.getStreetNumber());
-            address.setStreetType(addressDTO.getStreetType());
-            address.setStreetName(addressDTO.getStreetName());
-            address.setCityName(addressDTO.getCityName());
-            address.setPostalCode(addressDTO.getPostalCode());
-
-            // save all addresses
             addresses.add(address);
         });
 
-        addressRepository.saveAll(addresses);
-
-        return addresses;
+        // save all addresses
+        return addressRepository.saveAll(addresses);
     }
 
+    @Override
+    public List<AddressDTO> toDto(List<Address> addresses) {
+        return addresses.stream()
+                .map(this::toDto)
+                .toList();
+    }
 
-    public List<AddressDTO> addressesUpdateDTO(List<Address> addresses) {
-        List<AddressDTO> addressesDTO = new ArrayList<>();
-        addresses.forEach(address -> {
+    @Override
+    public AddressDTO toDto(Address address) {
 
-            CountryDTO countryDTO = new CountryDTO();
-            AddressDTO addressDTO = new AddressDTO();
+        CountryDTO countryDTO = countryService.toDto(address.getCountry());
 
-            // save each addressesDTO
-            addressDTO.setAddressId(address.getAddressId());
-            addressDTO.setStreetNumber(address.getStreetNumber());
-            addressDTO.setStreetType(address.getStreetType());
-            addressDTO.setStreetName(address.getStreetName());
-            addressDTO.setCityName(address.getCityName());
-            addressDTO.setPostalCode(address.getPostalCode());
-
-            // save each countryDTO in addressDTO
-            countryDTO.setCountryId(address.getCountry().getCountryId());
-            countryDTO.setLibelle(address.getCountry().getLibelle());
-            addressDTO.setCountry(countryDTO);
-
-            // save all addressDTOs
-            addressesDTO.add(addressDTO);
-        });
-        return addressesDTO;
+        return AddressDTO.builder()
+                .addressId(address.getAddressId())
+                .streetNumber(address.getStreetNumber())
+                .streetType(address.getStreetType().name())
+                .streetName(address.getStreetName())
+                .cityName(address.getCityName())
+                .postalCode(address.getPostalCode())
+                .country(countryDTO)
+                .build();
     }
 }

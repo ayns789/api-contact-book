@@ -1,14 +1,7 @@
 package com.project.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,6 +11,9 @@ import java.util.Objects;
 @SequenceGenerator(name = "CountryIdGenerator", sequenceName = "country_seq", allocationSize = 1)
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Country implements Serializable {
 
     @Id
@@ -31,9 +27,9 @@ public class Country implements Serializable {
     @Override
     public String toString() {
         return "Country{" +
-            "countryId=" + countryId +
-            ", libelle='" + libelle + '\'' +
-            '}';
+                "countryId=" + countryId +
+                ", libelle='" + libelle + '\'' +
+                '}';
     }
 
     @Override
@@ -44,7 +40,7 @@ public class Country implements Serializable {
         if (!(o instanceof Country country)) {
             return false;
         }
-        return getCountryId() == country.getCountryId() && Objects.equals(getLibelle(), country.getLibelle());
+        return getCountryId().equals(country.getCountryId()) && Objects.equals(getLibelle(), country.getLibelle());
     }
 
     @Override

@@ -1,21 +1,28 @@
 package com.project.service.implementation;
 
+import com.project.dto.CountryDTO;
 import com.project.entities.Country;
 import com.project.repository.CountryRepository;
+import com.project.service.CountryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CountryServiceImpl {
+@RequiredArgsConstructor
+public class CountryServiceImpl implements CountryService {
 
     private final CountryRepository countryRepository;
 
-    public CountryServiceImpl(CountryRepository countryRepository) {
-        this.countryRepository = countryRepository;
+    public Country getCountryById(Long countryId) {
+        return countryRepository.getReferenceById(countryId);
     }
 
-    public Country getCountryById(Long countryId) {
-        Country country = countryRepository.getReferenceById(countryId);
-        return country;
+    @Override
+    public CountryDTO toDto(Country country) {
+        return CountryDTO.builder()
+                .countryId(country.getCountryId())
+                .libelle(country.getLibelle())
+                .build();
     }
 
 

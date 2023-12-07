@@ -2,7 +2,9 @@ package com.project.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import java.util.Objects;
 @SequenceGenerator(name = "ContactIdGenerator", sequenceName = "contact_seq", allocationSize = 1)
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor
 public class Contact implements Serializable {
 
     @Id
@@ -61,7 +65,7 @@ public class Contact implements Serializable {
         if (!(o instanceof Contact contact)) {
             return false;
         }
-        return getContactId() == contact.getContactId() && Objects.equals(getFirstName(), contact.getFirstName()) &&
+        return getContactId().equals(contact.getContactId()) && Objects.equals(getFirstName(), contact.getFirstName()) &&
                 Objects.equals(getLastName(), contact.getLastName()) && Objects.equals(getCivility(), contact.getCivility()) &&
                 Objects.equals(getEmails(), contact.getEmails()) && Objects.equals(getPhones(), contact.getPhones()) &&
                 Objects.equals(getAddresses(), contact.getAddresses());

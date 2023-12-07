@@ -1,80 +1,85 @@
 package com.project.service.implementation;
 
-import com.project.dto.ContactDTO;
-import com.project.entities.Address;
-import com.project.entities.Civility;
-import com.project.entities.Contact;
-import com.project.entities.Email;
-import com.project.entities.Phone;
+import com.project.dto.*;
+import com.project.entities.*;
 import com.project.repository.ContactRepository;
 import com.project.service.ContactService;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
-
     private final EmailServiceImpl emailService;
-
     private final PhoneServiceImpl phoneService;
-
     private final CivilityServiceImpl civilityService;
-
     private final AddressServiceImpl addressService;
 
-    public ContactServiceImpl(ContactRepository contactRepository, EmailServiceImpl emailService, PhoneServiceImpl phoneService,
-                              AddressServiceImpl addressService, CivilityServiceImpl civilityService) {
-        this.contactRepository = contactRepository;
-        this.addressService = addressService;
-        this.civilityService = civilityService;
-        this.emailService = emailService;
-        this.phoneService = phoneService;
-    }
-
-
     @Override
-    public ContactDTO createContact(ContactDTO contactDTO) {
-        // get Civility by Id
+    public ContactDTO create(ContactDTO contactDTO) {
+
+        // Handle civility
         Long civilityId = contactDTO.getCivility().getCivilityId();
         Civility civility = civilityService.getCivilityById(civilityId);
+        CivilityDTO civilityDTO = civilityService.toDto(civility);
 
-        Contact contact = new Contact();
+        // Handle contact
+        Contact contact = save(contactDTO, civility);
 
-        // contact get data from contactDTO
-        contact.setCivility(civility);
-        contact.setFirstName(contactDTO.getFirstName());
-        contact.setLastName(contactDTO.getLastName());
+        // Handle emails
+        List<EmailDTO> emailDTOS = contactDTO.getEmails();
+        emailDTOS = ListUtils.emptyIfNull(emailDTOS);
+        List<Email> emails = emailService.save(emailDTOS, contact);
+        List<EmailDTO> emailDTOs = emailService.toDto(emails);
 
-        List<Phone> phones = new ArrayList<>();
-        List<Email> emails = new ArrayList<>();
-        List<Address> addresses = new ArrayList<>();
+        // Handle phones
+        List<PhoneDTO> phoneDTOS = contactDTO.getPhones();
+        List<Phone> phones = phoneService.save(phoneDTOS, contact);
+        List<PhoneDTO> phoneDTOs = phoneService.toDto(phones);
 
-        // save all DTO datas in entities concerned
-        try {
-            contact = contactRepository.save(contact);
-        } catch (Exception e) {
-            System.out.println("Error in save process of contact" + e.getMessage());
-        }
-
-        emails = emailService.saveEmails(contactDTO, contact);
-        phones = phoneService.savePhones(contactDTO, contact);
-        addresses = addressService.saveAddresses(contactDTO, contact);
+        // Handle addresses
+        List<AddressDTO> addressDTOS = contactDTO.getAddresses();
+        addressDTOS = ListUtils.emptyIfNull(addressDTOS);
+        List<Address> addresses = addressService.save(addressDTOS, contact);
+        List<AddressDTO> addressDTOs = addressService.toDto(addresses);
 
 
-        // update contactDTO before return this ( with id from entities created )
-        contactDTO.setContactId(contact.getContactId());
-        contactDTO.setEmails(emailService.emailUpdateDTO(emails));
-        contactDTO.setPhones(phoneService.phonesUpdateDTO(phones));
-        contactDTO.setAddresses(addressService.addressesUpdateDTO(addresses));
-
-        return contactDTO;
+        // Build contactDTO
+        return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
     }
 
+    @Override
+    public Contact save(ContactDTO contactDTO, Civility civility) {
+        Contact contact = Contact.builder()
+                .firstName(contactDTO.getFirstName())
+                .lastName(contactDTO.getLastName())
+                .civility(civility)
+                .build();
 
+        // Save contact
+        contact = contactRepository.save(contact);
+        return contact;
+    }
+
+    @Override
+    public ContactDTO toDto(Contact contact, CivilityDTO civilityDTO, List<EmailDTO> emailDTOS,
+                            List<PhoneDTO> phoneDTOS, List<AddressDTO> addressDTOS) {
+
+        return ContactDTO.builder()
+                .contactId(contact.getContactId())
+                .firstName(contact.getFirstName())
+                .lastName(contact.getLastName())
+                .civility(civilityDTO)
+                .emails(emailDTOS)
+                .phones(phoneDTOS)
+                .addresses(addressDTOS)
+                .build();
+    }
 }
 
 

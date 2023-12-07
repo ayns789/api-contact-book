@@ -17,8 +17,8 @@ public enum CivilityEnumType {
 
     public CivilityEnumType getvalue(String value) {
         return Arrays.stream(CivilityEnumType.values())
-            .filter(civilityEnumType -> civilityEnumType.value.equals(value))
-            .findFirst()
-            .orElseThrow(IllegalArgumentException::new); // todo : create a custom exception
+                .filter(civilityEnumType -> civilityEnumType.value.equals(value))
+                .findFirst()
+                .orElse(CivilityEnumType.AUTRE);
     }
 }

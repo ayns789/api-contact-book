@@ -1,60 +1,59 @@
 package com.project.service.implementation;
 
-import com.project.dto.ContactDTO;
 import com.project.dto.PhoneDTO;
 import com.project.entities.Contact;
 import com.project.entities.Phone;
+import com.project.enums.PhoneTypeEnum;
 import com.project.repository.PhoneRepository;
+import com.project.service.PhoneService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PhoneServiceImpl {
+@RequiredArgsConstructor
+public class PhoneServiceImpl implements PhoneService {
 
     private final PhoneRepository phoneRepository;
 
-    public PhoneServiceImpl(PhoneRepository phoneRepository) {
-        this.phoneRepository = phoneRepository;
-    }
+    @Override
+    public List<Phone> save(List<PhoneDTO> phoneDTOS, Contact contact) {
 
-    public List<Phone> savePhones(ContactDTO contactDTO, Contact contact) {
         List<Phone> phones = new ArrayList<>();
-        contactDTO.getPhones().forEach(phoneDTO -> {
 
-            Phone phone = new Phone();
+        phoneDTOS.forEach(phoneDTO -> {
 
-            // save each phone
-            phone.setContact(contact);
-            phone.setLibelle(phoneDTO.getLibelle());
-            phone.setType(phoneDTO.getType());
+            PhoneTypeEnum phoneTypeEnum = PhoneTypeEnum.valueOf(phoneDTO.getType());
 
-            // save all phones
+            Phone phone = Phone.builder()
+                    .libelle(phoneDTO.getLibelle())
+                    .type(phoneTypeEnum)
+                    .contact(contact)
+                    .build();
+
             phones.add(phone);
         });
 
-        phoneRepository.saveAll(phones);
-
-        return phones;
+        // save all phones
+        return phoneRepository.saveAll(phones);
     }
 
+    @Override
+    public List<PhoneDTO> toDto(List<Phone> phones) {
+        return phones.stream()
+                .map(this::toDto)
+                .toList();
+    }
 
-    public List<PhoneDTO> phonesUpdateDTO(List<Phone> phonesGetRepo) {
-        List<PhoneDTO> phonesDTO = new ArrayList<>();
-        phonesGetRepo.forEach(phone -> {
-
-            PhoneDTO phoneDTO = new PhoneDTO();
-
-            // save each phone
-            phoneDTO.setPhoneId(phone.getPhoneId());
-            phoneDTO.setLibelle(phone.getLibelle());
-            phoneDTO.setType(phone.getType());
-
-            // save all phoneDTOs
-            phonesDTO.add(phoneDTO);
-        });
-        return phonesDTO;
+    @Override
+    public PhoneDTO toDto(Phone phone) {
+        return PhoneDTO.builder()
+                .phoneId(phone.getPhoneId())
+                .libelle(phone.getLibelle())
+                .type(phone.getType().name())
+                .build();
     }
 
 }
