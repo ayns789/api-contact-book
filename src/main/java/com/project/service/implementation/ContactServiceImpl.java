@@ -35,34 +35,6 @@ public class ContactServiceImpl implements ContactService {
     @Transactional
     public ContactDTO create(ContactDTO contactDTO) {
 
-//            // Handle civility
-//            Long civilityId = contactDTO.getCivility().getCivilityId();
-//            Civility civility = civilityService.getCivilityById(civilityId);
-//            CivilityDTO civilityDTO = civilityService.toDto(civility);
-//
-//            // Handle contact
-//            Contact contact = save(contactDTO, civility);
-//
-//            // Handle emails
-//            List<EmailDTO> emailDTOS = contactDTO.getEmails();
-//            emailDTOS = ListUtils.emptyIfNull(emailDTOS);
-//            List<Email> emails = emailService.save(emailDTOS, contact);
-//            List<EmailDTO> emailDTOs = emailService.toDto(emails);
-//
-//            // Handle phones
-//            List<PhoneDTO> phoneDTOS = contactDTO.getPhones();
-//            List<Phone> phones = phoneService.save(phoneDTOS, contact);
-//            List<PhoneDTO> phoneDTOs = phoneService.toDto(phones);
-//
-//            // Handle addresses
-//            List<AddressDTO> addressDTOS = contactDTO.getAddresses();
-//            addressDTOS = ListUtils.emptyIfNull(addressDTOS);
-//            List<Address> addresses = addressService.save(addressDTOS, contact);
-//            List<AddressDTO> addressDTOs = addressService.toDto(addresses);
-//
-//            // Build contactDTO
-//            return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
-//
         try {
             // Handle civility
             Long civilityId = contactDTO.getCivility().getCivilityId();
