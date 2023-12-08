@@ -1,9 +1,9 @@
 package com.project.service.implementation;
 
-import com.project.dto.EmailDTO;
-import com.project.entities.Contact;
-import com.project.entities.Email;
-import com.project.enums.EmailTypeEnum;
+import com.project.domain.dto.EmailDTO;
+import com.project.domain.entities.Contact;
+import com.project.domain.entities.Email;
+import com.project.domain.enums.EmailTypeEnum;
 import com.project.repository.EmailRepository;
 import com.project.service.EmailService;
 import lombok.RequiredArgsConstructor;

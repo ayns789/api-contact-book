@@ -1,7 +1,8 @@
 package com.project.service.implementation;
 
-import com.project.dto.*;
-import com.project.entities.*;
+import com.project.domain.dto.*;
+import com.project.domain.entities.*;
+import com.project.exceptions.GenericException;
 import com.project.repository.ContactRepository;
 import com.project.service.ContactService;
 import lombok.RequiredArgsConstructor;
@@ -55,10 +56,8 @@ public class ContactServiceImpl implements ContactService {
             return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
 
         } catch (Exception e) {
-            // Handle IllegalArgumentException
-            String errorMessage = "Invalid contact data";
 
-            throw new IllegalArgumentException(errorMessage, e);
+            throw new GenericException();
         }
 
 

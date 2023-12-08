@@ -1,4 +1,4 @@
-package com.project.dto;
+package com.project.domain.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

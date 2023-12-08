@@ -1,4 +1,4 @@
-package com.project.enums;
+package com.project.domain.enums;
 
 import lombok.RequiredArgsConstructor;
 

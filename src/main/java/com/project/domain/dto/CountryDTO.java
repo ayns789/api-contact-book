@@ -1,6 +1,6 @@
-package com.project.dto;
+package com.project.domain.dto;
 
-import jakarta.validation.constraints.Email;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,15 +13,12 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode
 @ToString
 @SuperBuilder
-public class EmailDTO {
+public class CountryDTO {
 
-    private Long emailId;
+    private Long countryId;
 
     @NotNull
     @NotBlank
-    @Email
-    @Size(max = 255, message = "'libelle' from email must be under 255 characters")
+    @Size(max = 100, message = "'libelle' of country must be under 100 characters")
     private String libelle;
-
-    private String type;
 }

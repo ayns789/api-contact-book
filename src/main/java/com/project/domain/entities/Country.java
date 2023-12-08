@@ -1,4 +1,4 @@
-package com.project.entities;
+package com.project.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

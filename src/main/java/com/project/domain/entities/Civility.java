@@ -1,6 +1,6 @@
-package com.project.entities;
+package com.project.domain.entities;
 
-import com.project.enums.CivilityEnumType;
+import com.project.domain.enums.CivilityEnumType;
 import jakarta.persistence.*;
 import lombok.*;
 

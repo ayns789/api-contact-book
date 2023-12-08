@@ -1,7 +1,7 @@
 package com.project.service.implementation;
 
-import com.project.dto.CountryDTO;
-import com.project.entities.Country;
+import com.project.domain.dto.CountryDTO;
+import com.project.domain.entities.Country;
 import com.project.repository.CountryRepository;
 import com.project.service.CountryService;
 import lombok.RequiredArgsConstructor;

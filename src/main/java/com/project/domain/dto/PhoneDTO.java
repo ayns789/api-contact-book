@@ -1,5 +1,4 @@
-package com.project.dto;
-
+package com.project.domain.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,12 +12,14 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode
 @ToString
 @SuperBuilder
-public class CountryDTO {
+public class PhoneDTO {
 
-    private Long countryId;
+    private Long phoneId;
 
     @NotNull
     @NotBlank
-    @Size(max = 100, message = "'libelle' of country must be under 100 characters")
+    @Size(max = 50, message = "'libelle' from phone must be under 50 characters")
     private String libelle;
+
+    private String type;
 }

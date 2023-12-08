@@ -1,7 +1,7 @@
 package com.project.service.implementation;
 
-import com.project.dto.CivilityDTO;
-import com.project.entities.Civility;
+import com.project.domain.dto.CivilityDTO;
+import com.project.domain.entities.Civility;
 import com.project.repository.CivilityRepository;
 import com.project.service.CivilityService;
 import lombok.RequiredArgsConstructor;

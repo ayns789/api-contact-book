@@ -1,8 +1,8 @@
 package com.project.service;
 
-import com.project.dto.EmailDTO;
-import com.project.entities.Contact;
-import com.project.entities.Email;
+import com.project.domain.dto.EmailDTO;
+import com.project.domain.entities.Contact;
+import com.project.domain.entities.Email;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package com.project.service;
 
-import com.project.dto.PhoneDTO;
-import com.project.entities.Contact;
-import com.project.entities.Phone;
+import com.project.domain.dto.PhoneDTO;
+import com.project.domain.entities.Contact;
+import com.project.domain.entities.Phone;
 
 import java.util.List;
 

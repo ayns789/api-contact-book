@@ -1,7 +1,7 @@
 package com.project.service;
 
-import com.project.dto.CountryDTO;
-import com.project.entities.Country;
+import com.project.domain.dto.CountryDTO;
+import com.project.domain.entities.Country;
 
 public interface CountryService {
     Country getCountryById(Long countryId);

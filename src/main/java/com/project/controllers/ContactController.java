@@ -1,6 +1,6 @@
 package com.project.controllers;
 
-import com.project.dto.ContactDTO;
+import com.project.domain.dto.ContactDTO;
 import com.project.service.ContactService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

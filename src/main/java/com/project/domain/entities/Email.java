@@ -1,6 +1,6 @@
-package com.project.entities;
+package com.project.domain.entities;
 
-import com.project.enums.PhoneTypeEnum;
+import com.project.domain.enums.EmailTypeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,25 +11,25 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "phone")
-@SequenceGenerator(name = "PhoneIdGenerator", sequenceName = "phone_seq", allocationSize = 1)
+@Table(name = "email")
+@SequenceGenerator(name = "EmailIdGenerator", sequenceName = "email_seq", allocationSize = 1)
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class Phone implements Serializable {
+public class Email implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PhoneIdGenerator")
-    @Column(name = "phone_id", nullable = false)
-    private Long phoneId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EmailIdGenerator")
+    @Column(name = "email_id", nullable = false)
+    private Long emailId;
 
     @Column(name = "libelle", nullable = false)
     private String libelle;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private PhoneTypeEnum type;
+    private EmailTypeEnum type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contact_id")
@@ -37,9 +37,9 @@ public class Phone implements Serializable {
 
     @Override
     public String toString() {
-        return "Phone{" +
-                "phoneId=" + phoneId +
-                ", libelle=" + libelle +
+        return "Email{" +
+                "emailId=" + emailId +
+                ", libelle='" + libelle + '\'' +
                 ", type=" + type +
                 ", contact=" + contact +
                 '}';
@@ -50,15 +50,15 @@ public class Phone implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Phone phone)) {
+        if (!(o instanceof Email email)) {
             return false;
         }
-        return getPhoneId().equals(phone.getPhoneId()) && Objects.equals(getLibelle(), phone.getLibelle()) && getType() == phone.getType() &&
-                Objects.equals(getContact(), phone.getContact());
+        return getEmailId().equals(email.getEmailId()) && Objects.equals(getLibelle(), email.getLibelle()) && getType() == email.getType() &&
+                Objects.equals(getContact(), email.getContact());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPhoneId(), getLibelle(), getType(), getContact());
+        return Objects.hash(getEmailId(), getLibelle(), getType(), getContact());
     }
 }

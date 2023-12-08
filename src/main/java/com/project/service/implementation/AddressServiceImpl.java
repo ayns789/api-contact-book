@@ -1,11 +1,11 @@
 package com.project.service.implementation;
 
-import com.project.dto.AddressDTO;
-import com.project.dto.CountryDTO;
-import com.project.entities.Address;
-import com.project.entities.Contact;
-import com.project.entities.Country;
-import com.project.enums.StreetTypeEnum;
+import com.project.domain.dto.AddressDTO;
+import com.project.domain.dto.CountryDTO;
+import com.project.domain.entities.Address;
+import com.project.domain.entities.Contact;
+import com.project.domain.entities.Country;
+import com.project.domain.enums.StreetTypeEnum;
 import com.project.repository.AddressRepository;
 import com.project.service.AddressService;
 import lombok.RequiredArgsConstructor;

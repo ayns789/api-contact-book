@@ -1,9 +1,9 @@
 package com.project.service;
 
 
-import com.project.dto.*;
-import com.project.entities.Civility;
-import com.project.entities.Contact;
+import com.project.domain.dto.*;
+import com.project.domain.entities.Civility;
+import com.project.domain.entities.Contact;
 
 import java.util.List;
 

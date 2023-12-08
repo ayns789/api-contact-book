@@ -1,6 +1,6 @@
-package com.project.entities;
+package com.project.domain.entities;
 
-import com.project.enums.StreetTypeEnum;
+import com.project.domain.enums.StreetTypeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
