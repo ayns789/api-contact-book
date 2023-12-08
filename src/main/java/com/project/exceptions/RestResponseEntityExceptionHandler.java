@@ -9,14 +9,12 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class RestResponseEntityExceptionHandler
-        extends ResponseEntityExceptionHandler {
+public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value
-            = {Exception.class})
-    public ResponseEntity<Object> handleException(
-            Exception e, RuntimeException ex, HttpHeaders httpHeaders, HttpStatus badRequest, WebRequest request) {
-        String bodyOfResponse = "This should be application specific";
+    @ExceptionHandler(value = {Exception.class})
+    public ResponseEntity<Object> handleException(RuntimeException ex, WebRequest request) {
+
+        String bodyOfResponse = "App error";
         return handleExceptionInternal(ex, bodyOfResponse,
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }

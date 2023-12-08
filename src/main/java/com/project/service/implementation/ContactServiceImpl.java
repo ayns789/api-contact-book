@@ -58,7 +58,7 @@ public class ContactServiceImpl implements ContactService {
             // Handle IllegalArgumentException
             String errorMessage = "Invalid contact data";
 
-            throw new Exception(errorMessage, e);
+            throw new IllegalArgumentException(errorMessage, e);
         }
 
 
