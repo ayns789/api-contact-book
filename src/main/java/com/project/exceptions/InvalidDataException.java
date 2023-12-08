@@ -2,7 +2,7 @@ package com.project.exceptions;
 
 public class InvalidDataException extends RuntimeException {
 
-    public InvalidDataException(String message, Object body) {
+    public InvalidDataException(String message) {
         super(message);
     }
 }

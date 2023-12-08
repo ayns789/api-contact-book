@@ -3,16 +3,10 @@ package com.project.service.implementation;
 import com.project.dto.*;
 import com.project.entities.*;
 import com.project.exceptions.InvalidDataException;
-import com.project.exceptions.InvalidSystemException;
-import com.project.exceptions.RestResponseEntityExceptionHandler;
 import com.project.repository.ContactRepository;
 import com.project.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.ListUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +21,6 @@ public class ContactServiceImpl implements ContactService {
     private final PhoneServiceImpl phoneService;
     private final CivilityServiceImpl civilityService;
     private final AddressServiceImpl addressService;
-
-    @Autowired
-    private RestResponseEntityExceptionHandler exceptionHandler;
 
     @Override
     @Transactional
@@ -64,22 +55,11 @@ public class ContactServiceImpl implements ContactService {
             // Build contactDTO
             return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
 
-        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
             // Handle IllegalArgumentException
             String errorMessage = "Invalid contact data";
 
-            ResponseEntity<Object> response = exceptionHandler.handleConflict(
-                    ex, null, null, new HttpHeaders(), HttpStatus.BAD_REQUEST, null);
-
-            throw new InvalidDataException(errorMessage, response.getBody());
-        } catch (IllegalStateException ex) {
-            // Handle IllegalStateException
-            String errorMessage = "Internal error while processing your request";
-
-            ResponseEntity<Object> response = exceptionHandler.handleConflict(
-                    null, ex, null, new HttpHeaders(), HttpStatus.BAD_REQUEST, null);
-
-            throw new InvalidSystemException(errorMessage, response.getBody());
+            throw new InvalidDataException(errorMessage);
         }
 
 
