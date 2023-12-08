@@ -25,7 +25,7 @@ public class PhoneServiceImpl implements PhoneService {
 
         phoneDTOS.forEach(phoneDTO -> {
 
-            PhoneTypeEnum phoneTypeEnum = PhoneTypeEnum.valueOf(phoneDTO.getType());
+            PhoneTypeEnum phoneTypeEnum = PhoneTypeEnum.getValue(phoneDTO.getType());
 
             Phone phone = Phone.builder()
                     .libelle(phoneDTO.getLibelle())

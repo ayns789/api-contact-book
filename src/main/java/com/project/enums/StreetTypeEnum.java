@@ -15,8 +15,8 @@ public enum StreetTypeEnum {
 
     public static StreetTypeEnum getValue(String value) {
         return Arrays.stream(StreetTypeEnum.values())
-            .filter(streetTypeEnum -> streetTypeEnum.value.equals(value))
-            .findFirst()
-            .orElseThrow(IllegalArgumentException::new); // todo : create a custom exception
+                .filter(streetTypeEnum -> streetTypeEnum.value.equalsIgnoreCase(value))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new); // todo : create a custom exception
     }
 }

@@ -7,11 +7,11 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum CivilityEnumType {
 
-    MONSIEUR("Monsieur"),
-    MADAME("Madame"),
-    MADEMOISELLE("Mademoiselle"),
-    NON_BINAIRE("non_binaire"),
-    AUTRE("autre");
+    MONSIEUR("MONSIEUR"),
+    MADAME("MADAME"),
+    MADEMOISELLE("MADEMOISELLE"),
+    NON_BINAIRE("NON_BINAIRE"),
+    AUTRE("AUTRE");
 
     final String value;
 
