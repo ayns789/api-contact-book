@@ -6,9 +6,11 @@ import com.project.domain.entities.Address;
 import com.project.domain.entities.Contact;
 import com.project.domain.entities.Country;
 import com.project.domain.enums.StreetTypeEnum;
+import com.project.exceptions.AddressNotSavedException;
 import com.project.repository.AddressRepository;
 import com.project.service.AddressService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
@@ -47,7 +50,13 @@ public class AddressServiceImpl implements AddressService {
         });
 
         // save all addresses
-        return addressRepository.saveAll(addresses);
+        try {
+            return addressRepository.saveAll(addresses);
+        } catch (Exception e) {
+            
+            log.error(STR."Error while saving addresses: \{e.getMessage()}", e);
+            throw new AddressNotSavedException();
+        }
     }
 
     @Override

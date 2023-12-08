@@ -4,9 +4,11 @@ import com.project.domain.dto.EmailDTO;
 import com.project.domain.entities.Contact;
 import com.project.domain.entities.Email;
 import com.project.domain.enums.EmailTypeEnum;
+import com.project.exceptions.EmailNotSavedException;
 import com.project.repository.EmailRepository;
 import com.project.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class EmailServiceImpl implements EmailService {
 
     private final EmailRepository emailRepository;
@@ -37,7 +40,13 @@ public class EmailServiceImpl implements EmailService {
         });
 
         // save all emails
-        return emailRepository.saveAll(emails);
+        try {
+            return emailRepository.saveAll(emails);
+        } catch (Exception e) {
+
+            log.error("Error while saving emails: {}", e.getMessage(), e);
+            throw new EmailNotSavedException();
+        }
     }
 
     @Override

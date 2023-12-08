@@ -1,5 +1,6 @@
 package com.project.domain.enums;
 
+import com.project.exceptions.StreetTypeEnumNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -17,6 +18,6 @@ public enum StreetTypeEnum {
         return Arrays.stream(StreetTypeEnum.values())
                 .filter(streetTypeEnum -> streetTypeEnum.value.equalsIgnoreCase(value))
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new); // todo : create a custom exception
+                .orElseThrow(() -> new StreetTypeEnumNotFoundException(value));
     }
 }

@@ -2,6 +2,7 @@ package com.project.service.implementation;
 
 import com.project.domain.dto.CountryDTO;
 import com.project.domain.entities.Country;
+import com.project.exceptions.CountryNotFoundException;
 import com.project.repository.CountryRepository;
 import com.project.service.CountryService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,8 @@ public class CountryServiceImpl implements CountryService {
     private final CountryRepository countryRepository;
 
     public Country getCountryById(Long countryId) {
-        return countryRepository.getReferenceById(countryId);
+        return countryRepository.findById(countryId)
+                .orElseThrow(() -> new CountryNotFoundException(countryId));
     }
 
     @Override
