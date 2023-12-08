@@ -2,10 +2,17 @@ package com.project.service.implementation;
 
 import com.project.dto.*;
 import com.project.entities.*;
+import com.project.exceptions.InvalidDataException;
+import com.project.exceptions.InvalidSystemException;
+import com.project.exceptions.RestResponseEntityExceptionHandler;
 import com.project.repository.ContactRepository;
 import com.project.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.ListUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,39 +28,91 @@ public class ContactServiceImpl implements ContactService {
     private final CivilityServiceImpl civilityService;
     private final AddressServiceImpl addressService;
 
+    @Autowired
+    private RestResponseEntityExceptionHandler exceptionHandler;
+
     @Override
     @Transactional
     public ContactDTO create(ContactDTO contactDTO) {
 
-        // Handle civility
-        Long civilityId = contactDTO.getCivility().getCivilityId();
-        Civility civility = civilityService.getCivilityById(civilityId);
-        CivilityDTO civilityDTO = civilityService.toDto(civility);
+//            // Handle civility
+//            Long civilityId = contactDTO.getCivility().getCivilityId();
+//            Civility civility = civilityService.getCivilityById(civilityId);
+//            CivilityDTO civilityDTO = civilityService.toDto(civility);
+//
+//            // Handle contact
+//            Contact contact = save(contactDTO, civility);
+//
+//            // Handle emails
+//            List<EmailDTO> emailDTOS = contactDTO.getEmails();
+//            emailDTOS = ListUtils.emptyIfNull(emailDTOS);
+//            List<Email> emails = emailService.save(emailDTOS, contact);
+//            List<EmailDTO> emailDTOs = emailService.toDto(emails);
+//
+//            // Handle phones
+//            List<PhoneDTO> phoneDTOS = contactDTO.getPhones();
+//            List<Phone> phones = phoneService.save(phoneDTOS, contact);
+//            List<PhoneDTO> phoneDTOs = phoneService.toDto(phones);
+//
+//            // Handle addresses
+//            List<AddressDTO> addressDTOS = contactDTO.getAddresses();
+//            addressDTOS = ListUtils.emptyIfNull(addressDTOS);
+//            List<Address> addresses = addressService.save(addressDTOS, contact);
+//            List<AddressDTO> addressDTOs = addressService.toDto(addresses);
+//
+//            // Build contactDTO
+//            return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
+//
+        try {
+            // Handle civility
+            Long civilityId = contactDTO.getCivility().getCivilityId();
+            Civility civility = civilityService.getCivilityById(civilityId);
+            CivilityDTO civilityDTO = civilityService.toDto(civility);
 
-        // Handle contact
-        Contact contact = save(contactDTO, civility);
+            // Handle contact
+            Contact contact = save(contactDTO, civility);
 
-        // Handle emails
-        List<EmailDTO> emailDTOS = contactDTO.getEmails();
-        emailDTOS = ListUtils.emptyIfNull(emailDTOS);
-        List<Email> emails = emailService.save(emailDTOS, contact);
-        List<EmailDTO> emailDTOs = emailService.toDto(emails);
+            // Handle emails
+            List<EmailDTO> emailDTOS = contactDTO.getEmails();
+            emailDTOS = ListUtils.emptyIfNull(emailDTOS);
+            List<Email> emails = emailService.save(emailDTOS, contact);
+            List<EmailDTO> emailDTOs = emailService.toDto(emails);
 
-        // Handle phones
-        List<PhoneDTO> phoneDTOS = contactDTO.getPhones();
-        List<Phone> phones = phoneService.save(phoneDTOS, contact);
-        List<PhoneDTO> phoneDTOs = phoneService.toDto(phones);
+            // Handle phones
+            List<PhoneDTO> phoneDTOS = contactDTO.getPhones();
+            List<Phone> phones = phoneService.save(phoneDTOS, contact);
+            List<PhoneDTO> phoneDTOs = phoneService.toDto(phones);
 
-        // Handle addresses
-        List<AddressDTO> addressDTOS = contactDTO.getAddresses();
-        addressDTOS = ListUtils.emptyIfNull(addressDTOS);
-        List<Address> addresses = addressService.save(addressDTOS, contact);
-        List<AddressDTO> addressDTOs = addressService.toDto(addresses);
+            // Handle addresses
+            List<AddressDTO> addressDTOS = contactDTO.getAddresses();
+            addressDTOS = ListUtils.emptyIfNull(addressDTOS);
+            List<Address> addresses = addressService.save(addressDTOS, contact);
+            List<AddressDTO> addressDTOs = addressService.toDto(addresses);
+
+            // Build contactDTO
+            return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
+
+        } catch (IllegalArgumentException ex) {
+            // Handle IllegalArgumentException
+            String errorMessage = "Invalid contact data";
+
+            ResponseEntity<Object> response = exceptionHandler.handleConflict(
+                    ex, null, null, new HttpHeaders(), HttpStatus.BAD_REQUEST, null);
+
+            throw new InvalidDataException(errorMessage, response.getBody());
+        } catch (IllegalStateException ex) {
+            // Handle IllegalStateException
+            String errorMessage = "Internal error while processing your request";
+
+            ResponseEntity<Object> response = exceptionHandler.handleConflict(
+                    null, ex, null, new HttpHeaders(), HttpStatus.BAD_REQUEST, null);
+
+            throw new InvalidSystemException(errorMessage, response.getBody());
+        }
 
 
-        // Build contactDTO
-        return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
     }
+
 
     @Override
     public Contact save(ContactDTO contactDTO, Civility civility) {
