@@ -1,11 +1,8 @@
 package com.project.exceptions;
 
 import com.project.domain.error.ApiError;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -14,16 +11,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-
-    
-    @ExceptionHandler(value = {MethodArgumentNotValidException.class})
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
-        String messageError = STR. "The payload is not valid ('\{ ex.getMessage() }')" ;
-        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
-        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST);
-    }
 
     @ExceptionHandler(value = {GenericException.class, Exception.class})
     public ResponseEntity<Object> handleGenericException(WebRequest request) {
