@@ -31,7 +31,7 @@ public class ContactController {
 
         String messageError = "The payload is not correct. There are missing or incorrect fields: " +
                 ex.getBindingResult().getFieldErrors().stream()
-                        .map(error -> String.format("%s : %s", error.getField(), error.getDefaultMessage()))
+                        .map(error -> String.format("%s : %s", error.getCode(), error.getDefaultMessage()))
                         .collect(Collectors.joining(" , "));
 
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
