@@ -31,7 +31,8 @@ public class ContactController {
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
 
-        String messageError = "The payload is not correct. There are missing or incorrect fields: <nom du field> : <error message>";
+        String messageError =
+            "The payload is not correct. There are missing or incorrect fields: <nom du field> : <error message>, <nom du field> : <error message>....";
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());
 
