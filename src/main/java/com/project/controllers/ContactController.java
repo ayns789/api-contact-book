@@ -7,11 +7,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -26,26 +28,23 @@ public class ContactController {
         return contactService.create(contactDTO);
     }
 
+    private String getFieldPath(FieldError error) {
+        return Optional.ofNullable(error.getField())
+                .filter(field -> field.contains("."))
+                .map(field -> field.substring(field.lastIndexOf(".") + 1))
+                .orElse(error.getField());
+    }
+
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
 
         String messageError = "The payload is not correct. There are missing or incorrect fields: " +
                 ex.getBindingResult().getFieldErrors().stream()
-                        .map(error -> String.format("%s : %s", error.getCode(), error.getDefaultMessage()))
+                        .map(error -> String.format("%s : %s", getFieldPath(error), error.getDefaultMessage()))
                         .collect(Collectors.joining(" , "));
 
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());
-
-//        Map<String, String> errors = new HashMap<>();
-//
-//        ex.getBindingResult().getFieldErrors().forEach(error -> {
-//            errors.put(error.getField(), error.getDefaultMessage());
-//        });
-//
-//        String messageError = STR."The payload is not correct. There are missing or incorrect fields: <field> : <error> , ...";
-//        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
-//        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());
 
         return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST);
     }

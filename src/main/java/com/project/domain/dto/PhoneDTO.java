@@ -17,7 +17,7 @@ public class PhoneDTO {
     private Long phoneId;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "le numéro doit être renseigné")
     @Size(max = 50, message = "'libelle' from phone must be under 50 characters")
     private String libelle;
 

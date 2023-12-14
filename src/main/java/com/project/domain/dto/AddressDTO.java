@@ -16,7 +16,7 @@ public class AddressDTO {
 
     private Long addressId;
 
-    @NotNull
+    @NotNull(message = "le numéro d'adresse doit être renseigné")
     private Integer streetNumber;
 
     private String streetType;
