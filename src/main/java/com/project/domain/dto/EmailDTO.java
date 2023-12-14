@@ -19,7 +19,7 @@ public class EmailDTO {
 
     @NotNull
     @NotBlank
-    @Email
+    @Email(message = "The email could not be saved")
     @Size(max = 255, message = "'libelle' from email must be under 255 characters")
     private String libelle;
 
