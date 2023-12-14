@@ -42,10 +42,6 @@ public class ContactController {
                 .map(error -> String.format("%s : %s", getFieldPath(error), error.getDefaultMessage()))
                 .collect(Collectors.joining(" , ")) }." ;
 
-//        String messageError = STR. "The payload is not correct. There are missing or incorrect fields:  \{ ex.getBindingResult().getFieldErrors().stream()
-//                .map(error -> String.format("%s : %s", error.getField(), error.getDefaultMessage()))
-//                .collect(Collectors.joining(" , ")) }." ;
-
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());
 
