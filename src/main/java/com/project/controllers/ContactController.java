@@ -39,7 +39,7 @@ public class ContactController {
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
 
         String messageError = STR. "The payload is not correct. There are missing or incorrect fields: \{ ex.getBindingResult().getFieldErrors().stream()
-                .map(error -> String.format("%s: %s", STR. "'\{ getFieldPath(error) }'" , error.getDefaultMessage()))
+                .map(error -> String.format("%s : %s", STR. "'\{ getFieldPath(error) }'" , error.getDefaultMessage()))
                 .collect(Collectors.joining(", ")) }." ;
 
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
