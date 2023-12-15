@@ -72,7 +72,7 @@ public class ContactServiceImpl implements ContactService {
             return contactRepository.save(contact);
         } catch (Exception e) {
 
-            log.error(STR."Error during contact creation: \{e.getMessage()}", e);
+            log.error(STR. "Error during contact creation: \{ e.getMessage() }" , e);
             throw new ContactNotSavedException();
         }
     }
@@ -90,6 +90,26 @@ public class ContactServiceImpl implements ContactService {
                 .phones(phoneDTOS)
                 .addresses(addressDTOS)
                 .build();
+    }
+
+    public ContactDTO getByID(Long id) {
+
+        return null;
+    }
+
+    public ContactDTO getByFirstName(String firstName) {
+
+        return null;
+    }
+
+    public ContactDTO getByLastName(String lastName) {
+
+        return null;
+    }
+
+    public ContactDTO getByPhoneNumber(String libelle) {
+
+        return null;
     }
 }
 

@@ -14,4 +14,12 @@ public interface ContactService {
     Contact save(ContactDTO contactDTO, Civility civility);
 
     ContactDTO toDto(Contact contact, CivilityDTO civilityDTO, List<EmailDTO> emailDTOS, List<PhoneDTO> phoneDTOS, List<AddressDTO> addressDTOS);
+
+    ContactDTO getByID(Long id);
+
+    ContactDTO getByFirstName(String firstName);
+
+    ContactDTO getByLastName(String lastName);
+
+    ContactDTO getByPhoneNumber(String libelle);
 }
