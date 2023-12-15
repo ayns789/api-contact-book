@@ -24,7 +24,7 @@ public class ContactController {
     private final ContactService contactService;
 
     @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
-    public ContactDTO create(@Valid @RequestBody ContactDTO contactDTO, WebRequest request) {
+    public ContactDTO create(@Valid @RequestBody ContactDTO contactDTO) {
         return contactService.create(contactDTO);
     }
 
