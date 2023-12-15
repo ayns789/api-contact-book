@@ -3,6 +3,7 @@ package com.project.service.implementation;
 import com.project.domain.dto.*;
 import com.project.domain.entities.*;
 import com.project.exceptions.ContactNotSavedException;
+import com.project.exceptions.RessourcesNotFoundException;
 import com.project.repository.ContactRepository;
 import com.project.service.ContactService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +59,38 @@ public class ContactServiceImpl implements ContactService {
         return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
     }
 
+    public ContactDTO getByID(Long id) {
+        Optional<Contact> optionalContact = contactRepository.findById(id);
+
+        if (optionalContact.isPresent()) {
+            // Build contactDTO
+            Contact contact = optionalContact.get();
+            CivilityDTO civilityDTO = civilityService.toDto(contact.getCivility());
+            List<EmailDTO> emailDTOs = emailService.toDto(contact.getEmails());
+            List<PhoneDTO> phoneDTOs = phoneService.toDto(contact.getPhones());
+            List<AddressDTO> addressDTOs = addressService.toDto(contact.getAddresses());
+
+            return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
+        } else {
+            throw new RessourcesNotFoundException();
+        }
+    }
+
+    public ContactDTO getByFirstName(String firstName) {
+
+        return null;
+    }
+
+    public ContactDTO getByLastName(String lastName) {
+
+        return null;
+    }
+
+    public ContactDTO getByPhoneNumber(String libelle) {
+
+        return null;
+    }
+
 
     @Override
     public Contact save(ContactDTO contactDTO, Civility civility) {
@@ -92,25 +126,7 @@ public class ContactServiceImpl implements ContactService {
                 .build();
     }
 
-    public ContactDTO getByID(Long id) {
 
-        return null;
-    }
-
-    public ContactDTO getByFirstName(String firstName) {
-
-        return null;
-    }
-
-    public ContactDTO getByLastName(String lastName) {
-
-        return null;
-    }
-
-    public ContactDTO getByPhoneNumber(String libelle) {
-
-        return null;
-    }
 }
 
 

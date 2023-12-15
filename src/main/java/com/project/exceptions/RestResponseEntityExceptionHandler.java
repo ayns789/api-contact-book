@@ -25,7 +25,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = {CountryNotFoundException.class})
     public ResponseEntity<Object> handleCountryNotFoundException(CountryNotFoundException ex, WebRequest request) {
 
-        String messageError = STR."The country with id : \{ex.getCountryId()} does not exist";
+        String messageError = STR. "The country with id : \{ ex.getCountryId() } does not exist" ;
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.NOT_FOUND.value());
 
@@ -45,7 +45,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = {CivilityNotFoundException.class})
     public ResponseEntity<Object> handleCivilityNotFoundException(CivilityNotFoundException ex, WebRequest request) {
 
-        String messageError = STR."The civility with id : \{ex.getCivilityId()} does not exist";
+        String messageError = STR. "The civility with id : \{ ex.getCivilityId() } does not exist" ;
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.NOT_FOUND.value());
 
@@ -55,7 +55,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = {StreetTypeEnumNotFoundException.class})
     public ResponseEntity<Object> handleStreetTypeEnumNotFoundException(StreetTypeEnumNotFoundException ex, WebRequest request) {
 
-        String messageError = STR."The street type with value : '\{ex.getStreetType()}' does not exist";
+        String messageError = STR. "The street type with value : '\{ ex.getStreetType() }' does not exist" ;
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.NOT_FOUND.value());
 
@@ -86,6 +86,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     public ResponseEntity<Object> handleContactNotSavedException(ContactNotSavedException ex, WebRequest request) {
 
         String messageError = "The contact could not be saved";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {RessourcesNotFoundException.class})
+    public ResponseEntity<Object> handleRessourcesNotFoundException(RessourcesNotFoundException ex, WebRequest request) {
+
+        String messageError = "This contact does not exist";
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());
 

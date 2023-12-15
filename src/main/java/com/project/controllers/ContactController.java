@@ -23,25 +23,9 @@ public class ContactController {
 
     private final ContactService contactService;
 
-    @GetMapping("/get/")
-    public ContactDTO getContactInfo(
-            @RequestParam(name = "contact_id", required = false) Long id,
-            @RequestParam(name = "first_name", required = false) String firstName,
-            @RequestParam(name = "last_name", required = false) String lastName,
-            @RequestParam(name = "libelle", required = false) String libelle) {
-
-        // Utilisez des conditions pour déterminer l'attribut spécifié et appelez contactService.get en conséquence
-        if (id != null) {
-            return contactService.getByID(id);
-        } else if (firstName != null) {
-            return contactService.getByFirstName(firstName);
-        } else if (lastName != null) {
-            return contactService.getByLastName(lastName);
-        } else if (libelle != null) {
-            return contactService.getByPhoneNumber(libelle);
-        }
-
-        return null;
+    @GetMapping("/get/{id}")
+    public ContactDTO getContactInfoById(@PathVariable("id") Long id) {
+        return contactService.getByID(id);
     }
 
     @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
