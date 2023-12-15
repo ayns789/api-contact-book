@@ -1,6 +1,6 @@
 package com.project.repository;
 
-import com.project.entities.Contact;
+import com.project.domain.entities.Contact;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

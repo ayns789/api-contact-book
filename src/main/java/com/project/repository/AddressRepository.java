@@ -1,6 +1,6 @@
 package com.project.repository;
 
-import com.project.entities.Address;
+import com.project.domain.entities.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

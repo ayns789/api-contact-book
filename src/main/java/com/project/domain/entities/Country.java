@@ -1,38 +1,28 @@
-package com.project.entities;
+package com.project.domain.entities;
 
 import jakarta.persistence.*;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "country")
 @SequenceGenerator(name = "CountryIdGenerator", sequenceName = "country_seq", allocationSize = 1)
-public class Country {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Country implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CountryIdGenerator")
     @Column(name = "country_id", nullable = false)
-    private long countryId;
+    private Long countryId;
 
     @Column(name = "libelle", nullable = false)
     private String libelle;
-
-
-    public long getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(long countryId) {
-        this.countryId = countryId;
-    }
-
-    public String getLibelle() {
-        return libelle;
-    }
-
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
-    }
 
     @Override
     public String toString() {
@@ -44,9 +34,13 @@ public class Country {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Country country)) return false;
-        return getCountryId() == country.getCountryId() && Objects.equals(getLibelle(), country.getLibelle());
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Country country)) {
+            return false;
+        }
+        return getCountryId().equals(country.getCountryId()) && Objects.equals(getLibelle(), country.getLibelle());
     }
 
     @Override
