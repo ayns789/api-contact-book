@@ -12,6 +12,7 @@ import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,25 +71,31 @@ public class ContactServiceImpl implements ContactService {
             List<PhoneDTO> phoneDTOs = phoneService.toDto(contact.getPhones());
             List<AddressDTO> addressDTOs = addressService.toDto(contact.getAddresses());
 
+            // Save contactDTO
             return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
         } else {
             throw new RessourcesNotFoundException();
         }
     }
 
-    public ContactDTO getByFirstName(String firstName) {
+    public List<ContactDTO> getByVariousInfo(String lastName, String firstName, String libelle) {
+        // get contacts id by various informations, firstName lastName or phoneNumber
+        List<Long> contactsId = contactRepository.findByVariousInfo(lastName, firstName, libelle);
 
-        return null;
-    }
+        List<ContactDTO> contacts = new ArrayList<>();
 
-    public ContactDTO getByLastName(String lastName) {
+        // get contacts by id and save in contacts list
+        for (Long id : contactsId) {
+            ContactDTO contactDTO = getByID(id);
+            contacts.add(contactDTO);
+        }
 
-        return null;
-    }
-
-    public ContactDTO getByPhoneNumber(String libelle) {
-
-        return null;
+        // return contacts or error
+        if (contacts.isEmpty()) {
+            throw new RessourcesNotFoundException();
+        } else {
+            return contacts;
+        }
     }
 
 

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,16 @@ public class ContactController {
     @GetMapping("/get/{id}")
     public ContactDTO getContactInfoById(@PathVariable("id") Long id) {
         return contactService.getByID(id);
+    }
+
+    @GetMapping("/get/by-info/")
+    public List<ContactDTO> getContactsInfoByNames(@RequestBody Map<String, String> names) {
+
+        String lastName = names.get("last_name");
+        String firstName = names.get("first_name");
+        String libelle = names.get("libelle");
+
+        return contactService.getByVariousInfo(lastName, firstName, libelle);
     }
 
     @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")

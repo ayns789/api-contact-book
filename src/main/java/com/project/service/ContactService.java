@@ -17,9 +17,5 @@ public interface ContactService {
 
     ContactDTO getByID(Long id);
 
-    ContactDTO getByFirstName(String firstName);
-
-    ContactDTO getByLastName(String lastName);
-
-    ContactDTO getByPhoneNumber(String libelle);
+    List<ContactDTO> getByVariousInfo(String lastName, String firstName, String libelle);
 }
