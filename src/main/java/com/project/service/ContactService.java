@@ -1,7 +1,7 @@
 package com.project.service;
 
 
-import com.project.domain.dto.*;
+import com.project.domain.dto.ContactDTO;
 import com.project.domain.entities.Civility;
 import com.project.domain.entities.Contact;
 
@@ -13,9 +13,17 @@ public interface ContactService {
 
     Contact save(ContactDTO contactDTO, Civility civility);
 
-    ContactDTO toDto(Contact contact, CivilityDTO civilityDTO, List<EmailDTO> emailDTOS, List<PhoneDTO> phoneDTOS, List<AddressDTO> addressDTOS);
+    ContactDTO toDto(Contact contact);
 
-    ContactDTO getByID(Long id);
+    List<ContactDTO> toDto(List<Contact> contacts);
 
-    List<ContactDTO> getByVariousInfo(String lastName, String firstName, String libelle);
+    /**
+     * Retrieves a contact by its ID.
+     *
+     * @param id The ID of the contact.
+     * @return The {@link ContactDTO} object representing the retrieved contact.
+     */
+    ContactDTO getContact(Long id);
+
+    List<ContactDTO> getContact(String lastName);
 }

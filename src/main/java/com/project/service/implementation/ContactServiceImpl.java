@@ -1,7 +1,12 @@
 package com.project.service.implementation;
 
-import com.project.domain.dto.*;
-import com.project.domain.entities.*;
+import com.project.domain.dto.AddressDTO;
+import com.project.domain.dto.CivilityDTO;
+import com.project.domain.dto.ContactDTO;
+import com.project.domain.dto.EmailDTO;
+import com.project.domain.dto.PhoneDTO;
+import com.project.domain.entities.Civility;
+import com.project.domain.entities.Contact;
 import com.project.exceptions.ContactNotSavedException;
 import com.project.exceptions.RessourcesNotFoundException;
 import com.project.repository.ContactRepository;
@@ -12,9 +17,7 @@ import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,68 +37,35 @@ public class ContactServiceImpl implements ContactService {
         // Handle civility
         Long civilityId = contactDTO.getCivility().getCivilityId();
         Civility civility = civilityService.getCivilityById(civilityId);
-        CivilityDTO civilityDTO = civilityService.toDto(civility);
 
         // Handle contact
         Contact contact = save(contactDTO, civility);
 
-        // Handle emails
-        List<EmailDTO> emailDTOS = contactDTO.getEmails();
-        emailDTOS = ListUtils.emptyIfNull(emailDTOS);
-        List<Email> emails = emailService.save(emailDTOS, contact);
-        List<EmailDTO> emailDTOs = emailService.toDto(emails);
-
-        // Handle phones
-        List<PhoneDTO> phoneDTOS = contactDTO.getPhones();
-        List<Phone> phones = phoneService.save(phoneDTOS, contact);
-        List<PhoneDTO> phoneDTOs = phoneService.toDto(phones);
-
-        // Handle addresses
-        List<AddressDTO> addressDTOS = contactDTO.getAddresses();
-        addressDTOS = ListUtils.emptyIfNull(addressDTOS);
-        List<Address> addresses = addressService.save(addressDTOS, contact);
-        List<AddressDTO> addressDTOs = addressService.toDto(addresses);
-
         // Build contactDTO
-        return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
+        return toDto(contact);
     }
 
-    public ContactDTO getByID(Long id) {
-        Optional<Contact> optionalContact = contactRepository.findById(id);
+    /**
+     * Retrieves a contact by its ID.
+     *
+     * @param id The ID of the contact.
+     * @return The {@link ContactDTO} object representing the retrieved contact.
+     */
+    public ContactDTO getContact(Long id) {
 
-        if (optionalContact.isPresent()) {
-            // Build contactDTO
-            Contact contact = optionalContact.get();
-            CivilityDTO civilityDTO = civilityService.toDto(contact.getCivility());
-            List<EmailDTO> emailDTOs = emailService.toDto(contact.getEmails());
-            List<PhoneDTO> phoneDTOs = phoneService.toDto(contact.getPhones());
-            List<AddressDTO> addressDTOs = addressService.toDto(contact.getAddresses());
+        Contact contact = contactRepository.findById(id)
+            .orElseThrow(RessourcesNotFoundException::new);
 
-            // Save contactDTO
-            return toDto(contact, civilityDTO, emailDTOs, phoneDTOs, addressDTOs);
-        } else {
-            throw new RessourcesNotFoundException();
-        }
+        // Save contactDTO
+        return toDto(contact);
     }
 
-    public List<ContactDTO> getByVariousInfo(String lastName, String firstName, String libelle) {
-        // get contacts id by various informations, firstName lastName or phoneNumber
-        List<Long> contactsId = contactRepository.findByVariousInfo(lastName, firstName, libelle);
+    public List<ContactDTO> getContact(String lastName) {
 
-        List<ContactDTO> contacts = new ArrayList<>();
+        List<Contact> contacts = contactRepository.getContact(lastName)
+            .orElseThrow(RessourcesNotFoundException::new);
 
-        // get contacts by id and save in contacts list
-        for (Long id : contactsId) {
-            ContactDTO contactDTO = getByID(id);
-            contacts.add(contactDTO);
-        }
-
-        // return contacts or error
-        if (contacts.isEmpty()) {
-            throw new RessourcesNotFoundException();
-        } else {
-            return contacts;
-        }
+        return toDto(contacts);
     }
 
 
@@ -103,37 +73,52 @@ public class ContactServiceImpl implements ContactService {
     public Contact save(ContactDTO contactDTO, Civility civility) {
 
         Contact contact = Contact.builder()
-                .firstName(contactDTO.getFirstName())
-                .lastName(contactDTO.getLastName())
-                .civility(civility)
-                .build();
+            .firstName(contactDTO.getFirstName())
+            .lastName(contactDTO.getLastName())
+            .civility(civility)
+            .build();
 
         // Save contact
         try {
             return contactRepository.save(contact);
         } catch (Exception e) {
 
-            log.error(STR. "Error during contact creation: \{ e.getMessage() }" , e);
+            log.error(STR."Error during contact creation: \{e.getMessage()}", e);
             throw new ContactNotSavedException();
         }
     }
 
     @Override
-    public ContactDTO toDto(Contact contact, CivilityDTO civilityDTO, List<EmailDTO> emailDTOS,
-                            List<PhoneDTO> phoneDTOS, List<AddressDTO> addressDTOS) {
+    public ContactDTO toDto(Contact contact) {
+
+        CivilityDTO civilityDTO = civilityService.toDto(contact.getCivility());
+
+        List<EmailDTO> emailDTOs = emailService.toDto(contact.getEmails());
+        emailDTOs = ListUtils.emptyIfNull(emailDTOs);
+
+        List<PhoneDTO> phoneDTOs = phoneService.toDto(contact.getPhones());
+        phoneDTOs = ListUtils.emptyIfNull(phoneDTOs);
+
+        List<AddressDTO> addressDTOs = addressService.toDto(contact.getAddresses());
+        addressDTOs = ListUtils.emptyIfNull(addressDTOs);
 
         return ContactDTO.builder()
-                .contactId(contact.getContactId())
-                .firstName(contact.getFirstName())
-                .lastName(contact.getLastName())
-                .civility(civilityDTO)
-                .emails(emailDTOS)
-                .phones(phoneDTOS)
-                .addresses(addressDTOS)
-                .build();
+            .contactId(contact.getContactId())
+            .firstName(contact.getFirstName())
+            .lastName(contact.getLastName())
+            .civility(civilityDTO)
+            .emails(emailDTOs)
+            .phones(phoneDTOs)
+            .addresses(addressDTOs)
+            .build();
     }
 
-
+    @Override
+    public List<ContactDTO> toDto(List<Contact> contacts) {
+        return contacts.stream()
+            .map(this::toDto)
+            .toList();
+    }
 }
 
 
