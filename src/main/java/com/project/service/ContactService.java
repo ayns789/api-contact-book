@@ -25,5 +25,9 @@ public interface ContactService {
      */
     ContactDTO getContact(Long id);
 
-    List<ContactDTO> getContact(String lastName);
+    List<ContactDTO> getContactWithLastname(String lastName);
+
+    List<ContactDTO> getContactWithFirstname(String firstName);
+
+    List<ContactDTO> getContactWithPhone(String phoneNumber);
 }

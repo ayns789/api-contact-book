@@ -13,13 +13,35 @@ import java.util.Optional;
 public interface ContactRepository extends JpaRepository<Contact, Long> {
 
     @Query("""
-          select
-            con
-          from
-            Contact con
-          where
-            con.lastName is null or con.lastName ilike %:lastName%
-        """)
-    Optional<List<Contact>> getContact(@Param("lastName") String lastName);
+              select
+                con
+              from
+                Contact con
+              where
+                con.lastName is null or con.lastName ilike %:lastName%
+            """)
+    Optional<List<Contact>> getContactWithLastname(@Param("lastName") String lastName);
+
+    @Query("""
+              select
+                con
+              from
+                Contact con
+              where
+                con.firstName is null or con.firstName ilike %:firstName%
+            """)
+    Optional<List<Contact>> getContactWithFirstname(@Param("firstName") String firstName);
+
+    @Query("""
+              select
+                con
+              from
+                Contact con
+              join
+                con.phones ph
+              where
+                ph.libelle ilike %:phoneNumber%
+            """)
+    Optional<List<Contact>> getContactWithPhone(@Param("phoneNumber") String phoneNumber);
 
 }

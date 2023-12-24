@@ -40,10 +40,19 @@ public class ContactController {
         return contactService.getContact(id);
     }
 
-    @GetMapping(path = "", consumes = "application/json", produces = "application/json")
+    @GetMapping(path = "/by-last-name", consumes = "application/json", produces = "application/json")
     public List<ContactDTO> getContact(@RequestParam(value = "last_name", required = false) String lastName) {
+        return contactService.getContactWithLastname(lastName);
+    }
 
-        return contactService.getContact(lastName);
+    @GetMapping(path = "/by-first-name", consumes = "application/json", produces = "application/json")
+    public List<ContactDTO> getContactWithFirstname(@RequestParam(value = "first_name", required = false) String firstName) {
+        return contactService.getContactWithFirstname(firstName);
+    }
+
+    @GetMapping(path = "/by-phone", consumes = "application/json", produces = "application/json")
+    public List<ContactDTO> getContactWithPhone(@RequestParam(value = "phone_number", required = false) String phoneNumber) {
+        return contactService.getContactWithPhone(phoneNumber);
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})

@@ -60,10 +60,26 @@ public class ContactServiceImpl implements ContactService {
         return toDto(contact);
     }
 
-    public List<ContactDTO> getContact(String lastName) {
+    public List<ContactDTO> getContactWithLastname(String lastName) {
 
-        List<Contact> contacts = contactRepository.getContact(lastName)
+        List<Contact> contacts = contactRepository.getContactWithLastname(lastName)
             .orElseThrow(RessourcesNotFoundException::new);
+
+        return toDto(contacts);
+    }
+
+    public List<ContactDTO> getContactWithFirstname(String firstName) {
+
+        List<Contact> contacts = contactRepository.getContactWithFirstname(firstName)
+                .orElseThrow(RessourcesNotFoundException::new);
+
+        return toDto(contacts);
+    }
+
+    public List<ContactDTO> getContactWithPhone(String phoneNumber) {
+
+        List<Contact> contacts = contactRepository.getContactWithPhone(phoneNumber)
+                .orElseThrow(RessourcesNotFoundException::new);
 
         return toDto(contacts);
     }
