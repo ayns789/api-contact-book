@@ -20,7 +20,7 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
               where
                 con.lastName is null or con.lastName ilike %:lastName%
             """)
-    Optional<List<Contact>> getContactWithLastname(@Param("lastName") String lastName);
+    Optional<List<Contact>> getContactByLastname(@Param("lastName") String lastName);
 
     @Query("""
               select
@@ -30,7 +30,7 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
               where
                 con.firstName is null or con.firstName ilike %:firstName%
             """)
-    Optional<List<Contact>> getContactWithFirstname(@Param("firstName") String firstName);
+    Optional<List<Contact>> getContactByFirstname(@Param("firstName") String firstName);
 
     @Query("""
               select
@@ -42,6 +42,6 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
               where
                 ph.libelle ilike %:phoneNumber%
             """)
-    Optional<List<Contact>> getContactWithPhone(@Param("phoneNumber") String phoneNumber);
+    Optional<List<Contact>> getContactByPhone(@Param("phoneNumber") String phoneNumber);
 
 }

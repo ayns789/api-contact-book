@@ -7,8 +7,7 @@ import com.project.domain.dto.EmailDTO;
 import com.project.domain.dto.PhoneDTO;
 import com.project.domain.entities.Civility;
 import com.project.domain.entities.Contact;
-import com.project.exceptions.ContactNotSavedException;
-import com.project.exceptions.RessourcesNotFoundException;
+import com.project.exceptions.*;
 import com.project.repository.ContactRepository;
 import com.project.service.ContactService;
 import lombok.RequiredArgsConstructor;
@@ -54,32 +53,32 @@ public class ContactServiceImpl implements ContactService {
     public ContactDTO getContact(Long id) {
 
         Contact contact = contactRepository.findById(id)
-            .orElseThrow(RessourcesNotFoundException::new);
+            .orElseThrow(IdNotFoundException::new);
 
         // Save contactDTO
         return toDto(contact);
     }
 
-    public List<ContactDTO> getContactWithLastname(String lastName) {
+    public List<ContactDTO> getContactByLastname(String lastName) {
 
-        List<Contact> contacts = contactRepository.getContactWithLastname(lastName)
-            .orElseThrow(RessourcesNotFoundException::new);
-
-        return toDto(contacts);
-    }
-
-    public List<ContactDTO> getContactWithFirstname(String firstName) {
-
-        List<Contact> contacts = contactRepository.getContactWithFirstname(firstName)
-                .orElseThrow(RessourcesNotFoundException::new);
+        List<Contact> contacts = contactRepository.getContactByLastname(lastName)
+            .orElseThrow(LastnameNotFoundException::new);
 
         return toDto(contacts);
     }
 
-    public List<ContactDTO> getContactWithPhone(String phoneNumber) {
+    public List<ContactDTO> getContactByFirstname(String firstName) {
 
-        List<Contact> contacts = contactRepository.getContactWithPhone(phoneNumber)
-                .orElseThrow(RessourcesNotFoundException::new);
+        List<Contact> contacts = contactRepository.getContactByFirstname(firstName)
+                .orElseThrow(FirstnameNotFoundException::new);
+
+        return toDto(contacts);
+    }
+
+    public List<ContactDTO> getContactByPhone(String phoneNumber) {
+
+        List<Contact> contacts = contactRepository.getContactByPhone(phoneNumber)
+                .orElseThrow(PhoneNotFoundException::new);
 
         return toDto(contacts);
     }

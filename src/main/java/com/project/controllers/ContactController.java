@@ -40,19 +40,19 @@ public class ContactController {
         return contactService.getContact(id);
     }
 
-    @GetMapping(path = "/by-last-name", consumes = "application/json", produces = "application/json")
-    public List<ContactDTO> getContact(@RequestParam(value = "last_name", required = false) String lastName) {
-        return contactService.getContactWithLastname(lastName);
+    @GetMapping(path = "/byLastName", consumes = "application/json", produces = "application/json")
+    public List<ContactDTO> getContactByLastname(@RequestParam(value = "last_name") String lastName) {
+        return contactService.getContactByLastname(lastName);
     }
 
-    @GetMapping(path = "/by-first-name", consumes = "application/json", produces = "application/json")
-    public List<ContactDTO> getContactWithFirstname(@RequestParam(value = "first_name", required = false) String firstName) {
-        return contactService.getContactWithFirstname(firstName);
+    @GetMapping(path = "/byFirstName", consumes = "application/json", produces = "application/json")
+    public List<ContactDTO> getContactByFirstname(@RequestParam(value = "first_name") String firstName) {
+        return contactService.getContactByFirstname(firstName);
     }
 
-    @GetMapping(path = "/by-phone", consumes = "application/json", produces = "application/json")
-    public List<ContactDTO> getContactWithPhone(@RequestParam(value = "phone_number", required = false) String phoneNumber) {
-        return contactService.getContactWithPhone(phoneNumber);
+    @GetMapping(path = "/byPhone", consumes = "application/json", produces = "application/json")
+    public List<ContactDTO> getContactByPhone(@RequestParam(value = "phone_number") String phoneNumber) {
+        return contactService.getContactByPhone(phoneNumber);
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})

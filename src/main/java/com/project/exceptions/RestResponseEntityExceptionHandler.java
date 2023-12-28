@@ -92,14 +92,44 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {RessourcesNotFoundException.class})
-    public ResponseEntity<Object> handleRessourcesNotFoundException(RessourcesNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(value = {IdNotFoundException.class})
+    public ResponseEntity<Object> handleIdNotFoundException(IdNotFoundException ex, WebRequest request) {
 
         String messageError = "This contact does not exist";
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
-        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.NOT_FOUND.value());
 
-        return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {LastnameNotFoundException.class})
+    public ResponseEntity<Object> handleLastnameNotFoundException(LastnameNotFoundException ex, WebRequest request) {
+
+        String messageError = "This last name does not exist";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.NOT_FOUND.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {FirstnameNotFoundException.class})
+    public ResponseEntity<Object> handleFirstnameNotFoundException(FirstnameNotFoundException ex, WebRequest request) {
+
+        String messageError = "This first name does not exist";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.NOT_FOUND.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {PhoneNotFoundException.class})
+    public ResponseEntity<Object> handlePhoneNotFoundException(PhoneNotFoundException ex, WebRequest request) {
+
+        String messageError = "This phone does not exist";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.NOT_FOUND.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.NOT_FOUND);
     }
 
 
