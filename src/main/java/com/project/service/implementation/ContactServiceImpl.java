@@ -57,7 +57,7 @@ public class ContactServiceImpl implements ContactService {
         Civility civility = civilityService.getCivilityById(civilityId);
 
         // update contact
-        if (contactDTO.getCivility() != null){
+        if (civility != null){
          existingContact.setCivility(civility);
         }
 
@@ -93,6 +93,14 @@ public class ContactServiceImpl implements ContactService {
 
             // save phone list updated
             existingContact.setPhones(phonesUpdated);
+        }
+
+        if(contactDTO.getAddresses() != null && !contactDTO.getAddresses().isEmpty()) {
+            List <Address> oldAddresses = existingContact.getAddresses();
+            List<AddressDTO> newAddressDTOs = contactDTO.getAddresses();
+            List<Address> addressUpdated = addressService.updateAddress(oldAddresses, newAddressDTOs);
+
+            existingContact.setAddresses(addressUpdated);
         }
 
 

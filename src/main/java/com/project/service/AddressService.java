@@ -13,4 +13,6 @@ public interface AddressService {
     List<AddressDTO> toDto(List<Address> addresses);
 
     AddressDTO toDto(Address address);
+
+    List<Address> updateAddress(List<Address> oldAddresses, List<AddressDTO> newAddressDTOs);
 }
