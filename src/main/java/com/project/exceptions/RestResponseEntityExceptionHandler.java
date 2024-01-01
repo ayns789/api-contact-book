@@ -132,5 +132,25 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(bodyOfResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = {ContactNotFoundException.class})
+    public ResponseEntity<Object> handleContactNotFoundException(ContactNotFoundException ex, WebRequest request) {
+
+        String messageError = "This contact does not exist";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.NOT_FOUND.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {ContactNotUpdatedException.class})
+    public ResponseEntity<Object> handleContactNotFoundException(ContactNotUpdatedException ex, WebRequest request) {
+
+        String messageError = "The contact could not be updated ";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
 }

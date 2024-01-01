@@ -1,8 +1,11 @@
 package com.project.service.implementation;
 
+import com.project.domain.dto.EmailDTO;
 import com.project.domain.dto.PhoneDTO;
 import com.project.domain.entities.Contact;
+import com.project.domain.entities.Email;
 import com.project.domain.entities.Phone;
+import com.project.domain.enums.EmailTypeEnum;
 import com.project.domain.enums.PhoneTypeEnum;
 import com.project.exceptions.PhoneNotSavedException;
 import com.project.repository.PhoneRepository;
@@ -63,6 +66,28 @@ public class PhoneServiceImpl implements PhoneService {
                 .libelle(phone.getLibelle())
                 .type(phone.getType().name())
                 .build();
+    }
+
+    @Override
+    public List<Phone> updatePhone(List<Phone> oldPhones, List<PhoneDTO> newPhoneDTOs) {
+        List<Phone> updatedPhones = new ArrayList<>();
+        for (int i = 0; i < oldPhones.size(); i++) {
+            // get each old phone and new phone
+            Phone oldPhone = oldPhones.get(i);
+            PhoneDTO newPhoneDTO = newPhoneDTOs.get(i);
+
+            // compare and update data if changes are detected
+            if (!oldPhone.getLibelle().equals(newPhoneDTO.getLibelle())) {
+                oldPhone.setLibelle(newPhoneDTO.getLibelle());
+            }
+            if (!oldPhone.getType().equals(PhoneTypeEnum.valueOf(newPhoneDTO.getType()))) {
+                oldPhone.setType(PhoneTypeEnum.valueOf(newPhoneDTO.getType()));
+            }
+            // save in list
+            updatedPhones.add(oldPhone);
+        }
+        // return list updated
+        return updatedPhones;
     }
 
 }

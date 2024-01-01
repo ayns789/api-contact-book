@@ -11,6 +11,8 @@ public interface ContactService {
 
     ContactDTO create(ContactDTO contactDTO);
 
+    ContactDTO update(Long contactId, ContactDTO contactDTO);
+
     Contact save(ContactDTO contactDTO, Civility civility);
 
     ContactDTO toDto(Contact contact);

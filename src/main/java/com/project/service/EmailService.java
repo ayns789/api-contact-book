@@ -10,6 +10,8 @@ public interface EmailService {
 
     List<Email> save(List<EmailDTO> emailDTOS, Contact contact);
 
+    List<Email> updateEmail(List<Email> oldEmails, List<EmailDTO> newEmailDTOs);
+
     List<EmailDTO> toDto(List<Email> emails);
 
     EmailDTO toDto(Email email);

@@ -13,4 +13,6 @@ public interface PhoneService {
     List<PhoneDTO> toDto(List<Phone> phones);
 
     PhoneDTO toDto(Phone phone);
+
+    List<Phone> updatePhone(List<Phone> oldPhones, List<PhoneDTO> newPhoneDTOs);
 }
