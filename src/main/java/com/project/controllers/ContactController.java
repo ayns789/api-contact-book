@@ -30,11 +30,8 @@ public class ContactController {
     }
 
     @PutMapping(path = "/update/{contactId}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<ContactDTO> update(@PathVariable Long contactId, @Valid @RequestBody ContactDTO updateContactDTO) {
-        ContactDTO updatedContactDTO = contactService.update(contactId, updateContactDTO);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("contactId", contactId.toString());
-        return new ResponseEntity<>(updatedContactDTO, headers, HttpStatus.OK);
+    public ContactDTO update(@PathVariable Long contactId, @Valid @RequestBody ContactDTO updateContactDTO) {
+        return contactService.update(contactId, updateContactDTO);
     }
 
     @GetMapping(path = "/{id}", consumes = "application/json", produces = "application/json")
@@ -61,11 +58,11 @@ public class ContactController {
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
 
         String messageError =
-            STR."The payload is not correct. There are missing or incorrect fields: \{ex.getBindingResult().getFieldErrors().stream()
-                .map(error -> String
-                    .format("%s : %s", STR."'\{CarnetUtils.getFieldPath(error)}'", error.getDefaultMessage())
-                )
-                .collect(Collectors.joining(", "))}.";
+                STR."The payload is not correct. There are missing or incorrect fields: \{ex.getBindingResult().getFieldErrors().stream()
+                        .map(error -> String
+                                .format("%s : %s", STR."'\{CarnetUtils.getFieldPath(error)}'", error.getDefaultMessage())
+                        )
+                        .collect(Collectors.joining(", "))}.";
 
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());

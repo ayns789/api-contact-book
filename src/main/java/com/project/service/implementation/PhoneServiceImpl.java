@@ -1,6 +1,5 @@
 package com.project.service.implementation;
 
-import com.project.domain.dto.EmailDTO;
 import com.project.domain.dto.PhoneDTO;
 import com.project.domain.entities.Contact;
 import com.project.domain.entities.Email;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -69,25 +69,22 @@ public class PhoneServiceImpl implements PhoneService {
     }
 
     @Override
-    public List<Phone> updatePhone(List<Phone> oldPhones, List<PhoneDTO> newPhoneDTOs) {
-        List<Phone> updatedPhones = new ArrayList<>();
-        for (int i = 0; i < oldPhones.size(); i++) {
-            // get each old phone and new phone
-            Phone oldPhone = oldPhones.get(i);
-            PhoneDTO newPhoneDTO = newPhoneDTOs.get(i);
+    public List<Phone> updatePhone(Contact contactId, List<Phone> oldPhones, List<PhoneDTO> newPhoneDTOs) {
 
-            // compare and update data if changes are detected
-            if (!oldPhone.getLibelle().equals(newPhoneDTO.getLibelle())) {
-                oldPhone.setLibelle(newPhoneDTO.getLibelle());
-            }
-            if (!oldPhone.getType().equals(PhoneTypeEnum.valueOf(newPhoneDTO.getType()))) {
-                oldPhone.setType(PhoneTypeEnum.valueOf(newPhoneDTO.getType()));
-            }
-            // save in list
-            updatedPhones.add(oldPhone);
-        }
-        // return list updated
-        return updatedPhones;
+        // delete old phones
+        phoneRepository.deleteAllInBatch(oldPhones);
+
+        // PhoneDTO to Phone
+        List<Phone> newPhones = newPhoneDTOs.stream()
+                .map(phoneDTO -> Phone.builder()
+                        .type(PhoneTypeEnum.valueOf(phoneDTO.getType()))
+                        .libelle(phoneDTO.getLibelle())
+                        .contact(contactId)
+                        .build())
+                .collect(Collectors.toList());
+
+        // save and return new phones
+        return phoneRepository.saveAll(newPhones);
     }
 
 }

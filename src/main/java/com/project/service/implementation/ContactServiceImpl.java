@@ -46,7 +46,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     @Transactional
-    public ContactDTO update(Long contactId, ContactDTO contactDTO){
+    public ContactDTO update(Long contactId, ContactDTO contactDTO) {
 
         // check and get contact, if contact exist
         Contact existingContact = contactRepository.findById(contactId)
@@ -57,18 +57,18 @@ public class ContactServiceImpl implements ContactService {
         Civility civility = civilityService.getCivilityById(civilityId);
 
         // update contact
-        if (civility != null){
-         existingContact.setCivility(civility);
+        if (civility != null) {
+            existingContact.setCivility(civility);
         }
 
-        if(contactDTO.getFirstName() != null && !contactDTO.getFirstName().isEmpty()) {
-            if(!existingContact.getFirstName().equals(contactDTO.getFirstName())) {
+        if (contactDTO.getFirstName() != null && !contactDTO.getFirstName().isEmpty()) {
+            if (!existingContact.getFirstName().equals(contactDTO.getFirstName())) {
                 existingContact.setFirstName(contactDTO.getFirstName());
             }
         }
 
-        if(contactDTO.getLastName() != null && !contactDTO.getLastName().isEmpty()) {
-            if(!existingContact.getLastName().equals(contactDTO.getLastName())) {
+        if (contactDTO.getLastName() != null && !contactDTO.getLastName().isEmpty()) {
+            if (!existingContact.getLastName().equals(contactDTO.getLastName())) {
                 existingContact.setLastName(contactDTO.getLastName());
             }
         }
@@ -78,9 +78,8 @@ public class ContactServiceImpl implements ContactService {
 
             List<Email> oldEmails = existingContact.getEmails();
             List<EmailDTO> newEmailDTOs = contactDTO.getEmails();
-            List<Email> emailsUpdated =  emailService.updateEmail(oldEmails, newEmailDTOs);
+            List<Email> emailsUpdated = emailService.updateEmail(existingContact, oldEmails, newEmailDTOs);
 
-            // save email list updated
             try {
                 existingContact.setEmails(emailsUpdated);
             } catch (Exception e) {
@@ -93,7 +92,7 @@ public class ContactServiceImpl implements ContactService {
 
             List<Phone> oldPhones = existingContact.getPhones();
             List<PhoneDTO> newPhoneDTOs = contactDTO.getPhones();
-            List<Phone> phonesUpdated =  phoneService.updatePhone(oldPhones, newPhoneDTOs);
+            List<Phone> phonesUpdated = phoneService.updatePhone(existingContact, oldPhones, newPhoneDTOs);
 
             // save phone list updated
             try {
@@ -103,10 +102,10 @@ public class ContactServiceImpl implements ContactService {
             }
         }
 
-        if(contactDTO.getAddresses() != null && !contactDTO.getAddresses().isEmpty()) {
+        if (contactDTO.getAddresses() != null && !contactDTO.getAddresses().isEmpty()) {
             List<Address> oldAddresses = existingContact.getAddresses();
             List<AddressDTO> newAddressDTOs = contactDTO.getAddresses();
-            List<Address> addressUpdated = addressService.updateAddress(oldAddresses, newAddressDTOs);
+            List<Address> addressUpdated = addressService.updateAddress(existingContact, oldAddresses, newAddressDTOs);
 
             try {
                 existingContact.setAddresses(addressUpdated);
@@ -115,12 +114,10 @@ public class ContactServiceImpl implements ContactService {
             }
         }
 
-        // save contact with new datas
+        // save contact with new data
         try {
             Contact updatedContact = contactRepository.save(existingContact);
-            ContactDTO responseDTO = toDto(updatedContact);
-            responseDTO.setContactId(null);
-            return responseDTO;
+            return toDto(updatedContact);
         } catch (Exception e) {
             log.error("Error during contact update: {}", e.getMessage(), e);
             throw new ContactNotUpdatedException();
@@ -137,7 +134,7 @@ public class ContactServiceImpl implements ContactService {
     public ContactDTO getContact(Long id) {
 
         Contact contact = contactRepository.findById(id)
-            .orElseThrow(IdNotFoundException::new);
+                .orElseThrow(IdNotFoundException::new);
 
         // Save contactDTO
         return toDto(contact);
@@ -146,7 +143,7 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDTO> getContactByLastname(String lastName) {
 
         List<Contact> contacts = contactRepository.getContactByLastname(lastName)
-            .orElseThrow(LastnameNotFoundException::new);
+                .orElseThrow(LastnameNotFoundException::new);
 
         return toDto(contacts);
     }
@@ -172,10 +169,10 @@ public class ContactServiceImpl implements ContactService {
     public Contact save(ContactDTO contactDTO, Civility civility) {
 
         Contact contact = Contact.builder()
-            .firstName(contactDTO.getFirstName())
-            .lastName(contactDTO.getLastName())
-            .civility(civility)
-            .build();
+                .firstName(contactDTO.getFirstName())
+                .lastName(contactDTO.getLastName())
+                .civility(civility)
+                .build();
 
         // Save contact
         try {
@@ -202,21 +199,21 @@ public class ContactServiceImpl implements ContactService {
         addressDTOs = ListUtils.emptyIfNull(addressDTOs);
 
         return ContactDTO.builder()
-            .contactId(contact.getContactId())
-            .firstName(contact.getFirstName())
-            .lastName(contact.getLastName())
-            .civility(civilityDTO)
-            .emails(emailDTOs)
-            .phones(phoneDTOs)
-            .addresses(addressDTOs)
-            .build();
+                .contactId(contact.getContactId())
+                .firstName(contact.getFirstName())
+                .lastName(contact.getLastName())
+                .civility(civilityDTO)
+                .emails(emailDTOs)
+                .phones(phoneDTOs)
+                .addresses(addressDTOs)
+                .build();
     }
 
     @Override
     public List<ContactDTO> toDto(List<Contact> contacts) {
         return contacts.stream()
-            .map(this::toDto)
-            .toList();
+                .map(this::toDto)
+                .toList();
     }
 }
 
