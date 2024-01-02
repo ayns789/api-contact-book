@@ -6,6 +6,7 @@ import com.project.service.ContactService;
 import com.project.utils.CarnetUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,8 +30,11 @@ public class ContactController {
     }
 
     @PutMapping(path = "/update/{contactId}", consumes = "application/json", produces = "application/json")
-    public ContactDTO update(@PathVariable Long contactId, @Valid @RequestBody ContactDTO updateContactDTO) {
-        return contactService.update(contactId, updateContactDTO);
+    public ResponseEntity<ContactDTO> update(@PathVariable Long contactId, @Valid @RequestBody ContactDTO updateContactDTO) {
+        ContactDTO updatedContactDTO = contactService.update(contactId, updateContactDTO);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("contactId", contactId.toString());
+        return new ResponseEntity<>(updatedContactDTO, headers, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}", consumes = "application/json", produces = "application/json")

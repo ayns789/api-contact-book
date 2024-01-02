@@ -81,7 +81,11 @@ public class ContactServiceImpl implements ContactService {
             List<Email> emailsUpdated =  emailService.updateEmail(oldEmails, newEmailDTOs);
 
             // save email list updated
-            existingContact.setEmails(emailsUpdated);
+            try {
+                existingContact.setEmails(emailsUpdated);
+            } catch (Exception e) {
+                throw new EmailNotSavedException();
+            }
         }
 
         // update phones
@@ -92,22 +96,31 @@ public class ContactServiceImpl implements ContactService {
             List<Phone> phonesUpdated =  phoneService.updatePhone(oldPhones, newPhoneDTOs);
 
             // save phone list updated
-            existingContact.setPhones(phonesUpdated);
+            try {
+                existingContact.setPhones(phonesUpdated);
+            } catch (Exception e) {
+                throw new PhoneNotSavedException();
+            }
         }
 
         if(contactDTO.getAddresses() != null && !contactDTO.getAddresses().isEmpty()) {
-            List <Address> oldAddresses = existingContact.getAddresses();
+            List<Address> oldAddresses = existingContact.getAddresses();
             List<AddressDTO> newAddressDTOs = contactDTO.getAddresses();
             List<Address> addressUpdated = addressService.updateAddress(oldAddresses, newAddressDTOs);
 
-            existingContact.setAddresses(addressUpdated);
+            try {
+                existingContact.setAddresses(addressUpdated);
+            } catch (Exception e) {
+                throw new AddressNotSavedException();
+            }
         }
-
 
         // save contact with new datas
         try {
             Contact updatedContact = contactRepository.save(existingContact);
-            return toDto(updatedContact);
+            ContactDTO responseDTO = toDto(updatedContact);
+            responseDTO.setContactId(null);
+            return responseDTO;
         } catch (Exception e) {
             log.error("Error during contact update: {}", e.getMessage(), e);
             throw new ContactNotUpdatedException();
