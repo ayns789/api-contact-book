@@ -6,6 +6,8 @@ import com.project.domain.entities.Email;
 import com.project.domain.entities.Phone;
 import com.project.domain.enums.EmailTypeEnum;
 import com.project.domain.enums.PhoneTypeEnum;
+import com.project.exceptions.EmailNotDeletedException;
+import com.project.exceptions.PhoneNotDeletedException;
 import com.project.exceptions.PhoneNotSavedException;
 import com.project.repository.PhoneRepository;
 import com.project.service.PhoneService;
@@ -69,7 +71,19 @@ public class PhoneServiceImpl implements PhoneService {
     }
 
     @Override
-    public List<Phone> updatePhone(Contact contactId, List<Phone> oldPhones, List<PhoneDTO> newPhoneDTOs) {
+    public List<Phone> toEntity(List<PhoneDTO> phoneDTOs) {
+        return phoneDTOs.stream()
+                .map(phoneDTO -> Phone.builder()
+                        .phoneId(phoneDTO.getPhoneId())
+                        .libelle(phoneDTO.getLibelle())
+                        .type(PhoneTypeEnum.valueOf(phoneDTO.getType()))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<Phone> updatePhones(Contact contactId, List<Phone> oldPhones, List<PhoneDTO> newPhoneDTOs) {
 
         // delete old phones
         phoneRepository.deleteAllInBatch(oldPhones);
@@ -85,6 +99,16 @@ public class PhoneServiceImpl implements PhoneService {
 
         // save and return new phones
         return phoneRepository.saveAll(newPhones);
+    }
+
+    @Override
+    public void deleteAll(List<Phone> phones) {
+        try {
+            phoneRepository.deleteAllInBatch(phones);
+        } catch (Exception e) {
+            log.error(STR."error message = \{e.getMessage()}, \{e}");
+            throw new PhoneNotDeletedException();
+        }
     }
 
 }

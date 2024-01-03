@@ -32,4 +32,6 @@ public interface ContactService {
     List<ContactDTO> getContactByFirstname(String firstName);
 
     List<ContactDTO> getContactByPhone(String phoneNumber);
+
+    ContactDTO delete(Long id);
 }

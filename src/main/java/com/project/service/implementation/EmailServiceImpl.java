@@ -4,6 +4,7 @@ import com.project.domain.dto.EmailDTO;
 import com.project.domain.entities.Contact;
 import com.project.domain.entities.Email;
 import com.project.domain.enums.EmailTypeEnum;
+import com.project.exceptions.EmailNotDeletedException;
 import com.project.exceptions.EmailNotSavedException;
 import com.project.repository.EmailRepository;
 import com.project.service.EmailService;
@@ -66,30 +67,20 @@ public class EmailServiceImpl implements EmailService {
                 .build();
     }
 
-//    @Override
-//    public List<Email> updateEmail(List<Email> oldEmails, List<EmailDTO> newEmailDTOs) {
-//        List<Email> updatedEmails = new ArrayList<>();
-//        for (int i = 0; i < oldEmails.size(); i++) {
-//            // get each old email and new email
-//            Email oldEmail = oldEmails.get(i);
-//            EmailDTO newEmailDTO = newEmailDTOs.get(i);
-//
-//            // compare and update data if changes are detected
-//            if (!oldEmail.getLibelle().equals(newEmailDTO.getLibelle())) {
-//                oldEmail.setLibelle(newEmailDTO.getLibelle());
-//            }
-//            if (!oldEmail.getType().equals(EmailTypeEnum.valueOf(newEmailDTO.getType()))) {
-//                oldEmail.setType(EmailTypeEnum.valueOf(newEmailDTO.getType()));
-//            }
-//            // save in list
-//            updatedEmails.add(oldEmail);
-//        }
-//        // return list updated
-//        return updatedEmails;
-//    }
+    @Override
+    public List<Email> toEntity(List<EmailDTO> emailDTOs) {
+        return emailDTOs.stream()
+                .map(emailDTO -> Email.builder()
+                        .emailId(emailDTO.getEmailId())
+                        .libelle(emailDTO.getLibelle())
+                        .type(EmailTypeEnum.valueOf(emailDTO.getType()))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 
     @Override
-    public List<Email> updateEmail(Contact contactId, List<Email> oldEmails, List<EmailDTO> newEmailDTOs) {
+    public List<Email> updateEmails(Contact contactId, List<Email> oldEmails, List<EmailDTO> newEmailDTOs) {
 
         // delete old emails
         emailRepository.deleteAllInBatch(oldEmails);
@@ -105,6 +96,16 @@ public class EmailServiceImpl implements EmailService {
 
         // save and return new emails
         return emailRepository.saveAll(newEmails);
+    }
+
+    @Override
+    public void deleteAll(List<Email> emails) {
+        try {
+            emailRepository.deleteAllInBatch(emails);
+        } catch (Exception e) {
+            log.error(STR."error message = \{e.getMessage()}, \{e}");
+            throw new EmailNotDeletedException();
+        }
     }
 
 }

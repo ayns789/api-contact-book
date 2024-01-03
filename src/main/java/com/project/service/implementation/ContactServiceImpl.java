@@ -78,7 +78,7 @@ public class ContactServiceImpl implements ContactService {
 
             List<Email> oldEmails = existingContact.getEmails();
             List<EmailDTO> newEmailDTOs = contactDTO.getEmails();
-            List<Email> emailsUpdated = emailService.updateEmail(existingContact, oldEmails, newEmailDTOs);
+            List<Email> emailsUpdated = emailService.updateEmails(existingContact, oldEmails, newEmailDTOs);
 
             try {
                 existingContact.setEmails(emailsUpdated);
@@ -92,7 +92,7 @@ public class ContactServiceImpl implements ContactService {
 
             List<Phone> oldPhones = existingContact.getPhones();
             List<PhoneDTO> newPhoneDTOs = contactDTO.getPhones();
-            List<Phone> phonesUpdated = phoneService.updatePhone(existingContact, oldPhones, newPhoneDTOs);
+            List<Phone> phonesUpdated = phoneService.updatePhones(existingContact, oldPhones, newPhoneDTOs);
 
             // save phone list updated
             try {
@@ -105,7 +105,7 @@ public class ContactServiceImpl implements ContactService {
         if (contactDTO.getAddresses() != null && !contactDTO.getAddresses().isEmpty()) {
             List<Address> oldAddresses = existingContact.getAddresses();
             List<AddressDTO> newAddressDTOs = contactDTO.getAddresses();
-            List<Address> addressUpdated = addressService.updateAddress(existingContact, oldAddresses, newAddressDTOs);
+            List<Address> addressUpdated = addressService.updateAddresses(existingContact, oldAddresses, newAddressDTOs);
 
             try {
                 existingContact.setAddresses(addressUpdated);
@@ -185,6 +185,35 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public ContactDTO delete(Long id) {
+
+        ContactDTO contactDTO = getContact(id);
+        Contact contact = toEntity(contactDTO);
+
+        // delete data linked to contact
+        List<Email> emails = contact.getEmails();
+        System.out.println("emails in service: " + emails);
+
+        emailService.deleteAll(emails);
+
+        List<Phone> phones = contact.getPhones();
+        phoneService.deleteAll(phones);
+
+        List<Address> addresses = contact.getAddresses();
+        addressService.deleteAll(addresses);
+
+        // delete contact
+        contactRepository.deleteById(contact.getContactId());
+
+        try {
+            return toDto(contact);
+        } catch (Exception e) {
+            log.error(STR."Error during contact deleted operation: \{e.getMessage()}", e);
+            throw new ContactNotDeletedException();
+        }
+    }
+
+    @Override
     public ContactDTO toDto(Contact contact) {
 
         CivilityDTO civilityDTO = civilityService.toDto(contact.getCivility());
@@ -214,6 +243,29 @@ public class ContactServiceImpl implements ContactService {
         return contacts.stream()
                 .map(this::toDto)
                 .toList();
+    }
+
+    public Contact toEntity(ContactDTO contactDTO) {
+        Civility civility = civilityService.toEntity(contactDTO.getCivility());
+
+        List<Email> emails = emailService.toEntity(contactDTO.getEmails());
+        emails = ListUtils.emptyIfNull(emails);
+
+        List<Phone> phones = phoneService.toEntity(contactDTO.getPhones());
+        phones = ListUtils.emptyIfNull(phones);
+
+        List<Address> addresses = addressService.toEntity(contactDTO.getAddresses());
+        addresses = ListUtils.emptyIfNull(addresses);
+
+        return Contact.builder()
+                .contactId(contactDTO.getContactId())
+                .firstName(contactDTO.getFirstName())
+                .lastName(contactDTO.getLastName())
+                .civility(civility)
+                .emails(emails)
+                .phones(phones)
+                .addresses(addresses)
+                .build();
     }
 }
 

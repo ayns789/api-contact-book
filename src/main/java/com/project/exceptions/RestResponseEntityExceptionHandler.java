@@ -25,7 +25,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = {CountryNotFoundException.class})
     public ResponseEntity<Object> handleCountryNotFoundException(CountryNotFoundException ex, WebRequest request) {
 
-        String messageError = STR. "The country with id : \{ ex.getCountryId() } does not exist" ;
+        String messageError = STR."The country with id : \{ex.getCountryId()} does not exist";
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.NOT_FOUND.value());
 
@@ -45,7 +45,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = {CivilityNotFoundException.class})
     public ResponseEntity<Object> handleCivilityNotFoundException(CivilityNotFoundException ex, WebRequest request) {
 
-        String messageError = STR. "The civility with id : \{ ex.getCivilityId() } does not exist" ;
+        String messageError = STR."The civility with id : \{ex.getCivilityId()} does not exist";
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.NOT_FOUND.value());
 
@@ -55,7 +55,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = {StreetTypeEnumNotFoundException.class})
     public ResponseEntity<Object> handleStreetTypeEnumNotFoundException(StreetTypeEnumNotFoundException ex, WebRequest request) {
 
-        String messageError = STR. "The street type with value : '\{ ex.getStreetType() }' does not exist" ;
+        String messageError = STR."The street type with value : '\{ex.getStreetType()}' does not exist";
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.NOT_FOUND.value());
 
@@ -143,9 +143,49 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler(value = {ContactNotUpdatedException.class})
-    public ResponseEntity<Object> handleContactNotFoundException(ContactNotUpdatedException ex, WebRequest request) {
+    public ResponseEntity<Object> handleContactNotUpdatedException(ContactNotUpdatedException ex, WebRequest request) {
 
         String messageError = "The contact could not be updated ";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = {ContactNotDeletedException.class})
+    public ResponseEntity<Object> handleContactNotDeletedException(ContactNotDeletedException ex, WebRequest request) {
+
+        String messageError = "The contact could not be deleted ";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = {EmailNotDeletedException.class})
+    public ResponseEntity<Object> handleEmailNotDeletedException(EmailNotDeletedException ex, WebRequest request) {
+
+        String messageError = "The email could not be deleted ";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = {PhoneNotDeletedException.class})
+    public ResponseEntity<Object> handlePhoneNotDeletedException(PhoneNotDeletedException ex, WebRequest request) {
+
+        String messageError = "The phone could not be deleted ";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = {AddressNotDeletedException.class})
+    public ResponseEntity<Object> handleAddressNotDeletedException(AddressNotDeletedException ex, WebRequest request) {
+
+        String messageError = "The address could not be deleted ";
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.INTERNAL_SERVER_ERROR.value());
 

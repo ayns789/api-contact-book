@@ -14,5 +14,7 @@ public interface AddressService {
 
     AddressDTO toDto(Address address);
 
-    List<Address> updateAddress(Contact contactId, List<Address> oldAddresses, List<AddressDTO> newAddressDTOs);
+    List<Address> updateAddresses(Contact contactId, List<Address> oldAddresses, List<AddressDTO> newAddressDTOs);
+
+    void deleteAll(List<Address> addresses);
 }
