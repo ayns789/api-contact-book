@@ -56,7 +56,6 @@ public class ContactController {
 
     @DeleteMapping(path = "/delete/{id}", consumes = "application/json", produces = "application/json")
     public ContactDTO delete(@PathVariable("id") Long id) {
-        System.out.println("id in request : " + id);
         return contactService.delete(id);
     }
 

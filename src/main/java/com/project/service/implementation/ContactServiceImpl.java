@@ -192,7 +192,6 @@ public class ContactServiceImpl implements ContactService {
 
         // delete data linked to contact
         List<Email> emails = contact.getEmails();
-        System.out.println("emails in service: " + emails);
 
         emailService.deleteAll(emails);
 
