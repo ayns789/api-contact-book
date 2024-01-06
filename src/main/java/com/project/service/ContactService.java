@@ -4,7 +4,13 @@ package com.project.service;
 import com.project.domain.dto.ContactDTO;
 import com.project.domain.entities.Civility;
 import com.project.domain.entities.Contact;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.core.io.ByteArrayResource;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public interface ContactService {
@@ -30,4 +36,12 @@ public interface ContactService {
     List<ContactDTO> getContactByFirstname(String firstName);
 
     List<ContactDTO> getContactByPhone(String phoneNumber);
+
+    ByteArrayResource exportExcel() throws IOException;
+
+    Workbook generateExcel() throws FileNotFoundException;
+
+    void downloadFile() throws IOException;
+
+
 }
