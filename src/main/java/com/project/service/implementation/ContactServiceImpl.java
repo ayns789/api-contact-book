@@ -191,15 +191,18 @@ public class ContactServiceImpl implements ContactService {
         Contact contact = toEntity(contactDTO);
 
         // delete data linked to contact
-        List<Email> emails = contact.getEmails();
-
-        emailService.deleteAll(emails);
+        if (contact.getEmails() != null && !contact.getEmails().isEmpty()) {
+            List<Email> emails = contact.getEmails();
+            emailService.deleteAll(emails);
+        }
 
         List<Phone> phones = contact.getPhones();
         phoneService.deleteAll(phones);
 
-        List<Address> addresses = contact.getAddresses();
-        addressService.deleteAll(addresses);
+        if (contact.getAddresses() != null && !contact.getAddresses().isEmpty()) {
+            List<Address> addresses = contact.getAddresses();
+            addressService.deleteAll(addresses);
+        }
 
         // delete contact
         contactRepository.deleteById(contact.getContactId());
