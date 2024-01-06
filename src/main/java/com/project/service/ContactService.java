@@ -4,7 +4,9 @@ package com.project.service;
 import com.project.domain.dto.ContactDTO;
 import com.project.domain.entities.Civility;
 import com.project.domain.entities.Contact;
+import org.springframework.core.io.ByteArrayResource;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ContactService {
@@ -34,4 +36,8 @@ public interface ContactService {
     List<ContactDTO> getContactByPhone(String phoneNumber);
 
     ContactDTO delete(Long id);
+
+    void downloadFile() throws IOException;
+
+    ByteArrayResource exportExcel() throws IOException;
 }
