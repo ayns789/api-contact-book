@@ -11,6 +11,8 @@ public interface ContactService {
 
     ContactDTO create(ContactDTO contactDTO);
 
+    ContactDTO update(Long contactId, ContactDTO contactDTO);
+
     Contact save(ContactDTO contactDTO, Civility civility);
 
     ContactDTO toDto(Contact contact);
@@ -30,4 +32,6 @@ public interface ContactService {
     List<ContactDTO> getContactByFirstname(String firstName);
 
     List<ContactDTO> getContactByPhone(String phoneNumber);
+
+    ContactDTO delete(Long id);
 }

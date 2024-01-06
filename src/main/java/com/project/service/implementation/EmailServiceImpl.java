@@ -4,6 +4,7 @@ import com.project.domain.dto.EmailDTO;
 import com.project.domain.entities.Contact;
 import com.project.domain.entities.Email;
 import com.project.domain.enums.EmailTypeEnum;
+import com.project.exceptions.EmailNotDeletedException;
 import com.project.exceptions.EmailNotSavedException;
 import com.project.repository.EmailRepository;
 import com.project.service.EmailService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,4 +66,46 @@ public class EmailServiceImpl implements EmailService {
                 .type(email.getType().name())
                 .build();
     }
+
+    @Override
+    public List<Email> toEntity(List<EmailDTO> emailDTOs) {
+        return emailDTOs.stream()
+                .map(emailDTO -> Email.builder()
+                        .emailId(emailDTO.getEmailId())
+                        .libelle(emailDTO.getLibelle())
+                        .type(EmailTypeEnum.valueOf(emailDTO.getType()))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<Email> updateEmails(Contact contactId, List<Email> oldEmails, List<EmailDTO> newEmailDTOs) {
+
+        // delete old emails
+        emailRepository.deleteAllInBatch(oldEmails);
+
+        // EmailDTO to Email
+        List<Email> newEmails = newEmailDTOs.stream()
+                .map(emailDTO -> Email.builder()
+                        .type(EmailTypeEnum.valueOf(emailDTO.getType()))
+                        .libelle(emailDTO.getLibelle())
+                        .contact(contactId)
+                        .build())
+                .collect(Collectors.toList());
+
+        // save and return new emails
+        return emailRepository.saveAll(newEmails);
+    }
+
+    @Override
+    public void deleteAll(List<Email> emails) {
+        try {
+            emailRepository.deleteAllInBatch(emails);
+        } catch (Exception e) {
+            log.error(STR."error message = \{e.getMessage()}, \{e}");
+            throw new EmailNotDeletedException();
+        }
+    }
+
 }

@@ -2,8 +2,12 @@ package com.project.service.implementation;
 
 import com.project.domain.dto.PhoneDTO;
 import com.project.domain.entities.Contact;
+import com.project.domain.entities.Email;
 import com.project.domain.entities.Phone;
+import com.project.domain.enums.EmailTypeEnum;
 import com.project.domain.enums.PhoneTypeEnum;
+import com.project.exceptions.EmailNotDeletedException;
+import com.project.exceptions.PhoneNotDeletedException;
 import com.project.exceptions.PhoneNotSavedException;
 import com.project.repository.PhoneRepository;
 import com.project.service.PhoneService;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -63,6 +68,47 @@ public class PhoneServiceImpl implements PhoneService {
                 .libelle(phone.getLibelle())
                 .type(phone.getType().name())
                 .build();
+    }
+
+    @Override
+    public List<Phone> toEntity(List<PhoneDTO> phoneDTOs) {
+        return phoneDTOs.stream()
+                .map(phoneDTO -> Phone.builder()
+                        .phoneId(phoneDTO.getPhoneId())
+                        .libelle(phoneDTO.getLibelle())
+                        .type(PhoneTypeEnum.valueOf(phoneDTO.getType()))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<Phone> updatePhones(Contact contactId, List<Phone> oldPhones, List<PhoneDTO> newPhoneDTOs) {
+
+        // delete old phones
+        phoneRepository.deleteAllInBatch(oldPhones);
+
+        // PhoneDTO to Phone
+        List<Phone> newPhones = newPhoneDTOs.stream()
+                .map(phoneDTO -> Phone.builder()
+                        .type(PhoneTypeEnum.valueOf(phoneDTO.getType()))
+                        .libelle(phoneDTO.getLibelle())
+                        .contact(contactId)
+                        .build())
+                .collect(Collectors.toList());
+
+        // save and return new phones
+        return phoneRepository.saveAll(newPhones);
+    }
+
+    @Override
+    public void deleteAll(List<Phone> phones) {
+        try {
+            phoneRepository.deleteAllInBatch(phones);
+        } catch (Exception e) {
+            log.error(STR."error message = \{e.getMessage()}, \{e}");
+            throw new PhoneNotDeletedException();
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package com.project.service.implementation;
 
 import com.project.domain.dto.CivilityDTO;
 import com.project.domain.entities.Civility;
+import com.project.domain.enums.CivilityEnumType;
 import com.project.exceptions.CivilityNotFoundException;
 import com.project.repository.CivilityRepository;
 import com.project.service.CivilityService;
@@ -26,4 +27,13 @@ public class CivilityServiceImpl implements CivilityService {
                 .libelle(civility.getLibelle().name())
                 .build();
     }
+
+    @Override
+    public Civility toEntity(CivilityDTO civilityDTO) {
+        Civility civility = new Civility();
+        civility.setCivilityId(civilityDTO.getCivilityId());
+        civility.setLibelle(CivilityEnumType.valueOf(civilityDTO.getLibelle()));
+        return civility;
+    }
+
 }

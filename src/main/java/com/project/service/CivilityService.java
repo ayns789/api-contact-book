@@ -8,4 +8,6 @@ public interface CivilityService {
     Civility getCivilityById(Long civilityId);
 
     CivilityDTO toDto(Civility civility);
+
+    Civility toEntity(CivilityDTO civilityDTO);
 }
