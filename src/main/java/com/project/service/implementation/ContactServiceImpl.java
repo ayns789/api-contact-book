@@ -32,7 +32,6 @@ public class ContactServiceImpl implements ContactService {
     private final PhoneServiceImpl phoneService;
     private final CivilityServiceImpl civilityService;
     private final AddressServiceImpl addressService;
-    private final Map<String, Integer> headerMap = new HashMap<>();
 
 
     @Override
@@ -282,19 +281,28 @@ public class ContactServiceImpl implements ContactService {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Contacts");
 
-        // Create the header row
+        // create the header row
         Row headerRow = sheet.createRow(0);
 
-        // Set the header row style
+        // set the header row style
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
 
         CellStyle headerStyle = workbook.createCellStyle();
+        // font
         headerStyle.setFont(headerFont);
+        // background
         headerStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
         headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        // ellipsis
+        headerStyle.setWrapText(true);
+        // lines borders
+        headerStyle.setBorderTop(BorderStyle.THIN);
+        headerStyle.setBorderLeft(BorderStyle.THIN);
+        headerStyle.setBorderBottom(BorderStyle.THIN);
+        headerStyle.setBorderRight(BorderStyle.THIN);
 
-        // add values to headerRow
+        // add values to headerRows
         headerRow.createCell(0).setCellValue("FirstName");
         headerRow.createCell(1).setCellValue("LastName");
         headerRow.createCell(2).setCellValue("Civility");
@@ -302,16 +310,39 @@ public class ContactServiceImpl implements ContactService {
         headerRow.createCell(4).setCellValue("Phone");
         headerRow.createCell(5).setCellValue("Address");
 
+        // set columns width to 24 centimeters
+        int widthInUnits = (int) (24 * 256); // 1 cm = 256 units in Excel
         for (int i = 0; i < headerRow.getLastCellNum(); i++) {
-            headerRow.getCell(i).setCellStyle(headerStyle);
+            sheet.setColumnWidth(i, widthInUnits);
         }
 
+        // add style to headerRows
+        for (int i = 0; i < headerRow.getLastCellNum(); i++) {
+            headerRow.getCell(i).setCellStyle(headerStyle);
+            headerRow.setHeightInPoints((short) 24);
+            headerStyle.setAlignment(HorizontalAlignment.CENTER);
+            headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        }
+
+        // add values to rows
         int rowNum = 1;
         for (ContactDTO contact : contactDTOs) {
+
+            //create style rows
+            CellStyle rowStyle = workbook.createCellStyle();
+            rowStyle.setBorderTop(BorderStyle.THIN);
+            rowStyle.setBorderLeft(BorderStyle.THIN);
+            rowStyle.setBorderBottom(BorderStyle.THIN);
+            rowStyle.setBorderRight(BorderStyle.THIN);
+
+            // create and set values and styles in rows
             Row row = sheet.createRow(rowNum++);
             row.createCell(0).setCellValue(contact.getFirstName());
+            row.getCell(0).setCellStyle(rowStyle);
             row.createCell(1).setCellValue(contact.getLastName());
+            row.getCell(1).setCellStyle(rowStyle);
             row.createCell(2).setCellValue(String.valueOf(contact.getCivility().getLibelle()));
+            row.getCell(2).setCellStyle(rowStyle);
 
             String emailAddress = "";
             if (!contact.getEmails().isEmpty()) {
@@ -320,6 +351,7 @@ public class ContactServiceImpl implements ContactService {
                         .collect(Collectors.joining(" | "));
             }
             row.createCell(3).setCellValue(emailAddress);
+            row.getCell(3).setCellStyle(rowStyle);
 
             String phoneNumber = "";
             if (!contact.getPhones().isEmpty()) {
@@ -327,7 +359,8 @@ public class ContactServiceImpl implements ContactService {
                         .map(phone -> phone.getLibelle() + " : " + phone.getType())
                         .collect(Collectors.joining(" | "));
             }
-            row.createCell(5).setCellValue(phoneNumber);
+            row.createCell(4).setCellValue(phoneNumber);
+            row.getCell(4).setCellStyle(rowStyle);
 
             String addressList = "";
             if (!contact.getAddresses().isEmpty()) {
@@ -335,16 +368,24 @@ public class ContactServiceImpl implements ContactService {
                         .map(address -> address.getStreetNumber() + " " + address.getStreetType() + " " + address.getStreetName() + " " + address.getPostalCode() + " " + address.getCityName() + " " + address.getCountry().getLibelle())
                         .collect(Collectors.joining("|"));
             }
-            row.createCell(7).setCellValue(addressList);
+            row.createCell(5).setCellValue(addressList);
+            row.getCell(5).setCellStyle(rowStyle);
 
+            // add null value after the last column, for last column can use ellipsis
+            row.createCell(6).setCellValue("");
         }
 
-        // the columns take size of values
-        for (int i = 0; i <= 8; i++) {
-            sheet.autoSizeColumn(i);
+//        // columns take size of values
+//        for (int i = 0; i <= 5; i++) {
+//            sheet.autoSizeColumn(i);
+//        }
+        try {
+            return workbook;
+        } catch (Exception e) {
+            log.error(STR."Error during workbook generate operation: \{e.getMessage()}", e);
+            throw new FileExcelNotGeneratedException();
         }
 
-        return workbook;
     }
 
 
@@ -353,9 +394,15 @@ public class ContactServiceImpl implements ContactService {
         ByteArrayResource resource = exportExcel();
         String filePath = "C:\\Users\\jolya\\bureau\\tempraire\\contacts.xlsx";
 
-        FileOutputStream outputStream = new FileOutputStream(filePath);
-        outputStream.write(resource.getByteArray());
-        outputStream.close();
+        try {
+            FileOutputStream outputStream = new FileOutputStream(filePath);
+            outputStream.write(resource.getByteArray());
+            outputStream.close();
+        } catch (Exception e) {
+            log.error(STR."Error during FileOutputStream creation operation: \{e.getMessage()}", e);
+            throw new FileExcelNotGeneratedException();
+        }
+
     }
 
 //    // to export file with box dialog
@@ -393,7 +440,12 @@ public class ContactServiceImpl implements ContactService {
         workbook.write(baos);
         workbook.close();
         ByteArrayResource resource = new ByteArrayResource(baos.toByteArray());
-        return resource;
+        try {
+            return resource;
+        } catch (Exception e) {
+            log.error(STR."Error during ByteArrayResource writing operation: \{e.getMessage()}", e);
+            throw new FileExcelNotGeneratedException();
+        }
     }
 }
 
