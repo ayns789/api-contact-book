@@ -80,13 +80,13 @@ public class EmailServiceImpl implements EmailService {
 
 
     @Override
-    public List<Email> updateEmails(Contact contactId, List<Email> oldEmails, List<EmailDTO> newEmailDTOs) {
+    public List<Email> updateEmails(Contact contactId, List<Email> emails, List<EmailDTO> emailDTOs) {
 
         // delete old emails
-        emailRepository.deleteAllInBatch(oldEmails);
+        emailRepository.deleteAllInBatch(emails);
 
         // EmailDTO to Email
-        List<Email> newEmails = newEmailDTOs.stream()
+        List<Email> newEmails = emailDTOs.stream()
                 .map(emailDTO -> Email.builder()
                         .type(EmailTypeEnum.valueOf(emailDTO.getType()))
                         .libelle(emailDTO.getLibelle())

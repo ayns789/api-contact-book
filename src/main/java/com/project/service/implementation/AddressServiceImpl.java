@@ -105,13 +105,13 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> updateAddresses(Contact contactId, List<Address> oldAddresses, List<AddressDTO> newAddressDTOs) {
+    public List<Address> updateAddresses(Contact contactId, List<Address> addresses, List<AddressDTO> addressDTOs) {
 
         // delete old addresses
-        addressRepository.deleteAllInBatch(oldAddresses);
+        addressRepository.deleteAllInBatch(addresses);
 
         // AddressDTO to Address
-        List<Address> newAddresses = newAddressDTOs.stream()
+        List<Address> newAddresses = addressDTOs.stream()
                 .map(addressDTO -> Address.builder()
                         .streetNumber(addressDTO.getStreetNumber())
                         .streetType(StreetTypeEnum.valueOf(addressDTO.getStreetType()))

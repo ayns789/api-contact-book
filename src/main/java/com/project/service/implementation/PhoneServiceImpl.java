@@ -83,13 +83,13 @@ public class PhoneServiceImpl implements PhoneService {
 
 
     @Override
-    public List<Phone> updatePhones(Contact contactId, List<Phone> oldPhones, List<PhoneDTO> newPhoneDTOs) {
+    public List<Phone> updatePhones(Contact contactId, List<Phone> phones, List<PhoneDTO> phoneDTOs) {
 
         // delete old phones
-        phoneRepository.deleteAllInBatch(oldPhones);
+        phoneRepository.deleteAllInBatch(phones);
 
         // PhoneDTO to Phone
-        List<Phone> newPhones = newPhoneDTOs.stream()
+        List<Phone> newPhones = phoneDTOs.stream()
                 .map(phoneDTO -> Phone.builder()
                         .type(PhoneTypeEnum.valueOf(phoneDTO.getType()))
                         .libelle(phoneDTO.getLibelle())

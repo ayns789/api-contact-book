@@ -4,35 +4,16 @@ import com.project.domain.dto.ContactDTO;
 import com.project.domain.error.ApiError;
 import com.project.service.ContactService;
 import com.project.utils.CarnetUtils;
-import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,6 +47,16 @@ public class ContactController {
     @GetMapping(path = "/byPhone", consumes = "application/json", produces = "application/json")
     public List<ContactDTO> getContactByPhone(@RequestParam(value = "phone_number") String phoneNumber) {
         return contactService.getContactByPhone(phoneNumber);
+    }
+
+    @PutMapping(path = "/update/{contactId}", consumes = "application/json", produces = "application/json")
+    public ContactDTO update(@PathVariable Long contactId, @Valid @RequestBody ContactDTO contactDTO) {
+        return contactService.update(contactId, contactDTO);
+    }
+
+    @DeleteMapping(path = "/delete/{id}", consumes = "application/json", produces = "application/json")
+    public ContactDTO delete(@PathVariable("id") Long id) {
+        return contactService.delete(id);
     }
 
     // save on pc in file path
