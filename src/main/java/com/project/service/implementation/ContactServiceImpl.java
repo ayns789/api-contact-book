@@ -64,6 +64,12 @@ public class ContactServiceImpl implements ContactService {
         return toDto(contact);
     }
 
+    /**
+     * Retrieves contacts by last name.
+     *
+     * @param lastName The lastName of the contacts.
+     * @return The {@link List<ContactDTO>} object representing the retrieved contacts.
+     */
     public List<ContactDTO> getContactByLastname(String lastName) {
 
         List<Contact> contacts = contactRepository.getContactByLastname(lastName)
@@ -72,6 +78,12 @@ public class ContactServiceImpl implements ContactService {
         return toDto(contacts);
     }
 
+    /**
+     * Retrieves contacts by first name.
+     *
+     * @param firstName The firstName of the contacts.
+     * @return The {@link List<ContactDTO>} object representing the retrieved contacts.
+     */
     public List<ContactDTO> getContactByFirstname(String firstName) {
 
         List<Contact> contacts = contactRepository.getContactByFirstname(firstName)
@@ -80,6 +92,12 @@ public class ContactServiceImpl implements ContactService {
         return toDto(contacts);
     }
 
+    /**
+     * Retrieves contacts by phone numbers.
+     *
+     * @param phoneNumber The phoneNumber of the contacts.
+     * @return The {@link List<ContactDTO>} object representing the retrieved contacts.
+     */
     public List<ContactDTO> getContactByPhone(String phoneNumber) {
 
         List<Contact> contacts = contactRepository.getContactByPhone(phoneNumber)
@@ -108,6 +126,13 @@ public class ContactServiceImpl implements ContactService {
         }
     }
 
+    /**
+     * Edit a contact by their ID.
+     *
+     * @param contactId  The id of the contact.
+     * @param contactDTO The data of the contact to edit.
+     * @return The {@link ContactDTO} object representing the contact edited.
+     */
     @Override
     @Transactional
     public ContactDTO update(Long contactId, ContactDTO contactDTO) {
@@ -188,7 +213,14 @@ public class ContactServiceImpl implements ContactService {
         }
     }
 
+    /**
+     * Delete a contact by its ID.
+     *
+     * @param id The id of the contact.
+     * @return The {@link ContactDTO} object representing the contact deleted.
+     */
     @Override
+    @Transactional
     public ContactDTO delete(Long id) {
 
         ContactDTO contactDTO = getContact(id);
@@ -274,7 +306,10 @@ public class ContactServiceImpl implements ContactService {
                 .toList();
     }
 
-    public Workbook generateExcel() throws FileNotFoundException {
+    /**
+     * Generate Workbook with all contacts.
+     */
+    private Workbook generateExcel() throws FileNotFoundException {
         List<Contact> contacts = contactRepository.findAll();
         List<ContactDTO> contactDTOs = toDto(contacts);
 
@@ -374,7 +409,7 @@ public class ContactServiceImpl implements ContactService {
             // add null value after the last column, for last column can use ellipsis
             row.createCell(6).setCellValue("");
         }
-        
+
         try {
             return workbook;
         } catch (Exception e) {
@@ -384,10 +419,16 @@ public class ContactServiceImpl implements ContactService {
 
     }
 
+    /**
+     * Export an Excel file representing the contacts, on a file path.
+     */
+    public void exportFile() throws IOException {
 
-    public void downloadFile() throws IOException {
-
-        ByteArrayResource resource = exportExcel();
+        Workbook workbook = generateExcel();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        workbook.write(baos);
+        workbook.close();
+        ByteArrayResource resource = new ByteArrayResource(baos.toByteArray());
         String filePath = "C:\\Users\\jolya\\bureau\\tempraire\\contacts.xlsx";
 
         try {
@@ -396,28 +437,6 @@ public class ContactServiceImpl implements ContactService {
             outputStream.close();
         } catch (Exception e) {
             log.error(STR."Error during FileOutputStream creation operation: \{e.getMessage()}", e);
-            throw new FileExcelNotGeneratedException();
-        }
-
-    }
-
-    @Override
-    public ByteArrayResource exportExcel() throws IOException {
-        Workbook workbook = generateExcel();
-        ByteArrayResource resource = streamExcel(workbook);
-
-        return resource;
-    }
-
-    private ByteArrayResource streamExcel(Workbook workbook) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        workbook.write(baos);
-        workbook.close();
-        ByteArrayResource resource = new ByteArrayResource(baos.toByteArray());
-        try {
-            return resource;
-        } catch (Exception e) {
-            log.error(STR."Error during ByteArrayResource writing operation: \{e.getMessage()}", e);
             throw new FileExcelNotGeneratedException();
         }
     }

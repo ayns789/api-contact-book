@@ -69,43 +69,10 @@ public class ContactController {
     }
 
     // save on pc in file path
-    @GetMapping("/download")
-    public void downloadFileContact() throws IOException {
-        contactService.downloadFile();
-    }
-
-    // save export file with box dialog
     @GetMapping("/export")
-    public void exportContacts() throws IOException {
-        JFileChooser fileChooser = new JFileChooser();
-
-        // define file filters
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Fichiers Excel", "xlsx");
-        fileChooser.addChoosableFileFilter(filter);
-
-        // viewing box dialog
-        int result = fileChooser.showSaveDialog(null);
-
-        // if user selected "save"
-        if (result == JFileChooser.APPROVE_OPTION) {
-            // get path file
-            File file = fileChooser.getSelectedFile();
-
-            // export file excel
-            ByteArrayResource resource = contactService.exportExcel();
-            Files.write(file.toPath(), resource.getByteArray());
-        }
+    public void exportFile() throws IOException {
+        contactService.exportFile();
     }
-
-//    // V1 fonctionne, renvoie un fichier excel dans postman
-//    @GetMapping("/export")
-//    public ResponseEntity<ByteArrayResource> exportContacts() throws IOException {
-//        ByteArrayResource resource = contactService.exportExcel();
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=contacts.xlsx")
-//                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
-//                .body(resource);
-//    }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
