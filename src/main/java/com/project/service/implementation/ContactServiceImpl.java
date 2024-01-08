@@ -374,11 +374,7 @@ public class ContactServiceImpl implements ContactService {
             // add null value after the last column, for last column can use ellipsis
             row.createCell(6).setCellValue("");
         }
-
-//        // columns take size of values
-//        for (int i = 0; i <= 5; i++) {
-//            sheet.autoSizeColumn(i);
-//        }
+        
         try {
             return workbook;
         } catch (Exception e) {
@@ -404,29 +400,6 @@ public class ContactServiceImpl implements ContactService {
         }
 
     }
-
-
-//    // to export file with box dialog
-//    @Override
-//    public FileOutputStream exportExcel() throws IOException {
-//        Workbook workbook = generateExcel();
-//        ByteArrayResource resource = streamExcel(workbook);
-//
-//        ByteArrayOutputStream baos = resource.getByteArrayOutputStream();
-//
-//        File file = new File("myfile.xlsx");
-//        if (!file.exists()) {
-//            file.createNewFile();
-//        }
-//
-//        FileOutputStream outputStream = new FileOutputStream(file);
-//        baos.writeTo(outputStream);
-//
-//        outputStream.close();
-//        baos.close();
-//
-//        return outputStream;
-//    }
 
     @Override
     public ByteArrayResource exportExcel() throws IOException {
