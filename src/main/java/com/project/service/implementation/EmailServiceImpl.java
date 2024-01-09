@@ -1,5 +1,6 @@
 package com.project.service.implementation;
 
+import com.project.domain.dto.ContactDTO;
 import com.project.domain.dto.EmailDTO;
 import com.project.domain.entities.Contact;
 import com.project.domain.entities.Email;
@@ -10,7 +11,9 @@ import com.project.repository.EmailRepository;
 import com.project.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +36,11 @@ public class EmailServiceImpl implements EmailService {
             EmailTypeEnum emailTypeEnum = EmailTypeEnum.getValue(emailDTO.getType());
 
             Email email = Email.builder()
-                    .libelle(emailDTO.getLibelle())
-                    .type(emailTypeEnum)
-                    .contact(contact)
-                    .build();
+                .emailId(emailDTO.getEmailId())
+                .libelle(emailDTO.getLibelle())
+                .type(emailTypeEnum)
+                .contact(contact)
+                .build();
 
             emails.add(email);
         });
@@ -54,48 +58,28 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public List<EmailDTO> toDto(List<Email> emails) {
         return emails.stream()
-                .map(this::toDto)
-                .toList();
+            .map(this::toDto)
+            .toList();
     }
 
     @Override
     public EmailDTO toDto(Email email) {
         return EmailDTO.builder()
-                .emailId(email.getEmailId())
-                .libelle(email.getLibelle())
-                .type(email.getType().name())
-                .build();
+            .emailId(email.getEmailId())
+            .libelle(email.getLibelle())
+            .type(email.getType().name())
+            .build();
     }
 
     @Override
     public List<Email> toEntity(List<EmailDTO> emailDTOs) {
         return emailDTOs.stream()
-                .map(emailDTO -> Email.builder()
-                        .emailId(emailDTO.getEmailId())
-                        .libelle(emailDTO.getLibelle())
-                        .type(EmailTypeEnum.valueOf(emailDTO.getType()))
-                        .build())
-                .collect(Collectors.toList());
-    }
-
-
-    @Override
-    public List<Email> updateEmails(Contact contactId, List<Email> emails, List<EmailDTO> emailDTOs) {
-
-        // delete old emails
-        emailRepository.deleteAllInBatch(emails);
-
-        // EmailDTO to Email
-        List<Email> newEmails = emailDTOs.stream()
-                .map(emailDTO -> Email.builder()
-                        .type(EmailTypeEnum.valueOf(emailDTO.getType()))
-                        .libelle(emailDTO.getLibelle())
-                        .contact(contactId)
-                        .build())
-                .collect(Collectors.toList());
-
-        // save and return new emails
-        return emailRepository.saveAll(newEmails);
+            .map(emailDTO -> Email.builder()
+                .emailId(emailDTO.getEmailId())
+                .libelle(emailDTO.getLibelle())
+                .type(EmailTypeEnum.valueOf(emailDTO.getType()))
+                .build())
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -108,4 +92,17 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    @Override
+    @Transactional
+    public List<Email> updateEmails(ContactDTO contactDTO, Contact contact) {
+
+        List<EmailDTO> emailDTOs = contactDTO.getEmails();
+        emailDTOs = ListUtils.emptyIfNull(emailDTOs);
+
+        // delete old emails linked to contact
+        emailRepository.deleteByContact_ContactId(contact.getContactId());
+
+        // save and return new emails
+        return save(emailDTOs, contact);
+    }
 }

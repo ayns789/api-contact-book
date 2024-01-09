@@ -1,24 +1,47 @@
 package com.project.service.implementation;
 
-import com.project.domain.dto.*;
-import com.project.domain.entities.*;
-import com.project.exceptions.*;
+import com.project.domain.dto.AddressDTO;
+import com.project.domain.dto.CivilityDTO;
+import com.project.domain.dto.ContactDTO;
+import com.project.domain.dto.EmailDTO;
+import com.project.domain.dto.PhoneDTO;
+import com.project.domain.entities.Address;
+import com.project.domain.entities.Civility;
+import com.project.domain.entities.Contact;
+import com.project.domain.entities.Email;
+import com.project.domain.entities.Phone;
+import com.project.exceptions.ContactNotDeletedException;
+import com.project.exceptions.ContactNotFoundException;
+import com.project.exceptions.ContactNotSavedException;
+import com.project.exceptions.FileExcelNotGeneratedException;
+import com.project.exceptions.FirstnameNotFoundException;
+import com.project.exceptions.IdNotFoundException;
+import com.project.exceptions.LastnameNotFoundException;
+import com.project.exceptions.PhoneNotFoundException;
 import com.project.repository.ContactRepository;
 import com.project.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.commons.io.output.ByteArrayOutputStream;
 
-
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +82,7 @@ public class ContactServiceImpl implements ContactService {
     public ContactDTO getContact(Long id) {
 
         Contact contact = contactRepository.findById(id)
-                .orElseThrow(IdNotFoundException::new);
+            .orElseThrow(IdNotFoundException::new);
 
         // Save contactDTO
         return toDto(contact);
@@ -74,7 +97,7 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDTO> getContactByLastname(String lastName) {
 
         List<Contact> contacts = contactRepository.getContactByLastname(lastName)
-                .orElseThrow(LastnameNotFoundException::new);
+            .orElseThrow(LastnameNotFoundException::new);
 
         return toDto(contacts);
     }
@@ -88,7 +111,7 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDTO> getContactByFirstname(String firstName) {
 
         List<Contact> contacts = contactRepository.getContactByFirstname(firstName)
-                .orElseThrow(FirstnameNotFoundException::new);
+            .orElseThrow(FirstnameNotFoundException::new);
 
         return toDto(contacts);
     }
@@ -102,7 +125,7 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDTO> getContactByPhone(String phoneNumber) {
 
         List<Contact> contacts = contactRepository.getContactByPhone(phoneNumber)
-                .orElseThrow(PhoneNotFoundException::new);
+            .orElseThrow(PhoneNotFoundException::new);
 
         return toDto(contacts);
     }
@@ -112,11 +135,7 @@ public class ContactServiceImpl implements ContactService {
     public Contact save(ContactDTO contactDTO, Civility civility) {
 
         // edit contact
-        Contact contact = Contact.builder()
-                .firstName(contactDTO.getFirstName())
-                .lastName(contactDTO.getLastName())
-                .civility(civility)
-                .build();
+        Contact contact = buildContact(contactDTO, civility);
 
         // handle emails
         List<EmailDTO> emailDTOs = contactDTO.getEmails();
@@ -134,9 +153,7 @@ public class ContactServiceImpl implements ContactService {
         List<Address> addresses = addressService.save(addressDTOs, contact);
 
         // set emails, phones and addresses
-        contact.setEmails(emails);
-        contact.setPhones(phones);
-        contact.setAddresses(addresses);
+        buildContact(contact, emails, phones, addresses);
 
         // Save contact
         try {
@@ -146,6 +163,50 @@ public class ContactServiceImpl implements ContactService {
             log.error(STR."Error during contact creation: \{e.getMessage()}", e);
             throw new ContactNotSavedException();
         }
+    }
+
+//    @Override
+//    @Transactional
+//    public Contact update(ContactDTO contactDTO, Civility civility) {
+//
+//        // edit contact
+//        Contact contact = buildContact(contactDTO, civility);
+//
+//        // handle emails
+//        List<Email> emails = emailService.updateEmails(contactDTO, contact);
+//
+//        // handle phones
+//        List<Phone> phones = phoneService.updatePhones(contactDTO, contact);
+//
+//        // handle addresses
+//        List<Address> addresses = addressService.updateAddresses(contactDTO, contact);
+//
+//        // set emails, phones and addresses
+//        buildContact(contact, emails, phones, addresses);
+//
+//        // Save contact
+//        try {
+//            return contactRepository.save(contact);
+//        } catch (Exception e) {
+//
+//            log.error(STR."Error during contact creation: \{e.getMessage()}", e);
+//            throw new ContactNotSavedException();
+//        }
+//    }
+
+    private void buildContact(Contact contact, List<Email> emails, List<Phone> phones, List<Address> addresses) {
+        contact.setEmails(emails);
+        contact.setPhones(phones);
+        contact.setAddresses(addresses);
+    }
+
+    private Contact buildContact(ContactDTO contactDTO, Civility civility) {
+        return Contact.builder()
+            .contactId(contactDTO.getContactId())
+            .firstName(contactDTO.getFirstName())
+            .lastName(contactDTO.getLastName())
+            .civility(civility)
+            .build();
     }
 
     @Override
@@ -163,21 +224,21 @@ public class ContactServiceImpl implements ContactService {
         addressDTOs = ListUtils.emptyIfNull(addressDTOs);
 
         return ContactDTO.builder()
-                .contactId(contact.getContactId())
-                .firstName(contact.getFirstName())
-                .lastName(contact.getLastName())
-                .civility(civilityDTO)
-                .emails(emailDTOs)
-                .phones(phoneDTOs)
-                .addresses(addressDTOs)
-                .build();
+            .contactId(contact.getContactId())
+            .firstName(contact.getFirstName())
+            .lastName(contact.getLastName())
+            .civility(civilityDTO)
+            .emails(emailDTOs)
+            .phones(phoneDTOs)
+            .addresses(addressDTOs)
+            .build();
     }
 
     @Override
     public List<ContactDTO> toDto(List<Contact> contacts) {
         return contacts.stream()
-                .map(this::toDto)
-                .toList();
+            .map(this::toDto)
+            .toList();
     }
 
     public Contact toEntity(ContactDTO contactDTO) {
@@ -193,14 +254,14 @@ public class ContactServiceImpl implements ContactService {
         addresses = ListUtils.emptyIfNull(addresses);
 
         return Contact.builder()
-                .contactId(contactDTO.getContactId())
-                .firstName(contactDTO.getFirstName())
-                .lastName(contactDTO.getLastName())
-                .civility(civility)
-                .emails(emails)
-                .phones(phones)
-                .addresses(addresses)
-                .build();
+            .contactId(contactDTO.getContactId())
+            .firstName(contactDTO.getFirstName())
+            .lastName(contactDTO.getLastName())
+            .civility(civility)
+            .emails(emails)
+            .phones(phones)
+            .addresses(addresses)
+            .build();
     }
 
     /**
@@ -214,81 +275,45 @@ public class ContactServiceImpl implements ContactService {
     @Transactional
     public ContactDTO update(Long contactId, ContactDTO contactDTO) {
 
-        // check and get contact, if contact exist
-        Contact contact = contactRepository.findById(contactId)
-                .orElseThrow(ContactNotFoundException::new);
+        // Check if contact exist in bdd
+        boolean existsById = contactRepository.existsById(contactId);
 
-//        boolean contactIsInDB = contactRepository.existsById(contactId);
-//        if(!contactIsInDB) throw new ContactNotFoundException();
+        if (!existsById) {
+            log.error("Contact with id {} not found", contactId);
+            throw new ContactNotFoundException();
+        }
 
-        // get civility
+        // Handle civility
         Long civilityId = contactDTO.getCivility().getCivilityId();
         Civility civility = civilityService.getCivilityById(civilityId);
 
-        // set civility
-        if (civility != null) {
-            contact.setCivility(civility);
-        }
+        // Handle contact
+        contactDTO.setContactId(contactId);
+        Contact contact = buildContact(contactDTO, civility);
 
-        // set firstName
-        if (!StringUtils.isEmpty(contactDTO.getFirstName())) {
-            contact.setFirstName(contactDTO.getFirstName());
-        }
+        // handle emails
+        List<Email> emails = emailService.updateEmails(contactDTO, contact);
 
-        // set lastName
-        if (!StringUtils.isEmpty(contactDTO.getLastName())) {
-            contact.setLastName(contactDTO.getLastName());
-        }
+        // handle phones
+        List<Phone> phones = phoneService.updatePhones(contactDTO, contact);
 
-        // set emails
-        if (!CollectionUtils.isEmpty(contactDTO.getEmails())) {
+        // handle addresses
+        List<Address> addresses = addressService.updateAddresses(contactDTO, contact);
 
-            List<Email> emails = contact.getEmails();
-            List<EmailDTO> emailDTOs = contactDTO.getEmails();
-            List<Email> emailsUpdated = emailService.updateEmails(contact, emails, emailDTOs);
+        // set emails, phones and addresses
+        buildContact(contact, emails, phones, addresses);
 
-            try {
-                contact.setEmails(emailsUpdated);
-            } catch (Exception e) {
-                throw new EmailNotSavedException();
-            }
-        }
-
-        // update phones
-        if (!CollectionUtils.isEmpty(contactDTO.getPhones())) {
-
-            List<Phone> phones = contact.getPhones();
-            List<PhoneDTO> phoneDTOs = contactDTO.getPhones();
-            List<Phone> phonesUpdated = phoneService.updatePhones(contact, phones, phoneDTOs);
-
-            // save phone list updated
-            try {
-                contact.setPhones(phonesUpdated);
-            } catch (Exception e) {
-                throw new PhoneNotSavedException();
-            }
-        }
-
-        if (!CollectionUtils.isEmpty(contactDTO.getAddresses())) {
-            List<Address> addresses = contact.getAddresses();
-            List<AddressDTO> addressDTOs = contactDTO.getAddresses();
-            List<Address> addressUpdated = addressService.updateAddresses(contact, addresses, addressDTOs);
-
-            try {
-                contact.setAddresses(addressUpdated);
-            } catch (Exception e) {
-                throw new AddressNotSavedException();
-            }
-        }
-
-        // update contact and return dto
+        // Save contact
         try {
-            Contact updatedContact = contactRepository.save(contact);
-            return toDto(updatedContact);
+            contact = contactRepository.save(contact);
         } catch (Exception e) {
-            log.error("Error during contact update: {}", e.getMessage(), e);
-            throw new ContactNotUpdatedException();
+
+            log.error(STR."Error during contact creation: \{e.getMessage()}", e);
+            throw new ContactNotSavedException();
         }
+
+        // Build contactDTO
+        return toDto(contact);
     }
 
 
@@ -331,7 +356,6 @@ public class ContactServiceImpl implements ContactService {
             throw new ContactNotDeletedException();
         }
     }
-
 
     /**
      * Generate Workbook with all contacts.
@@ -409,8 +433,8 @@ public class ContactServiceImpl implements ContactService {
             String emailAddress = "";
             if (!contact.getEmails().isEmpty()) {
                 emailAddress = contact.getEmails().stream()
-                        .map(email -> email.getLibelle() + " : " + email.getType())
-                        .collect(Collectors.joining(" | "));
+                    .map(email -> email.getLibelle() + " : " + email.getType())
+                    .collect(Collectors.joining(" | "));
             }
             row.createCell(3).setCellValue(emailAddress);
             row.getCell(3).setCellStyle(rowStyle);
@@ -418,8 +442,8 @@ public class ContactServiceImpl implements ContactService {
             String phoneNumber = "";
             if (!contact.getPhones().isEmpty()) {
                 phoneNumber = contact.getPhones().stream()
-                        .map(phone -> phone.getLibelle() + " : " + phone.getType())
-                        .collect(Collectors.joining(" | "));
+                    .map(phone -> phone.getLibelle() + " : " + phone.getType())
+                    .collect(Collectors.joining(" | "));
             }
             row.createCell(4).setCellValue(phoneNumber);
             row.getCell(4).setCellStyle(rowStyle);
@@ -427,8 +451,9 @@ public class ContactServiceImpl implements ContactService {
             String addressList = "";
             if (!contact.getAddresses().isEmpty()) {
                 addressList = contact.getAddresses().stream()
-                        .map(address -> address.getStreetNumber() + " " + address.getStreetType() + " " + address.getStreetName() + " " + address.getPostalCode() + " " + address.getCityName() + " " + address.getCountry().getLibelle())
-                        .collect(Collectors.joining("|"));
+                    .map(address -> address.getStreetNumber() + " " + address.getStreetType() + " " + address.getStreetName() + " " +
+                        address.getPostalCode() + " " + address.getCityName() + " " + address.getCountry().getLibelle())
+                    .collect(Collectors.joining("|"));
             }
             row.createCell(5).setCellValue(addressList);
             row.getCell(5).setCellStyle(rowStyle);

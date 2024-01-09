@@ -1,6 +1,7 @@
 package com.project.service;
 
 import com.project.domain.dto.AddressDTO;
+import com.project.domain.dto.ContactDTO;
 import com.project.domain.entities.Address;
 import com.project.domain.entities.Contact;
 
@@ -17,4 +18,6 @@ public interface AddressService {
     List<Address> updateAddresses(Contact contactId, List<Address> oldAddresses, List<AddressDTO> newAddressDTOs);
 
     void deleteAll(List<Address> addresses);
+
+    List<Address> updateAddresses(ContactDTO contactDTO, Contact contact);
 }
