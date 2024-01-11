@@ -60,7 +60,7 @@ public interface ContactService {
      */
     ContactDTO update(Long contactId, ContactDTO contactDTO);
 
-    
+
     /**
      * Delete a contact by its ID.
      *
