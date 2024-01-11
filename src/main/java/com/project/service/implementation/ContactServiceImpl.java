@@ -24,25 +24,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,7 +74,7 @@ public class ContactServiceImpl implements ContactService {
     public ContactDTO getContact(Long id) {
 
         Contact contact = contactRepository.findById(id)
-            .orElseThrow(IdNotFoundException::new);
+                .orElseThrow(IdNotFoundException::new);
 
         // Save contactDTO
         return toDto(contact);
@@ -97,7 +89,7 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDTO> getContactByLastname(String lastName) {
 
         List<Contact> contacts = contactRepository.getContactByLastname(lastName)
-            .orElseThrow(LastnameNotFoundException::new);
+                .orElseThrow(LastnameNotFoundException::new);
 
         return toDto(contacts);
     }
@@ -111,7 +103,7 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDTO> getContactByFirstname(String firstName) {
 
         List<Contact> contacts = contactRepository.getContactByFirstname(firstName)
-            .orElseThrow(FirstnameNotFoundException::new);
+                .orElseThrow(FirstnameNotFoundException::new);
 
         return toDto(contacts);
     }
@@ -125,7 +117,7 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDTO> getContactByPhone(String phoneNumber) {
 
         List<Contact> contacts = contactRepository.getContactByPhone(phoneNumber)
-            .orElseThrow(PhoneNotFoundException::new);
+                .orElseThrow(PhoneNotFoundException::new);
 
         return toDto(contacts);
     }
@@ -202,11 +194,11 @@ public class ContactServiceImpl implements ContactService {
 
     private Contact buildContact(ContactDTO contactDTO, Civility civility) {
         return Contact.builder()
-            .contactId(contactDTO.getContactId())
-            .firstName(contactDTO.getFirstName())
-            .lastName(contactDTO.getLastName())
-            .civility(civility)
-            .build();
+                .contactId(contactDTO.getContactId())
+                .firstName(contactDTO.getFirstName())
+                .lastName(contactDTO.getLastName())
+                .civility(civility)
+                .build();
     }
 
     @Override
@@ -224,21 +216,21 @@ public class ContactServiceImpl implements ContactService {
         addressDTOs = ListUtils.emptyIfNull(addressDTOs);
 
         return ContactDTO.builder()
-            .contactId(contact.getContactId())
-            .firstName(contact.getFirstName())
-            .lastName(contact.getLastName())
-            .civility(civilityDTO)
-            .emails(emailDTOs)
-            .phones(phoneDTOs)
-            .addresses(addressDTOs)
-            .build();
+                .contactId(contact.getContactId())
+                .firstName(contact.getFirstName())
+                .lastName(contact.getLastName())
+                .civility(civilityDTO)
+                .emails(emailDTOs)
+                .phones(phoneDTOs)
+                .addresses(addressDTOs)
+                .build();
     }
 
     @Override
     public List<ContactDTO> toDto(List<Contact> contacts) {
         return contacts.stream()
-            .map(this::toDto)
-            .toList();
+                .map(this::toDto)
+                .toList();
     }
 
     public Contact toEntity(ContactDTO contactDTO) {
@@ -254,14 +246,14 @@ public class ContactServiceImpl implements ContactService {
         addresses = ListUtils.emptyIfNull(addresses);
 
         return Contact.builder()
-            .contactId(contactDTO.getContactId())
-            .firstName(contactDTO.getFirstName())
-            .lastName(contactDTO.getLastName())
-            .civility(civility)
-            .emails(emails)
-            .phones(phones)
-            .addresses(addresses)
-            .build();
+                .contactId(contactDTO.getContactId())
+                .firstName(contactDTO.getFirstName())
+                .lastName(contactDTO.getLastName())
+                .civility(civility)
+                .emails(emails)
+                .phones(phones)
+                .addresses(addresses)
+                .build();
     }
 
     /**
@@ -433,8 +425,8 @@ public class ContactServiceImpl implements ContactService {
             String emailAddress = "";
             if (!contact.getEmails().isEmpty()) {
                 emailAddress = contact.getEmails().stream()
-                    .map(email -> email.getLibelle() + " : " + email.getType())
-                    .collect(Collectors.joining(" | "));
+                        .map(email -> email.getLibelle() + " : " + email.getType())
+                        .collect(Collectors.joining(" | "));
             }
             row.createCell(3).setCellValue(emailAddress);
             row.getCell(3).setCellStyle(rowStyle);
@@ -442,8 +434,8 @@ public class ContactServiceImpl implements ContactService {
             String phoneNumber = "";
             if (!contact.getPhones().isEmpty()) {
                 phoneNumber = contact.getPhones().stream()
-                    .map(phone -> phone.getLibelle() + " : " + phone.getType())
-                    .collect(Collectors.joining(" | "));
+                        .map(phone -> phone.getLibelle() + " : " + phone.getType())
+                        .collect(Collectors.joining(" | "));
             }
             row.createCell(4).setCellValue(phoneNumber);
             row.getCell(4).setCellStyle(rowStyle);
@@ -451,9 +443,9 @@ public class ContactServiceImpl implements ContactService {
             String addressList = "";
             if (!contact.getAddresses().isEmpty()) {
                 addressList = contact.getAddresses().stream()
-                    .map(address -> address.getStreetNumber() + " " + address.getStreetType() + " " + address.getStreetName() + " " +
-                        address.getPostalCode() + " " + address.getCityName() + " " + address.getCountry().getLibelle())
-                    .collect(Collectors.joining("|"));
+                        .map(address -> address.getStreetNumber() + " " + address.getStreetType() + " " + address.getStreetName() + " " +
+                                address.getPostalCode() + " " + address.getCityName() + " " + address.getCountry().getLibelle())
+                        .collect(Collectors.joining("|"));
             }
             row.createCell(5).setCellValue(addressList);
             row.getCell(5).setCellStyle(rowStyle);
@@ -493,6 +485,97 @@ public class ContactServiceImpl implements ContactService {
             throw new FileExcelNotGeneratedException();
         }
     }
+
+    // V1
+    public void importFile(MultipartFile file) throws IOException {
+        Workbook workbook = new XSSFWorkbook(file.getInputStream());
+        Sheet sheet = workbook.getSheetAt(0);
+        Iterator<Row> rows = sheet.iterator();
+
+        // get the first row (headerRow)
+        Row headerRow = rows.next();
+        List<String> headers = new ArrayList<>();
+        headerRow.forEach(cell -> headers.add(cell.toString()));
+
+        // initialize list to stock each row
+        List<Map<String, String>> data = new ArrayList<>();
+
+        while (rows.hasNext()) {
+            Row currentRow = rows.next();
+            // initialize map to stock data of each cell with value of each headerRow
+            Map<String, String> rowData = new HashMap<>();
+
+            // iterate on each cell in row
+            for (int i = 0; i < headers.size(); i++) {
+                Cell currentCell = currentRow.getCell(i);
+                // convert cell in string and add to map rowData with his headerRow value
+                rowData.put(headers.get(i), currentCell.toString());
+            }
+
+            // add rowData to data list
+            data.add(rowData);
+            System.out.println("data : " + data);
+        }
+
+        workbook.close();
+    }
+
+//    public void importFile(MultipartFile file) throws IOException {
+//        Workbook workbook = new XSSFWorkbook(file.getInputStream());
+//        Sheet sheet = workbook.getSheetAt(0);
+//        Iterator<Row> rows = sheet.iterator();
+//        Map<String, Object> contactData = new HashMap<>();
+//
+//        while (rows.hasNext()) {
+//            Row currentRow = rows.next();
+//
+//            // Get values from each cell and store them in the contactData map
+//            contactData.put("firstName", currentRow.getCell(0).getStringCellValue());
+//            contactData.put("lastName", currentRow.getCell(1).getStringCellValue());
+//            contactData.put("civility", currentRow.getCell(2).getStringCellValue());
+//
+//            // Handle emails
+//            String emails = "";
+//            if (!currentRow.getCell(3).getStringCellValue().isEmpty()) {
+//                emails = currentRow.getCell(3).getStringCellValue();
+//                List<String> emailList = Arrays.asList(emails.split(" | "));
+//                for (String email : emailList) {
+//                    String[] splitEmail = email.split(":");
+//                    String libelle = splitEmail[0];
+//                    String type = splitEmail[1];
+//                    contactData.put("email" + libelle, type);
+//                }
+//            }
+//
+//            // Handle phones
+//            String phones = "";
+//            if (!currentRow.getCell(4).getStringCellValue().isEmpty()) {
+//                phones = currentRow.getCell(4).getStringCellValue();
+//                List<String> phoneList = Arrays.asList(phones.split(" | "));
+//                for (String phone : phoneList) {
+//                    String[] splitPhone = phone.split(":");
+//                    String libelle = splitPhone[0];
+//                    String type = splitPhone[1];
+//                    contactData.put("phone" + libelle, type);
+//                }
+//            }
+//
+//            // Handle addresses
+//            String address = "";
+//            if (!currentRow.getCell(5).getStringCellValue().isEmpty()) {
+//                address = currentRow.getCell(5).getStringCellValue();
+//                String[] splitAddress = address.split("\\|");
+//                List<String> addressList = Arrays.asList(splitAddress);
+//                contactData.put("addressLine1", addressList.get(0));
+//                contactData.put("addressLine2", addressList.get(1));
+//                contactData.put("addressPostalCode", addressList.get(2));
+//                contactData.put("addressCity", addressList.get(3));
+//                contactData.put("addressCountry", addressList.get(4));
+//            }
+//        }
+//
+//        // Process the contactData map and do whatever you need to do with it
+//    }
 }
 
 

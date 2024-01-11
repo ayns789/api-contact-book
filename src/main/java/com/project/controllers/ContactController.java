@@ -4,16 +4,22 @@ import com.project.domain.dto.ContactDTO;
 import com.project.domain.error.ApiError;
 import com.project.service.ContactService;
 import com.project.utils.CarnetUtils;
+import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +69,11 @@ public class ContactController {
     @GetMapping("/export")
     public void exportFile() throws IOException {
         contactService.exportFile();
+    }
+
+    @PostMapping("/import")
+    public void importFile(@RequestParam("file") MultipartFile file) throws IOException {
+        contactService.importFile(file);
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})

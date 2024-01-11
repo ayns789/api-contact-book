@@ -4,6 +4,7 @@ package com.project.service;
 import com.project.domain.dto.ContactDTO;
 import com.project.domain.entities.Civility;
 import com.project.domain.entities.Contact;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -72,4 +73,5 @@ public interface ContactService {
      */
     void exportFile() throws IOException;
 
+    void importFile(MultipartFile file) throws IOException;
 }
