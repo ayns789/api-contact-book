@@ -520,63 +520,6 @@ public class ContactServiceImpl implements ContactService {
         workbook.close();
     }
 
-//    public void importFile(MultipartFile file) throws IOException {
-
-//        Workbook workbook = new XSSFWorkbook(file.getInputStream());
-//        Sheet sheet = workbook.getSheetAt(0);
-//        Iterator<Row> rows = sheet.iterator();
-//        Map<String, Object> contactData = new HashMap<>();
-//
-//        while (rows.hasNext()) {
-//            Row currentRow = rows.next();
-//
-//            // Get values from each cell and store them in the contactData map
-//            contactData.put("firstName", currentRow.getCell(0).getStringCellValue());
-//            contactData.put("lastName", currentRow.getCell(1).getStringCellValue());
-//            contactData.put("civility", currentRow.getCell(2).getStringCellValue());
-//
-//            // Handle emails
-//            String emails = "";
-//            if (!currentRow.getCell(3).getStringCellValue().isEmpty()) {
-//                emails = currentRow.getCell(3).getStringCellValue();
-//                List<String> emailList = Arrays.asList(emails.split(" | "));
-//                for (String email : emailList) {
-//                    String[] splitEmail = email.split(":");
-//                    String libelle = splitEmail[0];
-//                    String type = splitEmail[1];
-//                    contactData.put("email" + libelle, type);
-//                }
-//            }
-//
-//            // Handle phones
-//            String phones = "";
-//            if (!currentRow.getCell(4).getStringCellValue().isEmpty()) {
-//                phones = currentRow.getCell(4).getStringCellValue();
-//                List<String> phoneList = Arrays.asList(phones.split(" | "));
-//                for (String phone : phoneList) {
-//                    String[] splitPhone = phone.split(":");
-//                    String libelle = splitPhone[0];
-//                    String type = splitPhone[1];
-//                    contactData.put("phone" + libelle, type);
-//                }
-//            }
-//
-//            // Handle addresses
-//            String address = "";
-//            if (!currentRow.getCell(5).getStringCellValue().isEmpty()) {
-//                address = currentRow.getCell(5).getStringCellValue();
-//                String[] splitAddress = address.split("\\|");
-//                List<String> addressList = Arrays.asList(splitAddress);
-//                contactData.put("addressLine1", addressList.get(0));
-//                contactData.put("addressLine2", addressList.get(1));
-//                contactData.put("addressPostalCode", addressList.get(2));
-//                contactData.put("addressCity", addressList.get(3));
-//                contactData.put("addressCountry", addressList.get(4));
-//            }
-//        }
-//
-//        // Process the contactData map and do whatever you need to do with it
-//    }
 }
 
 
