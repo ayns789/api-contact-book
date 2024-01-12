@@ -205,7 +205,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = {FileErrorExtensionException.class})
     public ResponseEntity<Object> handleFileErrorExtensionException(FileErrorExtensionException ex, WebRequest request) {
 
-        String messageError = "The file is not an 'xlsx' extension ";
+        String messageError = "This file does not have extension : 'xlsx'";
         String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
         ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());
 

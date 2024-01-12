@@ -69,10 +69,5 @@ public interface ContactService {
      */
     ContactDTO delete(Long id);
 
-    /**
-     * Export an Excel file representing the contacts, on a file path.
-     */
-    void exportFile() throws IOException;
 
-    void importFile(MultipartFile file) throws IOException;
 }

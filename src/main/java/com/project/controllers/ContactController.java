@@ -3,6 +3,7 @@ package com.project.controllers;
 import com.project.domain.dto.ContactDTO;
 import com.project.domain.error.ApiError;
 import com.project.service.ContactService;
+import com.project.service.ExcelFileService;
 import com.project.utils.CarnetUtils;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 public class ContactController {
 
     private final ContactService contactService;
+    private final ExcelFileService excelFileService;
 
     @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
     public ContactDTO create(@Valid @RequestBody ContactDTO contactDTO) {
@@ -68,13 +70,13 @@ public class ContactController {
     // save on pc in file path
     @GetMapping("/export")
     public void exportFile() throws IOException {
-        contactService.exportFile();
+        excelFileService.exportFile();
     }
 
 
     @PostMapping("/import")
     public void importFile(@RequestParam("file") MultipartFile file) throws IOException {
-        contactService.importFile(file);
+        excelFileService.importFile(file);
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
