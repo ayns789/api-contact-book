@@ -10,19 +10,13 @@ import com.project.domain.entities.Civility;
 import com.project.domain.entities.Contact;
 import com.project.domain.entities.Email;
 import com.project.domain.entities.Phone;
-import com.project.exceptions.ContactNotDeletedException;
-import com.project.exceptions.ContactNotFoundException;
-import com.project.exceptions.ContactNotSavedException;
-import com.project.exceptions.FileExcelNotGeneratedException;
-import com.project.exceptions.FirstnameNotFoundException;
-import com.project.exceptions.IdNotFoundException;
-import com.project.exceptions.LastnameNotFoundException;
-import com.project.exceptions.PhoneNotFoundException;
+import com.project.exceptions.*;
 import com.project.repository.ContactRepository;
 import com.project.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -488,6 +482,12 @@ public class ContactServiceImpl implements ContactService {
 
     // V1
     public void importFile(MultipartFile file) throws IOException {
+
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        if (!"xlsx".equals(extension)) {
+            throw new FileErrorExtensionException();
+        }
+
         Workbook workbook = new XSSFWorkbook(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
         Iterator<Row> rows = sheet.iterator();
