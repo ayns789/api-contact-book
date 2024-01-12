@@ -171,14 +171,19 @@ public class ExcelFileServiceImpl implements ExcelFileService {
      *
      * @param file The file data of the contact to save.
      */
-    public void importFile(MultipartFile file) throws IOException {
+    public void importFile(MultipartFile file) {
 
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         if (!"xlsx".equals(extension)) {
             throw new FileErrorExtensionException();
         }
 
-        Workbook workbook = new XSSFWorkbook(file.getInputStream());
+        Workbook workbook = null;
+        try {
+            workbook = new XSSFWorkbook(file.getInputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Sheet sheet = workbook.getSheetAt(0);
         Iterator<Row> rows = sheet.iterator();
 
@@ -207,6 +212,10 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             System.out.println("data : " + data);
         }
 
-        workbook.close();
+        try {
+            workbook.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
