@@ -106,7 +106,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             String emailAddress = "";
             if (!contact.getEmails().isEmpty()) {
                 emailAddress = contact.getEmails().stream()
-                        .map(email -> email.getLibelle() + " : " + email.getType())
+                        .map(email -> STR."\{email.getLibelle()} : \{email.getType()}")
                         .collect(Collectors.joining(" | "));
             }
             row.createCell(3).setCellValue(emailAddress);
@@ -115,7 +115,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             String phoneNumber = "";
             if (!contact.getPhones().isEmpty()) {
                 phoneNumber = contact.getPhones().stream()
-                        .map(phone -> phone.getLibelle() + " : " + phone.getType())
+                        .map(phone -> STR."\{phone.getLibelle()} : \{phone.getType()}")
                         .collect(Collectors.joining(" | "));
             }
             row.createCell(4).setCellValue(phoneNumber);
@@ -124,8 +124,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             String addressList = "";
             if (!contact.getAddresses().isEmpty()) {
                 addressList = contact.getAddresses().stream()
-                        .map(address -> address.getStreetNumber() + " " + address.getStreetType() + " " + address.getStreetName() + " " +
-                                address.getPostalCode() + " " + address.getCityName() + " " + address.getCountry().getLibelle())
+                        .map(address -> STR."\{address.getStreetNumber()} \{address.getStreetType()} \{address.getStreetName()} \{address.getPostalCode()} \{address.getCityName()} \{address.getCountry().getLibelle()}")
                         .collect(Collectors.joining("|"));
             }
             row.createCell(5).setCellValue(addressList);
@@ -168,9 +167,9 @@ public class ExcelFileServiceImpl implements ExcelFileService {
     }
 
     /**
-     * Import an Excel file and save contacts in database.
+     * Import an Excel file and extract its data to save in database.
      *
-     * @param file The file data of the contact to save.
+     * @param file The file contact to save.
      */
     public void importFile(MultipartFile file) {
 
@@ -194,6 +193,27 @@ public class ExcelFileServiceImpl implements ExcelFileService {
         List<String> headers = new ArrayList<>();
         headerRow.forEach(cell -> headers.add(cell.toString()));
 
+        List<ContactDTO> contactDTOS = fileToContactDTOs(sheetRows, headers);
+
+//        contactDTOS.forEach(contactDTO -> System.out.println(STR."contactDTO : \{contactDTO}"));
+        contactDTOS.forEach(contactService::create);
+
+        try {
+            workbook.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Retrieve contacts from the file to turn them into a contactDTO list.
+     *
+     * @param sheetRows The values of rows data some file.
+     * @param headers   The values of header data some file.
+     */
+    public List<ContactDTO> fileToContactDTOs(Iterator<Row> sheetRows, List<String> headers) {
+
+        List<ContactDTO> contactDTOs = new ArrayList<>();
         ContactDTO contactDTO = new ContactDTO();
 
         while (sheetRows.hasNext()) {
@@ -316,14 +336,10 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                     }
                 }
             }
-            contactService.create(contactDTO);
-            System.out.println("contactDTO : " + contactDTO);
+            contactDTOs.add(contactDTO);
         }
-
-        try {
-            workbook.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return contactDTOs;
     }
 }
+
+
