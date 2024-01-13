@@ -47,6 +47,17 @@ public class ContactServiceImpl implements ContactService {
     @Transactional
     public ContactDTO create(ContactDTO contactDTO) {
 
+        // check if contact already exist in database
+        List<Contact> contacts = getAllContacts();
+
+        for (Contact contact : contacts) {
+            if (contact.getLastName().equals(contactDTO.getLastName())) {
+                if (contact.getFirstName().equals(contactDTO.getFirstName())) {
+                    throw new ContactAlreadyExistException();
+                }
+            }
+        }
+
         // Handle civility
         Long civilityId = contactDTO.getCivility().getCivilityId();
         Civility civility = civilityService.getCivilityById(civilityId);
