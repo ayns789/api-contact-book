@@ -10,26 +10,17 @@ import com.project.domain.entities.Civility;
 import com.project.domain.entities.Contact;
 import com.project.domain.entities.Email;
 import com.project.domain.entities.Phone;
-import com.project.exceptions.*;
 import com.project.repository.ContactRepository;
 import com.project.service.ContactService;
+import com.project.exceptions.*;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -165,35 +156,6 @@ public class ContactServiceImpl implements ContactService {
             throw new ContactNotSavedException();
         }
     }
-
-//    @Override
-//    @Transactional
-//    public Contact update(ContactDTO contactDTO, Civility civility) {
-//
-//        // edit contact
-//        Contact contact = buildContact(contactDTO, civility);
-//
-//        // handle emails
-//        List<Email> emails = emailService.updateEmails(contactDTO, contact);
-//
-//        // handle phones
-//        List<Phone> phones = phoneService.updatePhones(contactDTO, contact);
-//
-//        // handle addresses
-//        List<Address> addresses = addressService.updateAddresses(contactDTO, contact);
-//
-//        // set emails, phones and addresses
-//        buildContact(contact, emails, phones, addresses);
-//
-//        // Save contact
-//        try {
-//            return contactRepository.save(contact);
-//        } catch (Exception e) {
-//
-//            log.error(STR."Error during contact creation: \{e.getMessage()}", e);
-//            throw new ContactNotSavedException();
-//        }
-//    }
 
     private void buildContact(Contact contact, List<Email> emails, List<Phone> phones, List<Address> addresses) {
         contact.setEmails(emails);
