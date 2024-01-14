@@ -171,11 +171,13 @@ public class ExcelFileServiceImpl implements ExcelFileService {
      */
     public void importFile(MultipartFile file) {
 
+        // check extension file for "xlsx"
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         if (!"xlsx".equals(extension)) {
             throw new FileErrorExtensionException();
         }
 
+        // initialize workbook
         Workbook workbook;
         try {
             workbook = new XSSFWorkbook(file.getInputStream());
@@ -183,17 +185,19 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             throw new RuntimeException(e);
         }
 
+        // get values of rows
         Sheet sheet = workbook.getSheetAt(0);
         Iterator<Row> sheetRows = sheet.iterator();
 
-        // get the first row (headerRow)
+        // get values of headers
         Row headerRow = sheetRows.next();
         List<String> headers = new ArrayList<>();
         headerRow.forEach(cell -> headers.add(cell.toString()));
 
-        List<ContactDTO> contactDTOS = fileToDTOs(sheetRows, headers);
+        // get List<ContactDTO> generate with data file
+        List<ContactDTO> contactDTOS = fileGenerateContactDTOs(sheetRows, headers);
 
-//        contactDTOS.forEach(contactDTO -> System.out.println(STR."contactDTO : \{contactDTO}"));
+        // save in database List<ContactDTO> extracted from file
         contactDTOS.forEach(contactService::create);
 
         try {
@@ -210,7 +214,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
      * @param headers   The values of header data some file.
      * @return The {@link List<ContactDTO>} object representing the contacts on the file.
      */
-    public List<ContactDTO> fileToDTOs(Iterator<Row> sheetRows, List<String> headers) {
+    public List<ContactDTO> fileGenerateContactDTOs(Iterator<Row> sheetRows, List<String> headers) {
 
         List<ContactDTO> contactDTOs = new ArrayList<>();
         ContactDTO contactDTO = new ContactDTO();
