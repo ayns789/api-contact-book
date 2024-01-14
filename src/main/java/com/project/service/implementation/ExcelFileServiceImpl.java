@@ -210,6 +210,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
      *
      * @param sheetRows The values of rows data some file.
      * @param headers   The values of header data some file.
+     * @return The {@link List<ContactDTO>} object representing the contacts on the file.
      */
     public List<ContactDTO> fileToDTOs(Iterator<Row> sheetRows, List<String> headers) {
 
