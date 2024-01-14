@@ -28,5 +28,5 @@ public interface ExcelFileService {
      * @param sheetRows The values of rows data some file.
      * @param headers   The values of header data some file.
      */
-    List<ContactDTO> fileToContactDTOs(Iterator<Row> sheetRows, List<String> headers);
+    List<ContactDTO> fileToDTOs(Iterator<Row> sheetRows, List<String> headers);
 }
