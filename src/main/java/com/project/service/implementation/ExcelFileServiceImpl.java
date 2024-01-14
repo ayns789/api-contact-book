@@ -1,7 +1,6 @@
 package com.project.service.implementation;
 
 import com.project.domain.dto.*;
-import com.project.domain.entities.Civility;
 import com.project.domain.entities.Contact;
 import com.project.exceptions.FileErrorExtensionException;
 import com.project.exceptions.FileExcelNotGeneratedException;
@@ -16,7 +15,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -32,7 +30,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
     /**
      * Generate Workbook with all contacts.
      */
-    private Workbook generateExcel() throws FileNotFoundException {
+    private Workbook generateExcel() {
 
         List<Contact> contacts = contactService.getAllContacts();
         List<ContactDTO> contactDTOs = contactService.toDto(contacts);
@@ -178,7 +176,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             throw new FileErrorExtensionException();
         }
 
-        Workbook workbook = null;
+        Workbook workbook;
         try {
             workbook = new XSSFWorkbook(file.getInputStream());
         } catch (IOException e) {
