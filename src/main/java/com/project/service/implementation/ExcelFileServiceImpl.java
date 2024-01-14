@@ -193,7 +193,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
         List<String> headers = new ArrayList<>();
         headerRow.forEach(cell -> headers.add(cell.toString()));
 
-        List<ContactDTO> contactDTOS = fileToContactDTOs(sheetRows, headers);
+        List<ContactDTO> contactDTOS = fileToDTOs(sheetRows, headers);
 
 //        contactDTOS.forEach(contactDTO -> System.out.println(STR."contactDTO : \{contactDTO}"));
         contactDTOS.forEach(contactService::create);
@@ -211,7 +211,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
      * @param sheetRows The values of rows data some file.
      * @param headers   The values of header data some file.
      */
-    public List<ContactDTO> fileToContactDTOs(Iterator<Row> sheetRows, List<String> headers) {
+    public List<ContactDTO> fileToDTOs(Iterator<Row> sheetRows, List<String> headers) {
 
         List<ContactDTO> contactDTOs = new ArrayList<>();
         ContactDTO contactDTO = new ContactDTO();
