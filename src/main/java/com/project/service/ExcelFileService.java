@@ -20,7 +20,7 @@ public interface ExcelFileService {
      *
      * @param file The file contact to save.
      */
-    void importFile(MultipartFile file) throws IOException;
+    void importFile(MultipartFile file);
 
     /**
      * Retrieve contacts from the file to turn them into a contactDTO list.
