@@ -29,5 +29,5 @@ public interface ExcelFileService {
      * @param headers   The values of header data some file.
      * @return The {@link List<ContactDTO>} object representing the contacts on the file.
      */
-    List<ContactDTO> fileGenerateContactDTOs(Iterator<Row> sheetRows, List<String> headers);
+    List<ContactDTO> getContactsData(Iterator<Row> sheetRows, List<String> headers);
 }

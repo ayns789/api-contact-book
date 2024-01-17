@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 public class ExcelFileServiceImpl implements ExcelFileService {
 
     private final ContactService contactService;
+    private final String EXCEL_EXTENSION = "xlsx";
 
     /**
      * Generate Workbook with all contacts.
@@ -176,7 +177,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
         // check extension file for "xlsx"
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        if (!"xlsx".equals(extension)) {
+        if (!EXCEL_EXTENSION.equals(extension)) {
             throw new FileErrorExtensionException();
         }
 
@@ -198,7 +199,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
         headerRow.forEach(cell -> headers.add(cell.toString()));
 
         // get List<ContactDTO> generate with data file
-        List<ContactDTO> contactDTOS = fileGenerateContactDTOs(sheetRows, headers);
+        List<ContactDTO> contactDTOS = getContactsData(sheetRows, headers);
 
         // save in database List<ContactDTO> extracted from file
         contactDTOS.forEach(contactService::create);
@@ -217,7 +218,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
      * @param headers   The values of header data some file.
      * @return The {@link List<ContactDTO>} object representing the contacts on the file.
      */
-    public List<ContactDTO> fileGenerateContactDTOs(Iterator<Row> sheetRows, List<String> headers) {
+    public List<ContactDTO> getContactsData(Iterator<Row> sheetRows, List<String> headers) {
 
         List<ContactDTO> contactDTOs = new ArrayList<>();
         ContactDTO contactDTO = new ContactDTO();
