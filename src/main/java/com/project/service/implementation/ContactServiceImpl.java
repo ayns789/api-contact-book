@@ -29,16 +29,16 @@ public class ContactServiceImpl implements ContactService {
     @Transactional
     public ContactDTO create(ContactDTO contactDTO) {
 
-        // check if contact already exist in database
-        List<Contact> contacts = getAllContacts();
-
-        for (Contact contact : contacts) {
-            if (contact.getLastName().equals(contactDTO.getLastName())) {
-                if (contact.getFirstName().equals(contactDTO.getFirstName())) {
-                    throw new ContactAlreadyExistException();
-                }
-            }
-        }
+//        // check if contact already exist in database
+//        List<Contact> contacts = getAllContacts();
+//
+//        for (Contact contact : contacts) {
+//            if (contact.getLastName().equals(contactDTO.getLastName())) {
+//                if (contact.getFirstName().equals(contactDTO.getFirstName())) {
+//                    throw new ContactAlreadyExistException();
+//                }
+//            }
+//        }
 
         // Handle civility
         Long civilityId = contactDTO.getCivility().getCivilityId();
@@ -67,6 +67,11 @@ public class ContactServiceImpl implements ContactService {
         return toDto(contact);
     }
 
+    /**
+     * Get all contacts in database.
+     *
+     * @return The {@link Contact} object representing the contact deleted.
+     */
     public List<Contact> getAllContacts() {
         return contactRepository.findAll();
     }
