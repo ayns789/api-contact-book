@@ -1,26 +1,17 @@
 package com.project.service.implementation;
 
-import com.project.domain.dto.AddressDTO;
-import com.project.domain.dto.CivilityDTO;
-import com.project.domain.dto.ContactDTO;
-import com.project.domain.dto.EmailDTO;
-import com.project.domain.dto.PhoneDTO;
-import com.project.domain.entities.Address;
-import com.project.domain.entities.Civility;
-import com.project.domain.entities.Contact;
-import com.project.domain.entities.Email;
-import com.project.domain.entities.Phone;
-import com.project.repository.ContactRepository;
-import com.project.service.ContactService;
+import com.project.domain.dto.*;
+import com.project.domain.entities.*;
 import com.project.exceptions.*;
-
+import com.project.repository.ContactRepository;
+import com.project.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +19,10 @@ import java.util.*;
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
-    private final EmailServiceImpl emailService;
-    private final PhoneServiceImpl phoneService;
-    private final CivilityServiceImpl civilityService;
-    private final AddressServiceImpl addressService;
+    private final EmailService emailService;
+    private final PhoneService phoneService;
+    private final CivilityService civilityService;
+    private final AddressService addressService;
 
 
     @Override

@@ -4,6 +4,7 @@ import com.project.domain.dto.*;
 import com.project.domain.entities.Contact;
 import com.project.exceptions.FileErrorExtensionException;
 import com.project.exceptions.FileExcelNotGeneratedException;
+import com.project.service.ContactService;
 import com.project.service.ExcelFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +28,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class ExcelFileServiceImpl implements ExcelFileService {
 
-    private final ContactServiceImpl contactService;
+    private final ContactService contactService;
 
     /**
      * Generate Workbook with all contacts.

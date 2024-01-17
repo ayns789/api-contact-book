@@ -20,4 +20,6 @@ public interface AddressService {
     void deleteAll(List<Address> addresses);
 
     List<Address> updateAddresses(ContactDTO contactDTO, Contact contact);
+
+    List<Address> toEntity(List<AddressDTO> addressesDTOs);
 }

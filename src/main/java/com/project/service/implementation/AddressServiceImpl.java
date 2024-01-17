@@ -11,6 +11,7 @@ import com.project.exceptions.AddressNotDeletedException;
 import com.project.exceptions.AddressNotSavedException;
 import com.project.repository.AddressRepository;
 import com.project.service.AddressService;
+import com.project.service.CountryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.ListUtils;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
-    private final CountryServiceImpl countryService;
+    private final CountryService countryService;
 
     @Override
     public List<Address> save(List<AddressDTO> addressDTOS, Contact contact) {
@@ -42,15 +43,15 @@ public class AddressServiceImpl implements AddressService {
             Country country = countryService.getCountryById(countryId);
 
             Address address = Address.builder()
-                .addressId(addressDTO.getAddressId())
-                .streetNumber(addressDTO.getStreetNumber())
-                .streetType(streetType)
-                .streetName(addressDTO.getStreetName())
-                .cityName(addressDTO.getCityName())
-                .postalCode(addressDTO.getPostalCode())
-                .contact(contact)
-                .country(country)
-                .build();
+                    .addressId(addressDTO.getAddressId())
+                    .streetNumber(addressDTO.getStreetNumber())
+                    .streetType(streetType)
+                    .streetName(addressDTO.getStreetName())
+                    .cityName(addressDTO.getCityName())
+                    .postalCode(addressDTO.getPostalCode())
+                    .contact(contact)
+                    .country(country)
+                    .build();
 
             addresses.add(address);
         });
@@ -68,24 +69,24 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public List<AddressDTO> toDto(List<Address> addresses) {
         return addresses.stream()
-            .map(this::toDto)
-            .toList();
+                .map(this::toDto)
+                .toList();
     }
 
 
     public List<Address> toEntity(List<AddressDTO> addressDTOs) {
 
         return addressDTOs.stream()
-            .map(addressDTO -> Address.builder()
-                .addressId(addressDTO.getAddressId())
-                .streetNumber(addressDTO.getStreetNumber())
-                .streetType(StreetTypeEnum.valueOf(addressDTO.getStreetType()))
-                .streetName(addressDTO.getStreetName())
-                .cityName(addressDTO.getCityName())
-                .postalCode(addressDTO.getPostalCode())
-                .country(countryService.getCountryById(addressDTO.getCountry().getCountryId()))
-                .build())
-            .collect(Collectors.toList());
+                .map(addressDTO -> Address.builder()
+                        .addressId(addressDTO.getAddressId())
+                        .streetNumber(addressDTO.getStreetNumber())
+                        .streetType(StreetTypeEnum.valueOf(addressDTO.getStreetType()))
+                        .streetName(addressDTO.getStreetName())
+                        .cityName(addressDTO.getCityName())
+                        .postalCode(addressDTO.getPostalCode())
+                        .country(countryService.getCountryById(addressDTO.getCountry().getCountryId()))
+                        .build())
+                .collect(Collectors.toList());
     }
 
 
@@ -95,14 +96,14 @@ public class AddressServiceImpl implements AddressService {
         CountryDTO countryDTO = countryService.toDto(address.getCountry());
 
         return AddressDTO.builder()
-            .addressId(address.getAddressId())
-            .streetNumber(address.getStreetNumber())
-            .streetType(address.getStreetType().name())
-            .streetName(address.getStreetName())
-            .cityName(address.getCityName())
-            .postalCode(address.getPostalCode())
-            .country(countryDTO)
-            .build();
+                .addressId(address.getAddressId())
+                .streetNumber(address.getStreetNumber())
+                .streetType(address.getStreetType().name())
+                .streetName(address.getStreetName())
+                .cityName(address.getCityName())
+                .postalCode(address.getPostalCode())
+                .country(countryDTO)
+                .build();
     }
 
     @Override
@@ -113,16 +114,16 @@ public class AddressServiceImpl implements AddressService {
 
         // AddressDTO to Address
         List<Address> newAddresses = addressDTOs.stream()
-            .map(addressDTO -> Address.builder()
-                .streetNumber(addressDTO.getStreetNumber())
-                .streetType(StreetTypeEnum.valueOf(addressDTO.getStreetType()))
-                .streetName(addressDTO.getStreetName())
-                .cityName(addressDTO.getCityName())
-                .postalCode(addressDTO.getPostalCode())
-                .country(countryService.getCountryById(addressDTO.getCountry().getCountryId()))
-                .contact(contactId)
-                .build())
-            .collect(Collectors.toList());
+                .map(addressDTO -> Address.builder()
+                        .streetNumber(addressDTO.getStreetNumber())
+                        .streetType(StreetTypeEnum.valueOf(addressDTO.getStreetType()))
+                        .streetName(addressDTO.getStreetName())
+                        .cityName(addressDTO.getCityName())
+                        .postalCode(addressDTO.getPostalCode())
+                        .country(countryService.getCountryById(addressDTO.getCountry().getCountryId()))
+                        .contact(contactId)
+                        .build())
+                .collect(Collectors.toList());
 
         // save and return new addresses
         return addressRepository.saveAll(newAddresses);

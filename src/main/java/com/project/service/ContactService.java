@@ -4,9 +4,7 @@ package com.project.service;
 import com.project.domain.dto.ContactDTO;
 import com.project.domain.entities.Civility;
 import com.project.domain.entities.Contact;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface ContactService {
@@ -69,5 +67,10 @@ public interface ContactService {
      */
     ContactDTO delete(Long id);
 
-
+    /**
+     * Get all contacts in database.
+     *
+     * @return The {@link Contact} object representing the contact deleted.
+     */
+    List<Contact> getAllContacts();
 }
