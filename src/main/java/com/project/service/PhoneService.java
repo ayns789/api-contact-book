@@ -15,8 +15,6 @@ public interface PhoneService {
 
     PhoneDTO toDto(Phone phone);
 
-    List<Phone> updatePhones(Contact existingContact, List<Phone> oldPhones, List<PhoneDTO> newPhoneDTOs);
-
     void deleteAll(List<Phone> phones);
 
     List<Phone> toEntity(List<PhoneDTO> phoneDTOs);

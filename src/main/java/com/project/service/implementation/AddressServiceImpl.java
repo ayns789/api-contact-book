@@ -107,29 +107,6 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> updateAddresses(Contact contactId, List<Address> addresses, List<AddressDTO> addressDTOs) {
-
-        // delete old addresses
-        addressRepository.deleteAllInBatch(addresses);
-
-        // AddressDTO to Address
-        List<Address> newAddresses = addressDTOs.stream()
-                .map(addressDTO -> Address.builder()
-                        .streetNumber(addressDTO.getStreetNumber())
-                        .streetType(StreetTypeEnum.valueOf(addressDTO.getStreetType()))
-                        .streetName(addressDTO.getStreetName())
-                        .cityName(addressDTO.getCityName())
-                        .postalCode(addressDTO.getPostalCode())
-                        .country(countryService.getCountryById(addressDTO.getCountry().getCountryId()))
-                        .contact(contactId)
-                        .build())
-                .collect(Collectors.toList());
-
-        // save and return new addresses
-        return addressRepository.saveAll(newAddresses);
-    }
-
-    @Override
     public void deleteAll(List<Address> addresses) {
         try {
             addressRepository.deleteAllInBatch(addresses);

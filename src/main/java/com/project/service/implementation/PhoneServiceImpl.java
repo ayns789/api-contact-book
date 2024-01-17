@@ -36,11 +36,11 @@ public class PhoneServiceImpl implements PhoneService {
             PhoneTypeEnum phoneTypeEnum = PhoneTypeEnum.getValue(phoneDTO.getType());
 
             Phone phone = Phone.builder()
-                .phoneId(phoneDTO.getPhoneId())
-                .libelle(phoneDTO.getLibelle())
-                .type(phoneTypeEnum)
-                .contact(contact)
-                .build();
+                    .phoneId(phoneDTO.getPhoneId())
+                    .libelle(phoneDTO.getLibelle())
+                    .type(phoneTypeEnum)
+                    .contact(contact)
+                    .build();
 
             phones.add(phone);
         });
@@ -58,28 +58,28 @@ public class PhoneServiceImpl implements PhoneService {
     @Override
     public List<PhoneDTO> toDto(List<Phone> phones) {
         return phones.stream()
-            .map(this::toDto)
-            .toList();
+                .map(this::toDto)
+                .toList();
     }
 
     @Override
     public PhoneDTO toDto(Phone phone) {
         return PhoneDTO.builder()
-            .phoneId(phone.getPhoneId())
-            .libelle(phone.getLibelle())
-            .type(phone.getType().name())
-            .build();
+                .phoneId(phone.getPhoneId())
+                .libelle(phone.getLibelle())
+                .type(phone.getType().name())
+                .build();
     }
 
     @Override
     public List<Phone> toEntity(List<PhoneDTO> phoneDTOs) {
         return phoneDTOs.stream()
-            .map(phoneDTO -> Phone.builder()
-                .phoneId(phoneDTO.getPhoneId())
-                .libelle(phoneDTO.getLibelle())
-                .type(PhoneTypeEnum.valueOf(phoneDTO.getType()))
-                .build())
-            .collect(Collectors.toList());
+                .map(phoneDTO -> Phone.builder()
+                        .phoneId(phoneDTO.getPhoneId())
+                        .libelle(phoneDTO.getLibelle())
+                        .type(PhoneTypeEnum.valueOf(phoneDTO.getType()))
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -94,25 +94,6 @@ public class PhoneServiceImpl implements PhoneService {
         phoneRepository.deleteByContact_ContactId(contact.getContactId());
 
         return save(phoneDTOs, contact);
-    }
-
-    @Override
-    public List<Phone> updatePhones(Contact contactId, List<Phone> phones, List<PhoneDTO> phoneDTOs) {
-
-        // delete old phones
-        phoneRepository.deleteAllInBatch(phones);
-
-        // PhoneDTO to Phone
-        List<Phone> newPhones = phoneDTOs.stream()
-            .map(phoneDTO -> Phone.builder()
-                .type(PhoneTypeEnum.valueOf(phoneDTO.getType()))
-                .libelle(phoneDTO.getLibelle())
-                .contact(contactId)
-                .build())
-            .collect(Collectors.toList());
-
-        // save and return new phones
-        return phoneRepository.saveAll(newPhones);
     }
 
     @Override
