@@ -2,14 +2,17 @@ package com.project.service.implementation;
 
 import com.project.domain.dto.*;
 import com.project.domain.entities.Contact;
+import com.project.domain.enums.CivilityEnumType;
 import com.project.exceptions.FileErrorExtensionException;
 import com.project.exceptions.FileExcelNotGeneratedException;
+import com.project.service.CivilityService;
 import com.project.service.ContactService;
 import com.project.service.ExcelFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ByteArrayResource;
@@ -29,7 +32,11 @@ import java.util.stream.Collectors;
 public class ExcelFileServiceImpl implements ExcelFileService {
 
     private final ContactService contactService;
+    private final CivilityService civilityService;
     private final String EXCEL_EXTENSION = "xlsx";
+    private final String REG_OTHER_DATA = "\\|";
+    private final String REG_OTHER_DATA_TYPE = ":";
+    private final String REG_SPACE = "\\s+";
 
     /**
      * Generate Workbook with all contacts.
@@ -155,6 +162,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         workbook.write(baos);
         workbook.close();
+
         ByteArrayResource resource = new ByteArrayResource(baos.toByteArray());
         String filePath = "C:\\Users\\jolya\\bureau\\tempraire\\contacts.xlsx";
 
@@ -228,37 +236,41 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             // iterate on each cell in row
             for (int i = 0; i < headers.size(); i++) {
 
+                // get value of current cell
                 Cell currentCell = currentRow.getCell(i);
+                String currentCellValue = currentCell.getStringCellValue().trim();
 
                 // build contact
-                if ("FirstName".equalsIgnoreCase(headers.get(i))) contactDTO.setFirstName(currentCell.toString());
-                if ("LastName".equalsIgnoreCase(headers.get(i))) contactDTO.setLastName(currentCell.toString());
-                if ("Civility".equalsIgnoreCase(headers.get(i))) {
-                    CivilityDTO civilityDTO = new CivilityDTO();
-                    if ("MONSIEUR".equalsIgnoreCase(currentCell.toString())) {
-                        civilityDTO.setCivilityId(1L);
-                    } else if ("MADAME".equalsIgnoreCase(currentCell.toString())) {
-                        civilityDTO.setCivilityId(2L);
-                    } else if ("MADEMOISELLE".equalsIgnoreCase(currentCell.toString())) {
-                        civilityDTO.setCivilityId(3L);
-                    } else if ("NON_BINAIRE".equalsIgnoreCase(currentCell.toString())) {
-                        civilityDTO.setCivilityId(4L);
-                    } else if ("AUTRE".equalsIgnoreCase(currentCell.toString())) {
-                        civilityDTO.setCivilityId(5L);
-                    }
+                if (headers.get(0).equalsIgnoreCase(headers.get(i))) {
+                    contactDTO.setFirstName(currentCellValue);
+                }
+                if (headers.get(1).equalsIgnoreCase(headers.get(i))) {
+                    contactDTO.setLastName(currentCellValue);
+                }
+                if (headers.get(2).equalsIgnoreCase(headers.get(i))) {
+                    // get enum type by current cell value
+                    CivilityEnumType civilityEnumType = CivilityEnumType.getValue(currentCellValue);
+
+                    // get civility by enum type
+                    CivilityDTO civilityDTO = civilityService.findByLibelle(civilityEnumType);
+
                     contactDTO.setCivility(civilityDTO);
                 }
 
                 // build emails
-                if ("Email".equalsIgnoreCase(headers.get(i))) {
-                    String emails = "";
+                if (headers.get(3).equalsIgnoreCase(headers.get(i))) {
+
                     List<EmailDTO> emailDTOs = new ArrayList<>();
-                    emails = currentCell.toString();
-                    if (!emails.isEmpty()) {
-                        String[] emailList = emails.split("\\\\|");
+
+                    if (!StringUtils.isEmpty(currentCellValue)) {
+                        // example format emails = "email | email | email"
+                        String[] emailList = currentCellValue.split(REG_OTHER_DATA);
+
                         for (String email : emailList) {
                             EmailDTO emailDTO = new EmailDTO();
-                            String[] splitEmail = email.split(":");
+                            // example format each email = "jojo@gmail.com : PERSONAL"
+                            String[] splitEmail = email.split(REG_OTHER_DATA_TYPE);
+
                             if (splitEmail.length > 1) {
                                 emailDTO.setLibelle(splitEmail[0].trim());
                                 emailDTO.setType(splitEmail[1].trim());
@@ -270,15 +282,18 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                 }
 
                 // build phones
-                if ("Phone".equalsIgnoreCase(headers.get(i))) {
-                    String phones = "";
+                if (headers.get(4).equalsIgnoreCase(headers.get(i))) {
                     List<PhoneDTO> phoneDTOs = new ArrayList<>();
-                    phones = currentCell.toString();
-                    if (!phones.isEmpty()) {
-                        String[] phoneList = phones.split("\\\\|");
+
+                    if (!StringUtils.isEmpty(currentCellValue)) {
+                        // example format phones = "phone | phone | phone"
+                        String[] phoneList = currentCellValue.split(REG_OTHER_DATA);
+
                         for (String phone : phoneList) {
                             PhoneDTO phoneDTO = new PhoneDTO();
-                            String[] splitPhone = phone.split(":");
+                            // example format each phone = "0115566887 : PERSONAL"
+                            String[] splitPhone = phone.split(REG_OTHER_DATA_TYPE);
+
                             if (splitPhone.length > 1) {
                                 phoneDTO.setLibelle(splitPhone[0].trim());
                                 phoneDTO.setType(splitPhone[1].trim());
@@ -290,16 +305,20 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                 }
 
                 // build addresses
-                if ("Address".equalsIgnoreCase(headers.get(i))) {
-                    String addresses = "";
+                if (headers.get(5).equalsIgnoreCase(headers.get(i))) {
+
                     List<AddressDTO> addressDTOs = new ArrayList<>();
-                    addresses = currentCell.toString();
-                    if (!addresses.isEmpty()) {
-                        String[] addressList = addresses.split("\\\\|");
+
+                    if (!StringUtils.isEmpty(currentCellValue)) {
+                        // example format addresses = "address | address | address"
+                        String[] addressList = currentCellValue.split(REG_OTHER_DATA);
+
                         for (String address : addressList) {
                             AddressDTO addressDTO = new AddressDTO();
                             CountryDTO countryDTO = new CountryDTO();
-                            String[] splitAddress = address.split("\\s+");
+                            // example format each address = "55 STREET Dobenton 75014 Paris France"
+                            String[] splitAddress = address.split(REG_SPACE);
+
                             if (splitAddress.length > 1) {
                                 addressDTO.setStreetNumber(Integer.valueOf(splitAddress[0]));
                                 addressDTO.setStreetType(splitAddress[1]);
@@ -307,7 +326,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                                 addressDTO.setPostalCode(Integer.valueOf(splitAddress[3]));
                                 addressDTO.setCityName(splitAddress[4]);
 
-                                String[] getCountry = splitAddress[5].split("\\|");
+                                String[] getCountry = splitAddress[5].split(REG_OTHER_DATA);
                                 String countryValue = getCountry[0];
 
                                 if ("France".equalsIgnoreCase(countryValue)) {

@@ -21,6 +21,13 @@ public class CivilityServiceImpl implements CivilityService {
     }
 
     @Override
+    public CivilityDTO findByLibelle(CivilityEnumType civilityEnumType) {
+        Civility civility = civilityRepository.findByLibelle(civilityEnumType);
+        // to Dto
+        return toDto(civility);
+    }
+
+    @Override
     public CivilityDTO toDto(Civility civility) {
         return CivilityDTO.builder()
                 .civilityId(civility.getCivilityId())
