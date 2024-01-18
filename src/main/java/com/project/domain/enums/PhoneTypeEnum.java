@@ -1,10 +1,12 @@
 package com.project.domain.enums;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
 @RequiredArgsConstructor
+@Getter
 public enum PhoneTypeEnum {
 
     PERSONAL("Personal"),

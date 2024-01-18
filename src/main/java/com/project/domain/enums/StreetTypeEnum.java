@@ -1,11 +1,13 @@
 package com.project.domain.enums;
 
 import com.project.exceptions.StreetTypeEnumNotFoundException;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
 @RequiredArgsConstructor
+@Getter
 public enum StreetTypeEnum {
 
     STREET("Street"),
