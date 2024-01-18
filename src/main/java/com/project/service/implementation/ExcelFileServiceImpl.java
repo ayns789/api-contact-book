@@ -3,10 +3,12 @@ package com.project.service.implementation;
 import com.project.domain.dto.*;
 import com.project.domain.entities.Contact;
 import com.project.domain.enums.CivilityEnumType;
+import com.project.domain.enums.CountryEnum;
 import com.project.exceptions.FileErrorExtensionException;
 import com.project.exceptions.FileExcelNotGeneratedException;
 import com.project.service.CivilityService;
 import com.project.service.ContactService;
+import com.project.service.CountryService;
 import com.project.service.ExcelFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,6 +35,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
     private final ContactService contactService;
     private final CivilityService civilityService;
+    private final CountryService countryService;
     private final String EXCEL_EXTENSION = "xlsx";
     private final String REG_OTHER_DATA = "\\|";
     private final String REG_OTHER_DATA_TYPE = ":";
@@ -254,6 +257,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                     // get civility by enum type
                     CivilityDTO civilityDTO = civilityService.findByLibelle(civilityEnumType);
 
+                    // set civility
                     contactDTO.setCivility(civilityDTO);
                 }
 
@@ -315,7 +319,6 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
                         for (String address : addressList) {
                             AddressDTO addressDTO = new AddressDTO();
-                            CountryDTO countryDTO = new CountryDTO();
                             // example format each address = "55 STREET Dobenton 75014 Paris France"
                             String[] splitAddress = address.split(REG_SPACE);
 
@@ -330,32 +333,16 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                                 String[] getCountry = splitAddress[5].split(REG_OTHER_DATA);
                                 String countryValue = getCountry[0];
 
-                                if ("France".equalsIgnoreCase(countryValue)) {
-                                    countryDTO.setCountryId(1L);
-                                } else if ("Angleterre".equalsIgnoreCase(countryValue)) {
-                                    countryDTO.setCountryId(2L);
-                                } else if ("Espagne".equalsIgnoreCase(countryValue)) {
-                                    countryDTO.setCountryId(3L);
-                                } else if ("Italie".equalsIgnoreCase(countryValue)) {
-                                    countryDTO.setCountryId(4L);
-                                } else if ("Belgique".equalsIgnoreCase(countryValue)) {
-                                    countryDTO.setCountryId(5L);
-                                } else if ("Argentine".equalsIgnoreCase(countryValue)) {
-                                    countryDTO.setCountryId(6L);
-                                } else if ("Australie".equalsIgnoreCase(countryValue)) {
-                                    countryDTO.setCountryId(7L);
-                                } else if ("Japon".equalsIgnoreCase(countryValue)) {
-                                    countryDTO.setCountryId(8L);
-                                } else if ("Russie".equalsIgnoreCase(countryValue)) {
-                                    countryDTO.setCountryId(9L);
-                                } else if ("Inde".equalsIgnoreCase(countryValue)) {
-                                    countryDTO.setCountryId(10L);
-                                } else if ("Chine".equalsIgnoreCase(countryValue)) {
-                                    countryDTO.setCountryId(11L);
-                                }
+                                // get country enum by value of country libelle
+                                CountryEnum countryEnum = CountryEnum.getValue(countryValue);
 
-                                countryDTO.setLibelle(countryValue);
+                                // get country by enum value
+                                CountryDTO countryDTO = countryService.findByLibelle(countryEnum);
+
+                                // set country
                                 addressDTO.setCountry(countryDTO);
+
+                                // add to addresses list
                                 addressDTOs.add(addressDTO);
                             }
                         }

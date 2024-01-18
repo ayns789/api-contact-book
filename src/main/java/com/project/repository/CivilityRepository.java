@@ -13,11 +13,11 @@ public interface CivilityRepository extends JpaRepository<Civility, Long> {
 
     @Query("""
               select
-                libelle
+                civ
               from
                 Civility civ
               where
-                civ.libelle is null or civ.libelle ilike %:libelle%
+                civ.libelle = cast(:civilityEnumType as String)
             """)
-    Civility findByLibelle(@Param("libelle") CivilityEnumType civilityEnumType);
+    Civility findByLibelle(@Param("civilityEnumType") CivilityEnumType civilityEnumType);
 }
