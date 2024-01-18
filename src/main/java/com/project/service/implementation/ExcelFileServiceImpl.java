@@ -326,6 +326,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                                 addressDTO.setPostalCode(Integer.valueOf(splitAddress[3]));
                                 addressDTO.setCityName(splitAddress[4]);
 
+                                // get last data in splitAddress = get country
                                 String[] getCountry = splitAddress[5].split(REG_OTHER_DATA);
                                 String countryValue = getCountry[0];
 
