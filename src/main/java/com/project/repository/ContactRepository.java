@@ -44,4 +44,6 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
             """)
     Optional<List<Contact>> getContactByPhone(@Param("phoneNumber") String phoneNumber);
 
+    @Query(value = "select EXISTS(  select  c from  contact c  where c.last_name = :lastName and c.first_name = :firstName  ) ", nativeQuery = true)
+    Boolean findContactsByLastNameAndFirstName(@Param("lastName") String lastName, @Param("firstName") String firstName);
 }

@@ -30,14 +30,10 @@ public class ContactServiceImpl implements ContactService {
     public ContactDTO create(ContactDTO contactDTO) {
 
         // check if contact already exist in database
-        List<Contact> contacts = getAllContacts();
+        Boolean contactAlreadyExist = contactRepository.findContactsByLastNameAndFirstName(contactDTO.getLastName(), contactDTO.getFirstName());
 
-        for (Contact contact : contacts) {
-            if (contact.getLastName().equals(contactDTO.getLastName())) {
-                if (contact.getFirstName().equals(contactDTO.getFirstName())) {
-                    throw new ContactAlreadyExistException();
-                }
-            }
+        if (contactAlreadyExist) {
+            throw new ContactAlreadyExistException();
         }
 
         // Handle civility
