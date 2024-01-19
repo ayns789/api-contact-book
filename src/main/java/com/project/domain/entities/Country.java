@@ -1,5 +1,6 @@
 package com.project.domain.entities;
 
+import com.project.domain.enums.CountryEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +23,8 @@ public class Country implements Serializable {
     private Long countryId;
 
     @Column(name = "libelle", nullable = false)
-    private String libelle;
+    @Enumerated(EnumType.STRING)
+    private CountryEnum libelle;
 
     @Override
     public String toString() {

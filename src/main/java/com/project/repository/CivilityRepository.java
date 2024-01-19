@@ -17,7 +17,7 @@ public interface CivilityRepository extends JpaRepository<Civility, Long> {
               from
                 Civility civ
               where
-                civ.libelle = cast(:civilityEnumType as String)
+                civ.libelle ilike :civilityEnumType
             """)
     Civility findByLibelle(@Param("civilityEnumType") CivilityEnumType civilityEnumType);
 }

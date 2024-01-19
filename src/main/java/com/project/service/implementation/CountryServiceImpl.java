@@ -22,6 +22,7 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public CountryDTO findByLibelle(CountryEnum countryEnum) {
+        System.out.println(STR."data countryEnum: \{countryEnum}");
         Country country = countryRepository.findByLibelle(countryEnum);
         // to Dto
         return toDto(country);
@@ -31,7 +32,7 @@ public class CountryServiceImpl implements CountryService {
     public CountryDTO toDto(Country country) {
         return CountryDTO.builder()
                 .countryId(country.getCountryId())
-                .libelle(country.getLibelle())
+                .libelle(country.getLibelle().name())
                 .build();
     }
 

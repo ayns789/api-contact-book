@@ -331,7 +331,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
                                 // get last data in splitAddress = get country
                                 String[] getCountry = splitAddress[5].split(REG_OTHER_DATA);
-                                String countryValue = getCountry[0];
+                                String countryValue = getCountry[0].trim();
 
                                 // get country enum by value of country libelle
                                 CountryEnum countryEnum = CountryEnum.getValue(countryValue);
@@ -342,7 +342,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                                 // set country
                                 addressDTO.setCountry(countryDTO);
 
-                                // add to addresses list
+                                // add address to addresses list
                                 addressDTOs.add(addressDTO);
                             }
                         }

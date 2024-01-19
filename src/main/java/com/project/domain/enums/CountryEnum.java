@@ -9,18 +9,18 @@ import java.util.Arrays;
 @Getter
 public enum CountryEnum {
 
-    FRANCE("France"),
-    ANGLETERRE("Angleterre"),
-    ESPAGNE("Espagne"),
-    ITALIE("Italie"),
-    BELGIQUE("Belgique"),
-    ARGENTINE("Argentine"),
-    AUSTRALIE("Australie"),
-    JAPON("Japon"),
-    RUSSIE("Russie"),
-    INDE("Inde"),
-    CHINE("Chine"),
-    AUTRE("Autre");
+    FRANCE("FRANCE"),
+    ANGLETERRE("ANGLETERRE"),
+    ESPAGNE("ESPAGNE"),
+    ITALIE("ITALIE"),
+    BELGIQUE("BELGIQUE"),
+    ARGENTINE("ARGENTINE"),
+    AUSTRALIE("AUSTRALIE"),
+    JAPON("JAPON"),
+    RUSSIE("RUSSIE"),
+    INDE("INDE"),
+    CHINE("CHINE"),
+    AUTRE("AUTRE");
 
 
     final String value;
