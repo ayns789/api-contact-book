@@ -1,10 +1,29 @@
 package com.project.service.implementation;
 
-import com.project.domain.dto.*;
-import com.project.domain.entities.*;
-import com.project.exceptions.*;
+import com.project.domain.dto.AddressDTO;
+import com.project.domain.dto.CivilityDTO;
+import com.project.domain.dto.ContactDTO;
+import com.project.domain.dto.EmailDTO;
+import com.project.domain.dto.PhoneDTO;
+import com.project.domain.entities.Address;
+import com.project.domain.entities.Civility;
+import com.project.domain.entities.Contact;
+import com.project.domain.entities.Email;
+import com.project.domain.entities.Phone;
+import com.project.exceptions.ContactAlreadyExistException;
+import com.project.exceptions.ContactNotDeletedException;
+import com.project.exceptions.ContactNotFoundException;
+import com.project.exceptions.ContactNotSavedException;
+import com.project.exceptions.FirstnameNotFoundException;
+import com.project.exceptions.IdNotFoundException;
+import com.project.exceptions.LastnameNotFoundException;
+import com.project.exceptions.PhoneNotFoundException;
 import com.project.repository.ContactRepository;
-import com.project.service.*;
+import com.project.service.AddressService;
+import com.project.service.CivilityService;
+import com.project.service.ContactService;
+import com.project.service.EmailService;
+import com.project.service.PhoneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.ListUtils;
@@ -29,7 +48,7 @@ public class ContactServiceImpl implements ContactService {
     public ContactDTO create(ContactDTO contactDTO) {
 
         // check if contact already exist in database
-        Boolean contactAlreadyExist = contactRepository.findContactsByLastNameAndFirstName(contactDTO.getLastName(), contactDTO.getFirstName());
+        Boolean contactAlreadyExist = contactRepository.existsByLastNameAndAndFirstName(contactDTO.getLastName(), contactDTO.getFirstName());
 
         if (contactAlreadyExist) {
             throw new ContactAlreadyExistException();
@@ -55,7 +74,7 @@ public class ContactServiceImpl implements ContactService {
     public ContactDTO getContact(Long id) {
 
         Contact contact = contactRepository.findById(id)
-                .orElseThrow(IdNotFoundException::new);
+            .orElseThrow(IdNotFoundException::new);
 
         // Save contactDTO
         return toDto(contact);
@@ -79,7 +98,7 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDTO> getContactByLastname(String lastName) {
 
         List<Contact> contacts = contactRepository.getContactByLastname(lastName)
-                .orElseThrow(LastnameNotFoundException::new);
+            .orElseThrow(LastnameNotFoundException::new);
 
         return toDto(contacts);
     }
@@ -93,7 +112,7 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDTO> getContactByFirstname(String firstName) {
 
         List<Contact> contacts = contactRepository.getContactByFirstname(firstName)
-                .orElseThrow(FirstnameNotFoundException::new);
+            .orElseThrow(FirstnameNotFoundException::new);
 
         return toDto(contacts);
     }
@@ -107,7 +126,7 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDTO> getContactByPhone(String phoneNumber) {
 
         List<Contact> contacts = contactRepository.getContactByPhone(phoneNumber)
-                .orElseThrow(PhoneNotFoundException::new);
+            .orElseThrow(PhoneNotFoundException::new);
 
         return toDto(contacts);
     }
@@ -154,11 +173,11 @@ public class ContactServiceImpl implements ContactService {
 
     private Contact buildContact(ContactDTO contactDTO, Civility civility) {
         return Contact.builder()
-                .contactId(contactDTO.getContactId())
-                .firstName(contactDTO.getFirstName())
-                .lastName(contactDTO.getLastName())
-                .civility(civility)
-                .build();
+            .contactId(contactDTO.getContactId())
+            .firstName(contactDTO.getFirstName())
+            .lastName(contactDTO.getLastName())
+            .civility(civility)
+            .build();
     }
 
     @Override
@@ -176,21 +195,21 @@ public class ContactServiceImpl implements ContactService {
         addressDTOs = ListUtils.emptyIfNull(addressDTOs);
 
         return ContactDTO.builder()
-                .contactId(contact.getContactId())
-                .firstName(contact.getFirstName())
-                .lastName(contact.getLastName())
-                .civility(civilityDTO)
-                .emails(emailDTOs)
-                .phones(phoneDTOs)
-                .addresses(addressDTOs)
-                .build();
+            .contactId(contact.getContactId())
+            .firstName(contact.getFirstName())
+            .lastName(contact.getLastName())
+            .civility(civilityDTO)
+            .emails(emailDTOs)
+            .phones(phoneDTOs)
+            .addresses(addressDTOs)
+            .build();
     }
 
     @Override
     public List<ContactDTO> toDto(List<Contact> contacts) {
         return contacts.stream()
-                .map(this::toDto)
-                .toList();
+            .map(this::toDto)
+            .toList();
     }
 
     public Contact toEntity(ContactDTO contactDTO) {
@@ -206,14 +225,14 @@ public class ContactServiceImpl implements ContactService {
         addresses = ListUtils.emptyIfNull(addresses);
 
         return Contact.builder()
-                .contactId(contactDTO.getContactId())
-                .firstName(contactDTO.getFirstName())
-                .lastName(contactDTO.getLastName())
-                .civility(civility)
-                .emails(emails)
-                .phones(phones)
-                .addresses(addresses)
-                .build();
+            .contactId(contactDTO.getContactId())
+            .firstName(contactDTO.getFirstName())
+            .lastName(contactDTO.getLastName())
+            .civility(civility)
+            .emails(emails)
+            .phones(phones)
+            .addresses(addresses)
+            .build();
     }
 
     /**
