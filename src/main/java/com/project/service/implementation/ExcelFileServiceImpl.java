@@ -284,7 +284,6 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                                 }
                             } else {
                                 String valueEmail = email.trim();
-                                System.out.println("valueEmail : " + valueEmail);
                                 emailDTO.setLibelle(valueEmail);
                                 emailDTOs.add(emailDTO);
                             }
@@ -317,7 +316,6 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                                 }
                             } else {
                                 String phoneValue = phone.toString().trim();
-                                System.out.println("phoneValue : " + phoneValue);
                                 phoneDTO.setLibelle(phoneValue);
                                 phoneDTOs.add(phoneDTO);
                             }
