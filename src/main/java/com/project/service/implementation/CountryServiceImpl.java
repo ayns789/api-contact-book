@@ -2,7 +2,6 @@ package com.project.service.implementation;
 
 import com.project.domain.dto.CountryDTO;
 import com.project.domain.entities.Country;
-import com.project.domain.enums.CountryEnum;
 import com.project.exceptions.CountryNotFoundException;
 import com.project.repository.CountryRepository;
 import com.project.service.CountryService;
@@ -21,9 +20,8 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public CountryDTO findByLibelle(CountryEnum countryEnum) {
-        System.out.println(STR."data countryEnum: \{countryEnum}");
-        Country country = countryRepository.findByLibelle(countryEnum);
+    public CountryDTO findByLibelle(String libelle) {
+        Country country = countryRepository.findByLibelle(libelle);
         // to Dto
         return toDto(country);
     }
@@ -32,7 +30,7 @@ public class CountryServiceImpl implements CountryService {
     public CountryDTO toDto(Country country) {
         return CountryDTO.builder()
                 .countryId(country.getCountryId())
-                .libelle(country.getLibelle().name())
+                .libelle(country.getLibelle())
                 .build();
     }
 

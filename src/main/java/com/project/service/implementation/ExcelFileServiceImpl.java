@@ -3,7 +3,6 @@ package com.project.service.implementation;
 import com.project.domain.dto.*;
 import com.project.domain.entities.Contact;
 import com.project.domain.enums.CivilityEnumType;
-import com.project.domain.enums.CountryEnum;
 import com.project.exceptions.FileErrorExtensionException;
 import com.project.exceptions.FileExcelNotGeneratedException;
 import com.project.service.CivilityService;
@@ -333,11 +332,8 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                                 String[] getCountry = splitAddress[5].split(REG_OTHER_DATA);
                                 String countryValue = getCountry[0].trim();
 
-                                // get country enum by value of country libelle
-                                CountryEnum countryEnum = CountryEnum.getValue(countryValue);
-
-                                // get country by enum value
-                                CountryDTO countryDTO = countryService.findByLibelle(countryEnum);
+                                // get country by libelle value
+                                CountryDTO countryDTO = countryService.findByLibelle(countryValue);
 
                                 // set country
                                 addressDTO.setCountry(countryDTO);
