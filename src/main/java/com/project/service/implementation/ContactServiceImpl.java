@@ -24,7 +24,6 @@ public class ContactServiceImpl implements ContactService {
     private final CivilityService civilityService;
     private final AddressService addressService;
 
-
     @Override
     @Transactional
     public ContactDTO create(ContactDTO contactDTO) {
@@ -42,7 +41,6 @@ public class ContactServiceImpl implements ContactService {
 
         // Handle contact
         Contact contact = save(contactDTO, civility);
-
 
         // Build contactDTO
         return toDto(contact);
@@ -113,7 +111,6 @@ public class ContactServiceImpl implements ContactService {
 
         return toDto(contacts);
     }
-
 
     @Override
     public Contact save(ContactDTO contactDTO, Civility civility) {
@@ -271,7 +268,6 @@ public class ContactServiceImpl implements ContactService {
         return toDto(contact);
     }
 
-
     /**
      * Delete a contact by its ID.
      *
@@ -311,8 +307,6 @@ public class ContactServiceImpl implements ContactService {
             throw new ContactNotDeletedException();
         }
     }
-
-
 }
 
 
