@@ -35,10 +35,6 @@ public class ExcelFileServiceImpl implements ExcelFileService {
     private final ContactService contactService;
     private final CivilityService civilityService;
     private final CountryService countryService;
-    private final String EXCEL_EXTENSION = "xlsx";
-    private final String REG_OTHER_DATA = "\\|";
-    private final String REG_OTHER_DATA_TYPE = ":";
-    private final String REG_SPACE = "\\s+";
 
     /**
      * Generate Workbook with all contacts.
@@ -151,7 +147,6 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             log.error(STR."Error during workbook generate operation: \{e.getMessage()}", e);
             throw new FileExcelNotGeneratedException();
         }
-
     }
 
     /**
@@ -187,6 +182,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
         // check extension file for "xlsx"
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        String EXCEL_EXTENSION = "xlsx";
         if (!EXCEL_EXTENSION.equals(extension)) {
             throw new FileErrorExtensionException();
         }
@@ -250,7 +246,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                 if (headers.get(1).equalsIgnoreCase(headers.get(i))) {
                     contactDTO.setLastName(currentCellValue);
                 }
-                
+
                 if (headers.get(2).equalsIgnoreCase(headers.get(i))) {
                     // get enum type by current cell value
                     CivilityEnumType civilityEnumType = CivilityEnumType.getValue(currentCellValue);
@@ -263,6 +259,8 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                 }
 
                 // build emails
+                String REG_OTHER_DATA = "\\|";
+                String REG_OTHER_DATA_TYPE = ":";
                 if (headers.get(3).equalsIgnoreCase(headers.get(i))) {
 
                     List<EmailDTO> emailDTOs = new ArrayList<>();
@@ -289,7 +287,6 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                                 emailDTO.setLibelle(valueEmail);
                                 emailDTOs.add(emailDTO);
                             }
-
                         }
                         contactDTO.setEmails(emailDTOs);
                     }
@@ -339,6 +336,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                         for (String address : addressList) {
                             AddressDTO addressDTO = new AddressDTO();
                             // example format each address = "55 STREET Dobenton 75014 Paris France"
+                            String REG_SPACE = "\\s+";
                             String[] splitAddress = address.split(REG_SPACE);
 
                             if (splitAddress.length > 1) {
@@ -365,10 +363,8 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                         contactDTO.setAddresses(addressDTOs);
                     }
                 }
-
             }
             contactDTOs.add(contactDTO);
-
         }
         return contactDTOs;
     }

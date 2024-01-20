@@ -42,5 +42,4 @@ public class CivilityServiceImpl implements CivilityService {
         civility.setLibelle(CivilityEnumType.valueOf(civilityDTO.getLibelle()));
         return civility;
     }
-
 }

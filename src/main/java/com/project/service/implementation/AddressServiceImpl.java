@@ -73,7 +73,6 @@ public class AddressServiceImpl implements AddressService {
                 .toList();
     }
 
-
     public List<Address> toEntity(List<AddressDTO> addressDTOs) {
 
         return addressDTOs.stream()
