@@ -271,14 +271,24 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
                         for (String email : emailList) {
                             EmailDTO emailDTO = new EmailDTO();
-                            // example format each email = "jojo@gmail.com : PERSONAL"
-                            String[] splitEmail = email.split(REG_OTHER_DATA_TYPE);
 
-                            if (splitEmail.length > 1) {
-                                emailDTO.setLibelle(splitEmail[0].trim());
-                                emailDTO.setType(splitEmail[1].trim());
+                            // if data is complete, with 'email address' and 'type'
+                            if (email.contains(REG_OTHER_DATA_TYPE)) {
+                                // example format each email = "jojo@gmail.com : PERSONAL"
+                                String[] splitEmail = email.split(REG_OTHER_DATA_TYPE);
+
+                                if (splitEmail.length > 1) {
+                                    emailDTO.setLibelle(splitEmail[0].trim());
+                                    emailDTO.setType(splitEmail[1].trim());
+                                    emailDTOs.add(emailDTO);
+                                }
+                            } else {
+                                String valueEmail = email.trim();
+                                System.out.println("valueEmail : " + valueEmail);
+                                emailDTO.setLibelle(valueEmail);
                                 emailDTOs.add(emailDTO);
                             }
+
                         }
                         contactDTO.setEmails(emailDTOs);
                     }
@@ -294,14 +304,24 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
                         for (String phone : phoneList) {
                             PhoneDTO phoneDTO = new PhoneDTO();
-                            // example format each phone = "0115566887 : PERSONAL"
-                            String[] splitPhone = phone.split(REG_OTHER_DATA_TYPE);
 
-                            if (splitPhone.length > 1) {
-                                phoneDTO.setLibelle(splitPhone[0].trim());
-                                phoneDTO.setType(splitPhone[1].trim());
+                            // if data is complete, with 'number phone' and 'type'
+                            if (phone.contains(REG_OTHER_DATA_TYPE)) {
+                                // example format each phone = "0115566887 : PERSONAL"
+                                String[] splitPhone = phone.split(REG_OTHER_DATA_TYPE);
+
+                                if (splitPhone.length > 1) {
+                                    phoneDTO.setLibelle(splitPhone[0].trim());
+                                    phoneDTO.setType(splitPhone[1].trim());
+                                    phoneDTOs.add(phoneDTO);
+                                }
+                            } else {
+                                String phoneValue = phone.toString().trim();
+                                System.out.println("phoneValue : " + phoneValue);
+                                phoneDTO.setLibelle(phoneValue);
                                 phoneDTOs.add(phoneDTO);
                             }
+
                         }
                         contactDTO.setPhones(phoneDTOs);
                     }
