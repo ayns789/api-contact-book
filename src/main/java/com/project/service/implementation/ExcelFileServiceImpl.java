@@ -246,9 +246,11 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                 if (headers.get(0).equalsIgnoreCase(headers.get(i))) {
                     contactDTO.setFirstName(currentCellValue);
                 }
+
                 if (headers.get(1).equalsIgnoreCase(headers.get(i))) {
                     contactDTO.setLastName(currentCellValue);
                 }
+                
                 if (headers.get(2).equalsIgnoreCase(headers.get(i))) {
                     // get enum type by current cell value
                     CivilityEnumType civilityEnumType = CivilityEnumType.getValue(currentCellValue);

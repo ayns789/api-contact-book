@@ -37,37 +37,37 @@ public class ContactController {
 
     @GetMapping(path = "/{id}", consumes = "application/json", produces = "application/json")
     public ContactDTO getContact(@PathVariable("id") Long id) {
-        log.info("Call get contact by id : {}", id);
+        log.info("Call get contact with id : {}", id);
         return contactService.getContact(id);
     }
 
     @GetMapping(path = "/byLastName", consumes = "application/json", produces = "application/json")
     public List<ContactDTO> getContactByLastname(@RequestParam(value = "last_name") String lastName) {
-        log.info("Call get contact by lastname, with lastName : {}", lastName);
+        log.info("Call get contact with lastName : {}", lastName);
         return contactService.getContactByLastname(lastName);
     }
 
     @GetMapping(path = "/byFirstName", consumes = "application/json", produces = "application/json")
     public List<ContactDTO> getContactByFirstname(@RequestParam(value = "first_name") String firstName) {
-        log.info("Call get contact by firstname, with firstName : {}", firstName);
+        log.info("Call get contact with firstName : {}", firstName);
         return contactService.getContactByFirstname(firstName);
     }
 
     @GetMapping(path = "/byPhone", consumes = "application/json", produces = "application/json")
     public List<ContactDTO> getContactByPhone(@RequestParam(value = "phone_number") String phoneNumber) {
-        log.info("Call get contact by phone, with phoneNumber : {}", phoneNumber);
+        log.info("Call get contact with phoneNumber : {}", phoneNumber);
         return contactService.getContactByPhone(phoneNumber);
     }
 
     @PutMapping(path = "/update/{contactId}", consumes = "application/json", produces = "application/json")
     public ContactDTO update(@PathVariable Long contactId, @Valid @RequestBody ContactDTO contactDTO) {
-        log.info("Call update contact by id : {}", contactId);
+        log.info("Call update contact with id : {}", contactId);
         return contactService.update(contactId, contactDTO);
     }
 
     @DeleteMapping(path = "/delete/{id}", consumes = "application/json", produces = "application/json")
     public ContactDTO delete(@PathVariable("id") Long id) {
-        log.info("Call delete contact by id : {}", id);
+        log.info("Call delete contact with id : {}", id);
         return contactService.delete(id);
     }
 
@@ -80,7 +80,7 @@ public class ContactController {
 
 
     @PostMapping("/import")
-    public void importFile(@RequestParam("file") MultipartFile file) throws IOException {
+    public void importFile(@RequestParam("file") MultipartFile file) {
         log.info("Call import excel file contacts to save in database");
         excelFileService.importFile(file);
     }
