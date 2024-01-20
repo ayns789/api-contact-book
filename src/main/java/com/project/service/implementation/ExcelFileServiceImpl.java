@@ -1,6 +1,11 @@
 package com.project.service.implementation;
 
-import com.project.domain.dto.*;
+import com.project.domain.dto.AddressDTO;
+import com.project.domain.dto.CivilityDTO;
+import com.project.domain.dto.ContactDTO;
+import com.project.domain.dto.CountryDTO;
+import com.project.domain.dto.EmailDTO;
+import com.project.domain.dto.PhoneDTO;
 import com.project.domain.entities.Contact;
 import com.project.domain.enums.CivilityEnumType;
 import com.project.exceptions.FileErrorExtensionException;
@@ -14,7 +19,17 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
@@ -113,8 +128,8 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             String emailAddress = "";
             if (!contact.getEmails().isEmpty()) {
                 emailAddress = contact.getEmails().stream()
-                        .map(email -> STR."\{email.getLibelle()} : \{email.getType()}")
-                        .collect(Collectors.joining(" | "));
+                    .map(email -> STR."\{email.getLibelle()} : \{email.getType()}")
+                    .collect(Collectors.joining(" | "));
             }
             row.createCell(3).setCellValue(emailAddress);
             row.getCell(3).setCellStyle(rowStyle);
@@ -122,8 +137,8 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             String phoneNumber = "";
             if (!contact.getPhones().isEmpty()) {
                 phoneNumber = contact.getPhones().stream()
-                        .map(phone -> STR."\{phone.getLibelle()} : \{phone.getType()}")
-                        .collect(Collectors.joining(" | "));
+                    .map(phone -> STR."\{phone.getLibelle()} : \{phone.getType()}")
+                    .collect(Collectors.joining(" | "));
             }
             row.createCell(4).setCellValue(phoneNumber);
             row.getCell(4).setCellStyle(rowStyle);
@@ -131,8 +146,10 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             String addressList = "";
             if (!contact.getAddresses().isEmpty()) {
                 addressList = contact.getAddresses().stream()
-                        .map(address -> STR."\{address.getStreetNumber()} \{address.getStreetType()} \{address.getStreetName()} \{address.getPostalCode()} \{address.getCityName()} \{address.getCountry().getLibelle()}")
-                        .collect(Collectors.joining("|"));
+                    .map(
+                        address -> STR."\{address.getStreetNumber()} \{address.getStreetType()} \{address.getStreetName()} \{address.getPostalCode()} \{address.getCityName()} \{address.getCountry()
+                            .getLibelle()}")
+                    .collect(Collectors.joining("|"));
             }
             row.createCell(5).setCellValue(addressList);
             row.getCell(5).setCellStyle(rowStyle);
@@ -225,10 +242,13 @@ public class ExcelFileServiceImpl implements ExcelFileService {
      * @return The {@link List<ContactDTO>} object representing the contacts on the file.
      */
     public List<ContactDTO> getContactsData(Iterator<Row> sheetRows, List<String> headers) {
+
         List<ContactDTO> contactDTOs = new ArrayList<>();
 
         while (sheetRows.hasNext()) {
+
             ContactDTO contactDTO = new ContactDTO();
+
             Row currentRow = sheetRows.next();
 
             // iterate on each cell in row
@@ -247,14 +267,11 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                     contactDTO.setLastName(currentCellValue);
                 }
 
+                // Handle Civility
                 if (headers.get(2).equalsIgnoreCase(headers.get(i))) {
-                    // get enum type by current cell value
+
                     CivilityEnumType civilityEnumType = CivilityEnumType.getValue(currentCellValue);
-
-                    // get civility by enum type
                     CivilityDTO civilityDTO = civilityService.findByLibelle(civilityEnumType);
-
-                    // set civility
                     contactDTO.setCivility(civilityDTO);
                 }
 
