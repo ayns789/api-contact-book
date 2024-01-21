@@ -277,7 +277,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
                 final String REG_OTHER_DATA = "\\|";
                 final String REG_OTHER_DATA_TYPE = ":";
-                
+
                 // build emails
                 if (headers.get(3).equalsIgnoreCase(headers.get(i))) {
 
@@ -332,7 +332,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                                     phoneDTOs.add(phoneDTO);
                                 }
                             } else {
-                                String phoneValue = phone.toString().trim();
+                                String phoneValue = phone.trim();
                                 phoneDTO.setLibelle(phoneValue);
                                 phoneDTOs.add(phoneDTO);
                             }
