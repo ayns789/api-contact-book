@@ -17,22 +17,21 @@ public class CivilityServiceImpl implements CivilityService {
 
     public Civility getCivilityById(Long civilityId) {
         return civilityRepository.findById(civilityId)
-                .orElseThrow(() -> new CivilityNotFoundException(civilityId));
+            .orElseThrow(() -> new CivilityNotFoundException(civilityId));
     }
 
     @Override
     public CivilityDTO findByLibelle(CivilityEnumType civilityEnumType) {
         Civility civility = civilityRepository.findByLibelle(civilityEnumType);
-        // to Dto
         return toDto(civility);
     }
 
     @Override
     public CivilityDTO toDto(Civility civility) {
         return CivilityDTO.builder()
-                .civilityId(civility.getCivilityId())
-                .libelle(civility.getLibelle().name())
-                .build();
+            .civilityId(civility.getCivilityId())
+            .libelle(civility.getLibelle().name())
+            .build();
     }
 
     @Override

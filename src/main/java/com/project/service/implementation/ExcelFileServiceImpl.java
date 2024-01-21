@@ -275,9 +275,10 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                     contactDTO.setCivility(civilityDTO);
                 }
 
+                final String REG_OTHER_DATA = "\\|";
+                final String REG_OTHER_DATA_TYPE = ":";
+                
                 // build emails
-                String REG_OTHER_DATA = "\\|";
-                String REG_OTHER_DATA_TYPE = ":";
                 if (headers.get(3).equalsIgnoreCase(headers.get(i))) {
 
                     List<EmailDTO> emailDTOs = new ArrayList<>();
