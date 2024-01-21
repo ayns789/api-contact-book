@@ -292,6 +292,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
                             // if data is complete, with 'email address' and 'type'
                             if (email.contains(REG_OTHER_DATA_TYPE)) {
+
                                 // example format each email = "jojo@gmail.com : PERSONAL"
                                 String[] splitEmail = email.split(REG_OTHER_DATA_TYPE);
 
@@ -315,7 +316,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                     List<PhoneDTO> phoneDTOs = new ArrayList<>();
 
                     if (!StringUtils.isEmpty(currentCellValue)) {
-                        // example format phones = "phone | phone | phone"
+                        // example format phones = "0115566887 : PERSONAL | 0115566887 : PERSONAL | 0115566887 : PERSONAL"
                         String[] phoneList = currentCellValue.split(REG_OTHER_DATA);
 
                         for (String phone : phoneList) {
@@ -323,6 +324,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
                             // if data is complete, with 'number phone' and 'type'
                             if (phone.contains(REG_OTHER_DATA_TYPE)) {
+
                                 // example format each phone = "0115566887 : PERSONAL"
                                 String[] splitPhone = phone.split(REG_OTHER_DATA_TYPE);
 
