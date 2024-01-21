@@ -20,4 +20,6 @@ public interface PhoneService {
     List<Phone> toEntity(List<PhoneDTO> phoneDTOs);
 
     List<Phone> updatePhones(ContactDTO phoneDTOs, Contact contact);
+
+    void handlePhoneForImportFile(ContactDTO contactDTO, String currentCellValue, String separationBarRegex, String separationColonRegex);
 }

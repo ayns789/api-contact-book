@@ -17,12 +17,14 @@ public class CivilityServiceImpl implements CivilityService {
     private final CivilityRepository civilityRepository;
 
     public Civility getCivilityById(Long civilityId) {
+
         return civilityRepository.findById(civilityId)
-            .orElseThrow(() -> new CivilityNotFoundException(civilityId));
+                .orElseThrow(() -> new CivilityNotFoundException(civilityId));
     }
 
     @Override
     public CivilityDTO findByLibelle(CivilityEnumType civilityEnumType) {
+
         Civility civility = civilityRepository.findByLibelle(civilityEnumType);
         return toDto(civility);
     }
@@ -37,14 +39,16 @@ public class CivilityServiceImpl implements CivilityService {
 
     @Override
     public CivilityDTO toDto(Civility civility) {
+
         return CivilityDTO.builder()
-            .civilityId(civility.getCivilityId())
-            .libelle(civility.getLibelle().name())
-            .build();
+                .civilityId(civility.getCivilityId())
+                .libelle(civility.getLibelle().name())
+                .build();
     }
 
     @Override
     public Civility toEntity(CivilityDTO civilityDTO) {
+
         Civility civility = new Civility();
         civility.setCivilityId(civilityDTO.getCivilityId());
         civility.setLibelle(CivilityEnumType.valueOf(civilityDTO.getLibelle()));

@@ -15,12 +15,14 @@ public class CountryServiceImpl implements CountryService {
     private final CountryRepository countryRepository;
 
     public Country getCountryById(Long countryId) {
+
         return countryRepository.findById(countryId)
                 .orElseThrow(() -> new CountryNotFoundException(countryId));
     }
 
     @Override
     public CountryDTO findByLibelle(String libelle) {
+
         Country country = countryRepository.findByLibelle(libelle);
         // to Dto
         return toDto(country);
@@ -28,6 +30,7 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public CountryDTO toDto(Country country) {
+        
         return CountryDTO.builder()
                 .countryId(country.getCountryId())
                 .libelle(country.getLibelle())

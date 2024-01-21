@@ -15,6 +15,7 @@ public enum EmailTypeEnum {
     private final String value;
 
     public static EmailTypeEnum getValue(String value) {
+        
         return Arrays.stream(EmailTypeEnum.values())
                 .filter(emailTypeEnum -> emailTypeEnum.value.equals(value))
                 .findFirst()

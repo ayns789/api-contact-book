@@ -20,4 +20,6 @@ public interface AddressService {
     List<Address> updateAddresses(ContactDTO contactDTO, Contact contact);
 
     List<Address> toEntity(List<AddressDTO> addressesDTOs);
+
+    void handleAddressForImportFile(ContactDTO contactDTO, String currentCellValue, String separationBarRegex);
 }

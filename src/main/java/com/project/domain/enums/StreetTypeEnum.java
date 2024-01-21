@@ -17,6 +17,7 @@ public enum StreetTypeEnum {
     private final String value;
 
     public static StreetTypeEnum getValue(String value) {
+        
         return Arrays.stream(StreetTypeEnum.values())
                 .filter(streetTypeEnum -> streetTypeEnum.value.equalsIgnoreCase(value))
                 .findFirst()

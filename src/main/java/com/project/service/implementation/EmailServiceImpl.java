@@ -12,6 +12,7 @@ import com.project.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,11 +37,11 @@ public class EmailServiceImpl implements EmailService {
             EmailTypeEnum emailTypeEnum = EmailTypeEnum.getValue(emailDTO.getType());
 
             Email email = Email.builder()
-                .emailId(emailDTO.getEmailId())
-                .libelle(emailDTO.getLibelle())
-                .type(emailTypeEnum)
-                .contact(contact)
-                .build();
+                    .emailId(emailDTO.getEmailId())
+                    .libelle(emailDTO.getLibelle())
+                    .type(emailTypeEnum)
+                    .contact(contact)
+                    .build();
 
             emails.add(email);
         });
@@ -57,33 +58,37 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public List<EmailDTO> toDto(List<Email> emails) {
+
         return emails.stream()
-            .map(this::toDto)
-            .toList();
+                .map(this::toDto)
+                .toList();
     }
 
     @Override
     public EmailDTO toDto(Email email) {
+
         return EmailDTO.builder()
-            .emailId(email.getEmailId())
-            .libelle(email.getLibelle())
-            .type(email.getType().name())
-            .build();
+                .emailId(email.getEmailId())
+                .libelle(email.getLibelle())
+                .type(email.getType().name())
+                .build();
     }
 
     @Override
     public List<Email> toEntity(List<EmailDTO> emailDTOs) {
+
         return emailDTOs.stream()
-            .map(emailDTO -> Email.builder()
-                .emailId(emailDTO.getEmailId())
-                .libelle(emailDTO.getLibelle())
-                .type(EmailTypeEnum.valueOf(emailDTO.getType()))
-                .build())
-            .collect(Collectors.toList());
+                .map(emailDTO -> Email.builder()
+                        .emailId(emailDTO.getEmailId())
+                        .libelle(emailDTO.getLibelle())
+                        .type(EmailTypeEnum.valueOf(emailDTO.getType()))
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
     public void deleteAll(List<Email> emails) {
+
         try {
             emailRepository.deleteAllInBatch(emails);
         } catch (Exception e) {
@@ -99,10 +104,56 @@ public class EmailServiceImpl implements EmailService {
         List<EmailDTO> emailDTOs = contactDTO.getEmails();
         emailDTOs = ListUtils.emptyIfNull(emailDTOs);
 
-        // delete old emails linked to contact
-        emailRepository.deleteByContact_ContactId(contact.getContactId());
+        try {
+            // delete old emails linked to contact
+            emailRepository.deleteByContact_ContactId(contact.getContactId());
+        } catch (Exception e) {
+            log.error(STR."error while deleting emails = \{e.getMessage()}, \{e}");
+            throw new EmailNotDeletedException();
+        }
 
         // save and return new emails
         return save(emailDTOs, contact);
     }
+
+    public void handleEmailForImportFile(ContactDTO contactDTO, String currentCellValue, String separationBarRegex, String separationColonRegex) {
+
+        List<EmailDTO> emailDTOs = new ArrayList<>();
+
+        if (!StringUtils.isEmpty(currentCellValue)) {
+
+            // example format emails = "jojo@gmail.com : PERSONAL | fefe@gmail.com : PERSONAL"
+            String[] emailList = currentCellValue.split(separationBarRegex);
+
+            for (String email : emailList) {
+
+                EmailDTO emailDTO = new EmailDTO();
+
+                // if data is complete, with 'email address' and 'type'
+                if (email.contains(separationColonRegex)) {
+
+                    // example format each email = "jojo@gmail.com : PERSONAL"
+                    String[] splitEmail = email.split(separationColonRegex);
+
+                    // handle values libelle and type
+                    String libelle = splitEmail[0].trim();
+                    String type = splitEmail[1].trim();
+
+                    // get enum value with type
+                    EmailTypeEnum emailTypeEnum = EmailTypeEnum.getValue(type);
+                    String emailType = String.valueOf(emailTypeEnum);
+
+                    emailDTO.setLibelle(libelle);
+                    emailDTO.setType(emailType);
+                } else {
+
+                    String valueEmail = email.trim();
+                    emailDTO.setLibelle(valueEmail);
+                }
+                emailDTOs.add(emailDTO);
+            }
+            contactDTO.setEmails(emailDTOs);
+        }
+    }
 }
+

@@ -15,6 +15,7 @@ public enum PhoneTypeEnum {
     private final String value;
 
     public static PhoneTypeEnum getValue(String value) {
+        
         return Arrays.stream(PhoneTypeEnum.values())
                 .filter(phoneTypeEnum -> phoneTypeEnum.value.equals(value))
                 .findFirst()

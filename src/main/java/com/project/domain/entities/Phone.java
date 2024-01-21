@@ -37,12 +37,7 @@ public class Phone implements Serializable {
 
     @Override
     public String toString() {
-        return "Phone{" +
-                "phoneId=" + phoneId +
-                ", libelle=" + libelle +
-                ", type=" + type +
-                ", contact=" + contact +
-                '}';
+        return STR."Phone{phoneId=\{phoneId}, libelle=\{libelle}, type=\{type}, contact=\{contact}\{'}'}";
     }
 
     @Override

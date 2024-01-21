@@ -18,6 +18,7 @@ public enum CivilityEnumType {
     final String value;
 
     public static CivilityEnumType getValue(String value) {
+        
         return Arrays.stream(CivilityEnumType.values())
                 .filter(civilityEnumType -> civilityEnumType.value.equalsIgnoreCase(value))
                 .findFirst()

@@ -26,10 +26,7 @@ public class Country implements Serializable {
 
     @Override
     public String toString() {
-        return "Country{" +
-                "countryId=" + countryId +
-                ", libelle='" + libelle + '\'' +
-                '}';
+        return STR."Country{countryId=\{countryId}, libelle='\{libelle}\{'\''}\{'}'}";
     }
 
     @Override

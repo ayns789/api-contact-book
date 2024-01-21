@@ -16,7 +16,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,49 +30,57 @@ public class ContactController {
 
     @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
     public ContactDTO create(@Valid @RequestBody ContactDTO contactDTO) {
+        
         log.info("Call add contact");
         return contactService.create(contactDTO);
     }
 
     @GetMapping(path = "/{id}", consumes = "application/json", produces = "application/json")
     public ContactDTO getContact(@PathVariable("id") Long id) {
+
         log.info("Call get contact with id : {}", id);
         return contactService.getContact(id);
     }
 
     @GetMapping(path = "/byLastName", consumes = "application/json", produces = "application/json")
     public List<ContactDTO> getContactByLastname(@RequestParam(value = "last_name") String lastName) {
+
         log.info("Call get contact with lastName : {}", lastName);
         return contactService.getContactByLastname(lastName);
     }
 
     @GetMapping(path = "/byFirstName", consumes = "application/json", produces = "application/json")
     public List<ContactDTO> getContactByFirstname(@RequestParam(value = "first_name") String firstName) {
+
         log.info("Call get contact with firstName : {}", firstName);
         return contactService.getContactByFirstname(firstName);
     }
 
     @GetMapping(path = "/byPhone", consumes = "application/json", produces = "application/json")
     public List<ContactDTO> getContactByPhone(@RequestParam(value = "phone_number") String phoneNumber) {
+
         log.info("Call get contact with phoneNumber : {}", phoneNumber);
         return contactService.getContactByPhone(phoneNumber);
     }
 
     @PutMapping(path = "/update/{contactId}", consumes = "application/json", produces = "application/json")
     public ContactDTO update(@PathVariable Long contactId, @Valid @RequestBody ContactDTO contactDTO) {
+
         log.info("Call update contact with id : {}", contactId);
         return contactService.update(contactId, contactDTO);
     }
 
     @DeleteMapping(path = "/delete/{id}", consumes = "application/json", produces = "application/json")
     public ContactDTO delete(@PathVariable("id") Long id) {
+
         log.info("Call delete contact with id : {}", id);
         return contactService.delete(id);
     }
 
     // save on pc in file path
     @GetMapping("/export")
-    public void exportFile() throws IOException {
+    public void exportFile() {
+
         log.info("Call export excel file representing contacts");
         excelFileService.exportFile();
     }
@@ -81,6 +88,7 @@ public class ContactController {
 
     @PostMapping("/import")
     public void importFile(@RequestParam("file") MultipartFile file) {
+
         log.info("Call import excel file contacts to save in database");
         excelFileService.importFile(file);
     }

@@ -15,6 +15,7 @@ import com.project.service.CountryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,6 +69,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<AddressDTO> toDto(List<Address> addresses) {
+
         return addresses.stream()
                 .map(this::toDto)
                 .toList();
@@ -107,6 +109,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void deleteAll(List<Address> addresses) {
+
         try {
             addressRepository.deleteAllInBatch(addresses);
         } catch (Exception e) {
@@ -122,10 +125,60 @@ public class AddressServiceImpl implements AddressService {
         List<AddressDTO> addressDTOs = contactDTO.getAddresses();
         addressDTOs = ListUtils.emptyIfNull(addressDTOs);
 
-        // delete old addresses linked to contact
-        addressRepository.deleteByContact_ContactId(contact.getContactId());
+        try {
+            // delete old addresses linked to contact
+            addressRepository.deleteByContact_ContactId(contact.getContactId());
+        } catch (Exception e) {
+            log.error(STR."error while deleting addresses = \{e.getMessage()}, \{e}");
+            throw new AddressNotDeletedException();
+        }
 
         return save(addressDTOs, contact);
     }
 
+    public void handleAddressForImportFile(ContactDTO contactDTO, String currentCellValue, String separationBarRegex) {
+
+        List<AddressDTO> addressDTOs = new ArrayList<>();
+
+        if (!StringUtils.isEmpty(currentCellValue)) {
+
+            // example format addresses =
+            // "55 STREET Dobenton 75014 Paris France | 28 STREET Charogne 75012 Paris France"
+            String[] addressList = currentCellValue.split(separationBarRegex);
+
+            for (String address : addressList) {
+
+                AddressDTO addressDTO = new AddressDTO();
+
+                // example format each address = "55 STREET Dobenton 75014 Paris France"
+                final String SPACE_REGEX = "\\s+";
+                String[] splitAddress = address.split(SPACE_REGEX);
+
+                if (splitAddress.length > 1) {
+
+                    addressDTO.setStreetNumber(Integer.valueOf(splitAddress[0]));
+                    addressDTO.setStreetType(splitAddress[1]);
+                    addressDTO.setStreetName(splitAddress[2]);
+                    addressDTO.setPostalCode(Integer.valueOf(splitAddress[3]));
+                    addressDTO.setCityName(splitAddress[4]);
+
+                    // get last data in splitAddress = get country
+                    String[] getCountry = splitAddress[5].split(separationBarRegex);
+                    String countryValue = getCountry[0].trim();
+
+                    // get country by libelle value
+                    CountryDTO countryDTO = countryService.findByLibelle(countryValue);
+
+                    // set country
+                    addressDTO.setCountry(countryDTO);
+
+                    // add address to addresses list
+                    addressDTOs.add(addressDTO);
+                }
+            }
+            contactDTO.setAddresses(addressDTOs);
+        }
+    }
+
 }
+
