@@ -1,6 +1,7 @@
 package com.project.service.implementation;
 
 import com.project.domain.dto.CivilityDTO;
+import com.project.domain.dto.ContactDTO;
 import com.project.domain.entities.Civility;
 import com.project.domain.enums.CivilityEnumType;
 import com.project.exceptions.CivilityNotFoundException;
@@ -24,6 +25,14 @@ public class CivilityServiceImpl implements CivilityService {
     public CivilityDTO findByLibelle(CivilityEnumType civilityEnumType) {
         Civility civility = civilityRepository.findByLibelle(civilityEnumType);
         return toDto(civility);
+    }
+
+    @Override
+    public void handleCivilityForImportFile(ContactDTO contactDTO, String currentCellValue) {
+
+        CivilityEnumType civilityEnumType = CivilityEnumType.getValue(currentCellValue);
+        CivilityDTO civilityDTO = findByLibelle(civilityEnumType);
+        contactDTO.setCivility(civilityDTO);
     }
 
     @Override

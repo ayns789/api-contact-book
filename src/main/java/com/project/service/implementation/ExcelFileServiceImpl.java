@@ -1,13 +1,11 @@
 package com.project.service.implementation;
 
 import com.project.domain.dto.AddressDTO;
-import com.project.domain.dto.CivilityDTO;
 import com.project.domain.dto.ContactDTO;
 import com.project.domain.dto.CountryDTO;
 import com.project.domain.dto.EmailDTO;
 import com.project.domain.dto.PhoneDTO;
 import com.project.domain.entities.Contact;
-import com.project.domain.enums.CivilityEnumType;
 import com.project.exceptions.FileErrorExtensionException;
 import com.project.exceptions.FileExcelNotGeneratedException;
 import com.project.service.CivilityService;
@@ -270,9 +268,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                 // Handle Civility
                 if (headers.get(2).equalsIgnoreCase(headers.get(i))) {
 
-                    CivilityEnumType civilityEnumType = CivilityEnumType.getValue(currentCellValue);
-                    CivilityDTO civilityDTO = civilityService.findByLibelle(civilityEnumType);
-                    contactDTO.setCivility(civilityDTO);
+                    civilityService.handleCivilityForImportFile(contactDTO, currentCellValue);
                 }
 
                 final String REG_OTHER_DATA = "\\|";
