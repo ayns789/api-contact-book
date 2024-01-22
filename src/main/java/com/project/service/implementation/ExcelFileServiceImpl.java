@@ -46,8 +46,46 @@ public class ExcelFileServiceImpl implements ExcelFileService {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Contacts");
 
-        // create the header row
-        Row headerRow = sheet.createRow(0);
+        // build the header row ( design and values )
+        CellStyle headerStyle = designCellStyle(workbook);
+        buildHeaderRow(sheet, headerStyle);
+
+        // add values to rows
+        int rowNum = 1;
+
+        for (ContactDTO contact : contactDTOs) {
+
+            //create border style rows
+            CellStyle rowStyle = createBorderRow(workbook);
+
+            // create and set values and styles in rows
+            Row row = sheet.createRow(rowNum++);
+
+            // handle contact
+            buildContactRow(contact, rowStyle, row);
+
+            // handle emails
+            buildEmailRow(contact, rowStyle, row);
+
+            // handle phones
+            buildPhoneRow(contact, rowStyle, row);
+
+            // handle addresses
+            buildAddressRow(contact, rowStyle, row);
+
+            // add null value after the last column, for last column can use ellipsis
+            row.createCell(6).setCellValue("");
+        }
+
+        try {
+            return workbook;
+        } catch (Exception e) {
+            log.error(STR."Error during workbook generate operation: \{e.getMessage()}", e);
+            throw new FileExcelNotGeneratedException();
+        }
+    }
+
+    private CellStyle designCellStyle(Workbook workbook) {
 
         // set the header row style
         Font headerFont = workbook.createFont();
@@ -70,6 +108,14 @@ public class ExcelFileServiceImpl implements ExcelFileService {
         headerStyle.setBorderLeft(BorderStyle.THIN);
         headerStyle.setBorderBottom(BorderStyle.THIN);
         headerStyle.setBorderRight(BorderStyle.THIN);
+
+        return headerStyle;
+    }
+
+    private void buildHeaderRow(Sheet sheet, CellStyle headerStyle) {
+
+        // create the header row
+        Row headerRow = sheet.createRow(0);
 
         // add values to headerRows
         headerRow.createCell(0).setCellValue("FirstName");
@@ -95,94 +141,87 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             headerStyle.setAlignment(HorizontalAlignment.CENTER);
             headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         }
+    }
 
-        // add values to rows
-        int rowNum = 1;
+    private CellStyle createBorderRow(Workbook workbook) {
 
-        for (ContactDTO contact : contactDTOs) {
+        CellStyle rowStyle = workbook.createCellStyle();
+        rowStyle.setBorderTop(BorderStyle.THIN);
+        rowStyle.setBorderLeft(BorderStyle.THIN);
+        rowStyle.setBorderBottom(BorderStyle.THIN);
+        rowStyle.setBorderRight(BorderStyle.THIN);
 
-            //create style rows
-            CellStyle rowStyle = workbook.createCellStyle();
-            rowStyle.setBorderTop(BorderStyle.THIN);
-            rowStyle.setBorderLeft(BorderStyle.THIN);
-            rowStyle.setBorderBottom(BorderStyle.THIN);
-            rowStyle.setBorderRight(BorderStyle.THIN);
+        return rowStyle;
+    }
 
-            // create and set values and styles in rows
-            Row row = sheet.createRow(rowNum++);
+    private void buildContactRow(ContactDTO contact, CellStyle rowStyle, Row row) {
 
-            // handle contact
-            row.createCell(0).setCellValue(contact.getFirstName());
-            row.getCell(0).setCellStyle(rowStyle);
-            row.createCell(1).setCellValue(contact.getLastName());
-            row.getCell(1).setCellStyle(rowStyle);
-            row.createCell(2).setCellValue(String.valueOf(contact.getCivility().getLibelle()));
-            row.getCell(2).setCellStyle(rowStyle);
+        row.createCell(0).setCellValue(contact.getFirstName());
+        row.getCell(0).setCellStyle(rowStyle);
+        row.createCell(1).setCellValue(contact.getLastName());
+        row.getCell(1).setCellStyle(rowStyle);
+        row.createCell(2).setCellValue(String.valueOf(contact.getCivility().getLibelle()));
+        row.getCell(2).setCellStyle(rowStyle);
+    }
 
-            // handle emails
-            String emailAddress = "";
+    private void buildEmailRow(ContactDTO contact, CellStyle rowStyle, Row row) {
 
-            if (!contact.getEmails().isEmpty()) {
+        String emailAddress = "";
 
-                emailAddress = contact.getEmails().stream()
-                        .map(email -> STR."\{email.getLibelle()} : \{email.getType()}")
-                        .collect(Collectors.joining(" | "));
-            }
+        if (!contact.getEmails().isEmpty()) {
 
-            row.createCell(3).setCellValue(emailAddress);
-            row.getCell(3).setCellStyle(rowStyle);
+            emailAddress = contact.getEmails().stream()
+                    .map(email -> STR."\{email.getLibelle()} : \{email.getType()}")
+                    .collect(Collectors.joining(" | "));
+        }
 
-            // handle phones
-            String phoneNumber = "";
+        row.createCell(3).setCellValue(emailAddress);
+        row.getCell(3).setCellStyle(rowStyle);
+    }
 
-            if (!contact.getPhones().isEmpty()) {
+    private void buildPhoneRow(ContactDTO contact, CellStyle rowStyle, Row row) {
 
-                phoneNumber = contact.getPhones().stream()
-                        .map(phone -> STR."\{phone.getLibelle()} : \{phone.getType()}")
-                        .collect(Collectors.joining(" | "));
-            }
+        String phoneNumber = "";
 
-            row.createCell(4).setCellValue(phoneNumber);
-            row.getCell(4).setCellStyle(rowStyle);
+        if (!contact.getPhones().isEmpty()) {
 
-            // handle addresses
-            String addressList = "";
+            phoneNumber = contact.getPhones().stream()
+                    .map(phone -> STR."\{phone.getLibelle()} : \{phone.getType()}")
+                    .collect(Collectors.joining(" | "));
+        }
 
-            if (!contact.getAddresses().isEmpty()) {
+        row.createCell(4).setCellValue(phoneNumber);
+        row.getCell(4).setCellStyle(rowStyle);
+    }
 
-                StringBuilder sb = new StringBuilder();
+    private void buildAddressRow(ContactDTO contact, CellStyle rowStyle, Row row) {
 
-                for (AddressDTO address : contact.getAddresses()) {
+        String addressList = "";
 
-                    sb.append(STR."\{address.getStreetNumber()} ");
-                    sb.append(STR."\{address.getStreetType()} ");
-                    sb.append(STR."\{address.getStreetName()} ");
-                    sb.append(STR."\{address.getPostalCode()} ");
-                    sb.append(STR."\{address.getCityName()} ");
-                    sb.append(address.getCountry().getLibelle());
+        if (!contact.getAddresses().isEmpty()) {
 
-                    if (contact.getAddresses().indexOf(address) < contact.getAddresses().size() - 1) {
+            StringBuilder sb = new StringBuilder();
 
-                        sb.append(" | ");
-                    }
+            for (AddressDTO address : contact.getAddresses()) {
+
+                sb.append(STR."\{address.getStreetNumber()} ");
+                sb.append(STR."\{address.getStreetType()} ");
+                sb.append(STR."\{address.getStreetName()} ");
+                sb.append(STR."\{address.getPostalCode()} ");
+                sb.append(STR."\{address.getCityName()} ");
+                sb.append(address.getCountry().getLibelle());
+
+                if (contact.getAddresses().indexOf(address) < contact.getAddresses().size() - 1) {
+
+                    sb.append(" | ");
                 }
-
-                addressList = sb.toString();
             }
 
-            row.createCell(5).setCellValue(addressList);
-            row.getCell(5).setCellStyle(rowStyle);
-
-            // add null value after the last column, for last column can use ellipsis
-            row.createCell(6).setCellValue("");
+            addressList = sb.toString();
         }
 
-        try {
-            return workbook;
-        } catch (Exception e) {
-            log.error(STR."Error during workbook generate operation: \{e.getMessage()}", e);
-            throw new FileExcelNotGeneratedException();
-        }
+        row.createCell(5).setCellValue(addressList);
+        row.getCell(5).setCellStyle(rowStyle);
     }
 
     /**
