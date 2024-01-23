@@ -310,14 +310,6 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
         List<ContactDTO> contactDTOs = new ArrayList<>();
 
-        // initialize constants to compare headers values
-        final String FIRSTNAME = "FirstName";
-        final String LASTNAME = "LastName";
-        final String CIVILITY = "Civility";
-        final String EMAIL = "Email";
-        final String PHONE = "Phone";
-        final String ADDRESS = "Address";
-
         while (sheetRows.hasNext()) {
 
             ContactDTO contactDTO = new ContactDTO();
@@ -332,46 +324,59 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                 String currentCellValue = currentCell.getStringCellValue().trim();
 
                 // build contact
-                if (headers.get(i).equalsIgnoreCase(FIRSTNAME)) {
-
-                    contactDTO.setFirstName(currentCellValue);
-                }
-
-                if (headers.get(i).equalsIgnoreCase(LASTNAME)) {
-
-                    contactDTO.setLastName(currentCellValue);
-                }
-
-                // Handle Civility
-                if (headers.get(i).equalsIgnoreCase(CIVILITY)) {
-
-                    civilityService.handleCivilityForImportFile(contactDTO, currentCellValue);
-                }
-
-                final String SEPARATION_BAR_REGEX = "\\| ";
-                final String SEPARATION_COLON_REGEX = ":";
-
-                // build emails
-                if (headers.get(i).equalsIgnoreCase(EMAIL)) {
-
-                    emailService.handleEmailForImportFile(contactDTO, currentCellValue, SEPARATION_BAR_REGEX, SEPARATION_COLON_REGEX);
-                }
-
-                // build phones
-                if (headers.get(i).equalsIgnoreCase(PHONE)) {
-
-                    phoneService.handlePhoneForImportFile(contactDTO, currentCellValue, SEPARATION_BAR_REGEX, SEPARATION_COLON_REGEX);
-                }
-
-                // build addresses
-                if (headers.get(i).equalsIgnoreCase(ADDRESS)) {
-
-                    addressService.handleAddressForImportFile(contactDTO, currentCellValue, SEPARATION_BAR_REGEX);
-                }
+                buildContact(contactDTO, headers, i, currentCellValue);
             }
             contactDTOs.add(contactDTO);
         }
         return contactDTOs;
+    }
+
+    private void buildContact(ContactDTO contactDTO, List<String> headers, Integer i, String currentCellValue) {
+
+        // initialize constants to compare headers values
+        final String FIRSTNAME = "FirstName";
+        final String LASTNAME = "LastName";
+        final String CIVILITY = "Civility";
+        final String EMAIL = "Email";
+        final String PHONE = "Phone";
+        final String ADDRESS = "Address";
+
+        if (headers.get(i).equalsIgnoreCase(FIRSTNAME)) {
+
+            contactDTO.setFirstName(currentCellValue);
+        }
+
+        if (headers.get(i).equalsIgnoreCase(LASTNAME)) {
+
+            contactDTO.setLastName(currentCellValue);
+        }
+
+        // Handle Civility
+        if (headers.get(i).equalsIgnoreCase(CIVILITY)) {
+
+            civilityService.handleCivilityForImportFile(contactDTO, currentCellValue);
+        }
+
+        final String SEPARATION_BAR_REGEX = "\\| ";
+        final String SEPARATION_COLON_REGEX = ":";
+
+        // build emails
+        if (headers.get(i).equalsIgnoreCase(EMAIL)) {
+
+            emailService.handleEmailForImportFile(contactDTO, currentCellValue, SEPARATION_BAR_REGEX, SEPARATION_COLON_REGEX);
+        }
+
+        // build phones
+        if (headers.get(i).equalsIgnoreCase(PHONE)) {
+
+            phoneService.handlePhoneForImportFile(contactDTO, currentCellValue, SEPARATION_BAR_REGEX, SEPARATION_COLON_REGEX);
+        }
+
+        // build addresses
+        if (headers.get(i).equalsIgnoreCase(ADDRESS)) {
+
+            addressService.handleAddressForImportFile(contactDTO, currentCellValue, SEPARATION_BAR_REGEX);
+        }
     }
 }
 
