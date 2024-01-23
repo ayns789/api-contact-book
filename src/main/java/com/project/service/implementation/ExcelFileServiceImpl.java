@@ -30,7 +30,6 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
     private final ContactService contactService;
     private final CivilityService civilityService;
-    private final CountryService countryService;
     private final EmailService emailService;
     private final PhoneService phoneService;
     private final AddressService addressService;
