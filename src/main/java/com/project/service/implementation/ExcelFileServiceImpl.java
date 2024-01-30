@@ -60,17 +60,8 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             // create and set values and styles in rows
             Row row = sheet.createRow(rowNum++);
 
-            // handle contact
+            // write contacts data
             buildContactRow(contact, rowStyle, row);
-
-            // handle emails
-            buildEmailRow(contact, rowStyle, row);
-
-            // handle phones
-            buildPhoneRow(contact, rowStyle, row);
-
-            // handle addresses
-            buildAddressRow(contact, rowStyle, row);
 
             // add null value after the last column, for last column can use ellipsis
             row.createCell(6).setCellValue("");
@@ -155,16 +146,15 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
     private void buildContactRow(ContactDTO contact, CellStyle rowStyle, Row row) {
 
+        // handle contact
         row.createCell(0).setCellValue(contact.getFirstName());
         row.getCell(0).setCellStyle(rowStyle);
         row.createCell(1).setCellValue(contact.getLastName());
         row.getCell(1).setCellStyle(rowStyle);
         row.createCell(2).setCellValue(String.valueOf(contact.getCivility().getLibelle()));
         row.getCell(2).setCellStyle(rowStyle);
-    }
 
-    private void buildEmailRow(ContactDTO contact, CellStyle rowStyle, Row row) {
-
+        // handle emails
         String emailAddress = "";
 
         if (!contact.getEmails().isEmpty()) {
@@ -176,10 +166,8 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
         row.createCell(3).setCellValue(emailAddress);
         row.getCell(3).setCellStyle(rowStyle);
-    }
 
-    private void buildPhoneRow(ContactDTO contact, CellStyle rowStyle, Row row) {
-
+        // handle phones
         String phoneNumber = "";
 
         if (!contact.getPhones().isEmpty()) {
@@ -191,10 +179,8 @@ public class ExcelFileServiceImpl implements ExcelFileService {
 
         row.createCell(4).setCellValue(phoneNumber);
         row.getCell(4).setCellStyle(rowStyle);
-    }
 
-    private void buildAddressRow(ContactDTO contact, CellStyle rowStyle, Row row) {
-
+        // handle addresses
         String addressList = "";
 
         if (!contact.getAddresses().isEmpty()) {

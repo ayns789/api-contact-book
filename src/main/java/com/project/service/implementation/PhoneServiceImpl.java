@@ -90,7 +90,6 @@ public class PhoneServiceImpl implements PhoneService {
     @Transactional
     public List<Phone> updatePhones(ContactDTO contactDTO, Contact contact) {
 
-        // Todo : ajouter un try catch et dans toutes les méthode update dans les autress servivces
         List<PhoneDTO> phoneDTOs = contactDTO.getPhones();
         phoneDTOs = ListUtils.emptyIfNull(phoneDTOs);
 
