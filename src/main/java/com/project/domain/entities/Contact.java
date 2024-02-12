@@ -46,15 +46,7 @@ public class Contact implements Serializable {
 
     @Override
     public String toString() {
-        return "Contact{" +
-                "contactId=" + contactId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", civility=" + civility +
-                ", emails=" + emails +
-                ", phones=" + phones +
-                ", addresses=" + addresses +
-                '}';
+        return STR."Contact{contactId=\{contactId}, firstName='\{firstName}\{'\''}, lastName='\{lastName}\{'\''}, civility=\{civility}, emails=\{emails}, phones=\{phones}, addresses=\{addresses}\{'}'}";
     }
 
     @Override

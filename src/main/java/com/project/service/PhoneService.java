@@ -1,5 +1,6 @@
 package com.project.service;
 
+import com.project.domain.dto.ContactDTO;
 import com.project.domain.dto.PhoneDTO;
 import com.project.domain.entities.Contact;
 import com.project.domain.entities.Phone;
@@ -14,9 +15,11 @@ public interface PhoneService {
 
     PhoneDTO toDto(Phone phone);
 
-    List<Phone> updatePhones(Contact existingContact, List<Phone> oldPhones, List<PhoneDTO> newPhoneDTOs);
-
     void deleteAll(List<Phone> phones);
 
     List<Phone> toEntity(List<PhoneDTO> phoneDTOs);
+
+    List<Phone> updatePhones(ContactDTO phoneDTOs, Contact contact);
+
+    void handlePhoneForImportFile(ContactDTO contactDTO, String currentCellValue, String separationBarRegex, String separationColonRegex);
 }

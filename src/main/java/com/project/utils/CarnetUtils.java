@@ -20,9 +20,10 @@ public class CarnetUtils {
      * @return the field path extracted from the FieldError
      */
     public static String getFieldPath(FieldError error) {
+
         return Optional.of(error.getField())
-            .filter(field -> field.contains("."))
-            .map(field -> field.substring(field.lastIndexOf(".") + 1))
-            .orElse(error.getField());
+                .filter(field -> field.contains("."))
+                .map(field -> field.substring(field.lastIndexOf(".") + 1))
+                .orElse(error.getField());
     }
 }

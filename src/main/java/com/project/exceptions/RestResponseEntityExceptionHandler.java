@@ -192,5 +192,35 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(bodyOfResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(value = {FileExcelNotGeneratedException.class})
+    public ResponseEntity<Object> handleFileExcelNotGeneratedException(FileExcelNotGeneratedException ex, WebRequest request) {
+
+        String messageError = "Error during creation Excel file operation ";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = {FileErrorExtensionException.class})
+    public ResponseEntity<Object> handleFileErrorExtensionException(FileErrorExtensionException ex, WebRequest request) {
+
+        String messageError = "This file does not have extension : 'xlsx'";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {ContactAlreadyExistException.class})
+    public ResponseEntity<Object> handleContactAlreadyExistException(ContactAlreadyExistException ex, WebRequest request) {
+
+        String messageError = "This contact already exist";
+        String requestPath = ((ServletWebRequest) request).getRequest().getRequestURI();
+        ApiError bodyOfResponse = new ApiError(messageError, requestPath, HttpStatus.BAD_REQUEST.value());
+
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST);
+    }
+
 
 }

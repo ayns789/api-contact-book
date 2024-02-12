@@ -44,4 +44,5 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
             """)
     Optional<List<Contact>> getContactByPhone(@Param("phoneNumber") String phoneNumber);
 
+    Boolean existsByLastNameAndAndFirstName(@Param("lastName") String lastName, @Param("firstName") String firstName);
 }

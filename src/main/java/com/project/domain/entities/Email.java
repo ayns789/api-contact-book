@@ -37,12 +37,7 @@ public class Email implements Serializable {
 
     @Override
     public String toString() {
-        return "Email{" +
-                "emailId=" + emailId +
-                ", libelle='" + libelle + '\'' +
-                ", type=" + type +
-                ", contact=" + contact +
-                '}';
+        return STR."Email{emailId=\{emailId}, libelle='\{libelle}\{'\''}, type=\{type}, contact=\{contact}\{'}'}";
     }
 
     @Override

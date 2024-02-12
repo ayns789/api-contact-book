@@ -50,16 +50,7 @@ public class Address implements Serializable {
 
     @Override
     public String toString() {
-        return "Address{" +
-                "addressId=" + addressId +
-                ", streetNumber=" + streetNumber +
-                ", streetType=" + streetType +
-                ", streetName='" + streetName + '\'' +
-                ", cityName='" + cityName + '\'' +
-                ", postalCode=" + postalCode +
-                ", contact=" + contact +
-                ", country=" + country +
-                '}';
+        return STR."Address{addressId=\{addressId}, streetNumber=\{streetNumber}, streetType=\{streetType}, streetName='\{streetName}\{'\''}, cityName='\{cityName}\{'\''}, postalCode=\{postalCode}, contact=\{contact}, country=\{country}\{'}'}";
     }
 
     @Override
